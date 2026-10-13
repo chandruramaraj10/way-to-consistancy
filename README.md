@@ -22,3 +22,6 @@ Open the `android` directory in Android Studio with JDK 17 and Android SDK Platf
 - Theme emblem cards cut from the design sheet live in `assets/emblems/`; fonts are bundled in `assets/fonts/` so it works offline.
 - Home dashboard: icon-badge stat tiles, mission rows with progress bars, quick-action tiles, Budget / Goals / Monthly-report cards and a tagline strip.
 - Android bundles the whole `assets/` folder automatically, so no build changes are needed.
+
+## Photo backgrounds
+Put `minimal|nature|gaming|car|space|shadow.jpg` in `assets/backgrounds/` and each theme shows that photo instead of the built-in illustration (see the README.txt in that folder). Users can still upload their own picture in Settings.

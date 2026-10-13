@@ -46,32 +46,32 @@
 }
 /* the four dark-by-design themes commit to their own look in every mode */
 :root[data-skin="nature"]{
-  --bg:#0a1a10; --surface:rgba(14,38,26,.72); --surface-solid:#10281b; --surface2:rgba(255,255,255,.09); --input:rgba(255,255,255,.08);
+  --bg:#0a1a10; --surface:rgba(14,38,26,.58); --surface-solid:#10281b; --surface2:rgba(255,255,255,.09); --input:rgba(255,255,255,.08);
   --fg:#eaf7ee; --muted:#a8c9b3; --line:rgba(190,255,215,.18); --accent:#62d884; --on-accent:#05200e;
   --good:#6ee79a; --warn:#fbc54d; --bad:#ff8f8f; --info:#7cc4ff; --gold:#ffcf5a; --scrim-rgb:4,16,9;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.35); color-scheme:dark;
 }
 :root[data-skin="gaming"]{
-  --bg:#070d1f; --surface:rgba(11,20,46,.74); --surface-solid:#0f1a3a; --surface2:rgba(130,170,255,.1); --input:rgba(130,170,255,.09);
+  --bg:#070d1f; --surface:rgba(11,20,46,.58); --surface-solid:#0f1a3a; --surface2:rgba(130,170,255,.1); --input:rgba(130,170,255,.09);
   --fg:#e9efff; --muted:#a2b0dc; --line:rgba(120,165,255,.26); --accent:#3d7dff; --on-accent:#ffffff;
   --good:#4ade80; --warn:#ffb83d; --bad:#ff7a8c; --info:#7db4ff; --gold:#ffbe3d; --scrim-rgb:4,8,22;
   --shadow:0 0 0 1px rgba(80,130,255,.12),0 14px 34px rgba(0,0,0,.45); color-scheme:dark;
 }
 :root[data-skin="car"]{
-  --bg:#130709; --surface:rgba(34,12,16,.76); --surface-solid:#260d12; --surface2:rgba(255,120,120,.1); --input:rgba(255,120,120,.08);
+  --bg:#130709; --surface:rgba(34,12,16,.6); --surface-solid:#260d12; --surface2:rgba(255,120,120,.1); --input:rgba(255,120,120,.08);
   --fg:#fdeeee; --muted:#d3a8ad; --line:rgba(255,120,120,.26); --accent:#ff4a4a; --on-accent:#2a0508;
   --good:#58e08c; --warn:#ffb340; --bad:#ff8585; --info:#7db4ff; --gold:#ffb340; --scrim-rgb:16,3,6;
   --shadow:0 0 0 1px rgba(255,80,80,.12),0 14px 34px rgba(0,0,0,.5); color-scheme:dark;
 }
 :root[data-skin="space"]{
-  --bg:#0a0720; --surface:rgba(26,15,64,.74); --surface-solid:#1a1040; --surface2:rgba(190,160,255,.11); --input:rgba(190,160,255,.09);
+  --bg:#0a0720; --surface:rgba(26,15,64,.58); --surface-solid:#1a1040; --surface2:rgba(190,160,255,.11); --input:rgba(190,160,255,.09);
   --fg:#f0ecff; --muted:#b8aee3; --line:rgba(170,140,255,.28); --accent:#9b72ff; --on-accent:#120830;
   --good:#5eead4; --warn:#ffc65c; --bad:#ff8aa6; --info:#8cc0ff; --gold:#ffc65c; --scrim-rgb:6,3,20;
   --shadow:0 0 0 1px rgba(150,110,255,.14),0 14px 34px rgba(0,0,0,.5); color-scheme:dark;
 }
 
 :root[data-skin="shadow"]{
-  --bg:#0c0809; --surface:rgba(24,16,18,.78); --surface-solid:#1b1214; --surface2:rgba(255,255,255,.08); --input:rgba(255,255,255,.07);
+  --bg:#0c0809; --surface:rgba(24,16,18,.62); --surface-solid:#1b1214; --surface2:rgba(255,255,255,.08); --input:rgba(255,255,255,.07);
   --fg:#f4ecea; --muted:#bfaaa6; --line:rgba(255,255,255,.16); --accent:#e03a3a; --on-accent:#ffffff;
   --good:#58e08c; --warn:#ffb340; --bad:#ff8585; --info:#7db4ff; --gold:#d9b25a; --scrim-rgb:8,4,5;
   --font-script:'Kaushan Script','Brush Script MT',cursive;
@@ -452,6 +452,28 @@ textarea.export{font-family:var(--font-mono);font-size:.78rem;min-height:200px;w
   .profchip{display:flex;align-items:center;gap:8px;border:0;background:var(--surface2);padding:4px 10px 4px 4px;border-radius:999px;font-weight:600;font-size:.82rem}
   .qgrid{grid-template-columns:repeat(3,1fr)}
 }
+
+/* ===== v3: per-theme header, solid quick buttons, theme showcase cards, photo backgrounds ===== */
+.thead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:2px 2px 0}
+.thead .tt{font-size:clamp(1.3rem,3.6vw,1.8rem);font-weight:700;line-height:1.1}
+.thead .ts{color:var(--muted);font-size:.92rem}
+.thead .tuser{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-weight:600;font-size:.9rem}
+.thead .tuser small{display:block;color:var(--muted);font-weight:500;font-size:.72rem}
+:root[data-skin="shadow"] .thead .tt{font-family:var(--font-script);font-weight:400;font-size:clamp(1.6rem,4.2vw,2.2rem)}
+.qbtns{display:flex;flex-direction:column;gap:10px}
+.qbtn{display:flex;align-items:center;gap:12px;min-height:50px;padding:0 16px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 60%,#fff 10%);background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent));color:var(--on-accent);font-weight:700;box-shadow:0 8px 18px color-mix(in srgb,var(--accent) 30%,transparent)}
+.qbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.qbtn:hover{filter:brightness(1.08)}
+.mrow .check{order:9;margin-left:2px}
+.mrow .mi{border-radius:50%}
+.mrow .mm .meter{height:6px}
+.mrow .mm .meter i{background:var(--c,var(--accent))}
+.scard .kv{font-family:var(--font-display);font-weight:700;font-size:2rem;line-height:1.05}
+.scard .gauge{width:100%;max-width:170px;margin:0 auto;display:block}
+.scard .flame{font-size:3.2rem;line-height:1;text-align:center;filter:drop-shadow(0 0 14px color-mix(in srgb,var(--accent) 70%,transparent))}
+.tagbar{border-radius:999px;padding:12px 22px;justify-content:center}
+.tagbar .ibadge{--bs:34px}
+@media (max-width:820px){.thead .tuser{display:none}}
 </style>
 </head>
 <body>
@@ -1046,6 +1068,32 @@ function missionRow(o){
     <button class="mm" type="button" data-a="openOcc" data-id="${o.id}"><span class="mt">${esc(t.title)}</span><span class="meter ${done ? '' : 'xp'}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="ometa">${esc(timeLabel(o))}${target ? ` · ${prog} / ${target} ${esc(t.targetUnit || '')}` : ''}</span></button>
     <span class="mp">${pct}%</span></div>`;
 }
+const TICON = {minimal: {i: 'sun', c: '#f5a623'}, nature: {i: 'leaf', c: '#2fb344'}, gaming: {i: 'gamepad', c: '#f5a623'}, car: {i: 'car', c: '#e5484d'}, space: {i: 'planet', c: '#8b5cf6'}, shadow: {i: 'ninja', c: '#e03a3a'}};
+function miniDonut(md){
+  const en = Object.entries(md.cats).filter(e => e[1] > 0).sort((a, b) => b[1] - a[1]), tot = en.reduce((x, e) => x + e[1], 0);
+  if (!tot) return '<p class="sub">No spending yet.</p>';
+  let off = 0;
+  const arcs = en.map(([id, v]) => { const pc = v / tot * 100, c = catById(id) || {color: '#8a8fa6'}, r = `<circle cx="21" cy="21" r="15.9155" fill="none" stroke="${esc(c.color)}" stroke-width="6" stroke-dasharray="${pc.toFixed(2)} ${(100 - pc).toFixed(2)}" stroke-dashoffset="${(25 - off).toFixed(2)}"/>`; off += pc; return r; }).join('');
+  return `<svg class="mring" style="width:104px;height:104px;margin:0 auto;display:block" viewBox="0 0 42 42" role="img" aria-label="Spending by category">${arcs}</svg>`;
+}
+function showcase(th, md, x){
+  const {tb, tbu, cats, topSpend, goal, wk, mp, C, r30} = x, cm = md.m;
+  const hd = (ic, c, t) => `<h3>${ibadge(ic, c, 34)} ${t}</h3>`;
+  const bars = c => `<div class="bars" aria-hidden="true">${wk.map(v => `<i style="height:${Math.max(6, v)}%"></i>`).join('')}</div>`;
+  const catBars = () => cats.length ? cats.map(([id, v]) => { const c = catById(id) || {name: 'Other', emoji: '🧾', color: '#888'}; return `<div class="hbar"><div class="l"><span>${esc(c.emoji)} ${esc(c.name)}</span><span class="mono muted">${fmt(v)}</span></div><div class="meter" aria-hidden="true"><i style="width:${topSpend ? Math.round(v / topSpend * 100) : 0}%;background:${esc(c.color)}"></i></div></div>`; }).join('') : '<p class="sub">Add an expense to see where your money goes.</p>';
+  const budget = () => `<section class="scard" aria-label="Budget">${hd('wallet', '#f5a623', 'Budget')}${catBars()}${tbu ? meter(tbu.used, tbu.over > 0 ? fmt(tbu.over) + ' over' : fmt(tbu.remaining) + ' left') : '<button class="btn small" type="button" data-a="goMoney" data-t="budgets">Set a monthly budget</button>'}</section>`;
+  const money = () => `<section class="scard" aria-label="Money manager">${hd('wallet', '#2f80ed', 'Money Manager')}<div class="kv mono">${fmt(md.tot.remainder)}</div>${miniDonut(md)}</section>`;
+  const report = () => `<section class="scard" aria-label="Monthly report">${hd('chart', '#2fb344', 'Monthly Report')}<div class="rowf"><svg class="mring" viewBox="0 0 100 100" role="img" aria-label="Completion ${mp} percent"><circle class="trk" cx="50" cy="50" r="40"/><circle class="val" cx="50" cy="50" r="40" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - mp / 100)).toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="58">${md.rate == null ? '–' : mp + '%'}</text></svg><div class="grow"><div class="sub">Progress in ${esc(monthLabel(cm))}</div><button class="btn small" style="margin-top:8px" type="button" data-a="goView" data-v="reports">Open report</button></div></div>${bars()}</section>`;
+  const streak = () => `<section class="scard" aria-label="Habit streak">${hd('flame', '#f5a623', 'Habit Streak')}<div class="flame" aria-hidden="true">🔥</div><div class="kv" style="text-align:center">${streakDays()} <small style="font-size:.9rem;font-weight:500" class="muted">day streak</small></div></section>`;
+  const gp = goal ? Math.min(100, Math.round(Calc.pct(goal.actual, goal.target))) : 0;
+  const goalCard = () => `<section class="scard" aria-label="Goal">${hd('target', '#a855f7', th.id === 'nature' ? 'Savings Goal' : 'Goals')}${goal ? `<div class="rowf"><span style="font-size:2rem" aria-hidden="true">${gp < 30 ? '🌱' : gp < 70 ? '🌿' : '🌳'}</span><div class="grow"><b>${esc(goal.title)}</b><div class="sub">${goal.actual} / ${goal.target}</div></div><span class="kv">${gp}%</span></div><div class="meter xp" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${gp}"><i style="width:${gp}%"></i></div>` : '<p class="sub">Set a goal and link tasks to it to watch it grow.</p><button class="btn small" type="button" data-a="newGoal">Set a goal</button>'}</section>`;
+  const expense = () => { const u = tbu ? Math.min(100, Math.round(tbu.used)) : 0; return `<section class="scard" aria-label="Expense tracker">${hd('expense', '#e5484d', 'Expense Tracker')}<div class="kv mono">${fmt(md.tot.spent)}</div><svg class="gauge" viewBox="0 0 120 72" role="img" aria-label="Budget used ${u} percent"><path class="trk" d="M10 62 A50 50 0 0 1 110 62" pathLength="100"/><path class="val" d="M10 62 A50 50 0 0 1 110 62" pathLength="100" stroke-dasharray="${u} 100"/><line class="needle" x1="60" y1="62" x2="60" y2="26" transform="rotate(${-90 + u * 1.8} 60 62)"/><circle class="hub" cx="60" cy="62" r="5"/></svg><p class="sub" style="text-align:center">${tbu ? u + '% of budget used' : 'Set a budget to light up the gauge'}</p></section>`; };
+  const habitPlanet = () => { const hs = db.tasks.filter(t => t.state === 'active' && t.rec.type !== 'none').length; return `<section class="scard" aria-label="Habit tracker">${hd('planet', '#8b5cf6', 'Habit Tracker')}<div class="flame" aria-hidden="true">🪐</div><div class="kv" style="text-align:center">${hs} <small style="font-size:.9rem;font-weight:500" class="muted">habits in orbit</small></div></section>`; };
+  const growth = () => { const prev = rateRange(addDays(todayStr(), -59), addDays(todayStr(), -30)), d = Calc.points(r30, prev); return `<section class="scard" aria-label="Growth">${hd('chart', '#8b5cf6', 'Monthly Report')}<div class="sub">Growth</div><div class="kv mono ${d != null && d < 0 ? 'neg' : 'pos'}">${d == null ? '–' : (d >= 0 ? '+' : '') + Math.round(d) + '%'}</div>${bars()}</section>`; };
+  const cat = () => `<section class="scard" aria-label="Expense categories">${hd('wallet', '#2fb344', 'Expense Categories')}${catBars()}</section>`;
+  const sets = {gaming: [streak, money, report], shadow: [streak, money, report], car: [expense, budget, report], space: [habitPlanet, money, growth], nature: [cat, goalCard, report], minimal: [budget, goalCard, report]};
+  return (sets[th.id] || sets.minimal).map(f => f()).join('');
+}
 function viewHome(){
   const td = todayStr(), now = new Date(), p = db.profile, th = curTheme(), g = greet();
   const todays = db.occs.filter(o => o.date === td && o.status !== 'cancelled').sort((a, b) => (a.start || a.due || '99').localeCompare(b.start || b.due || '99'));
@@ -1065,6 +1113,7 @@ function viewHome(){
   return `<div class="page">
     ${p.sample ? `<div class="banner"><span aria-hidden="true">🧪</span><span class="grow">You are looking at <b>sample data</b> so you can explore. Clear it any time and start fresh.</span><button class="btn small" type="button" data-a="clearSamples">Clear sample data</button></div>` : ''}
     ${memOnly ? `<div class="banner"><span aria-hidden="true">⚠️</span><span class="grow">This view cannot keep data after you close it. Export a backup from Settings, or open the saved app file in your browser.</span></div>` : ''}
+    <div class="thead">${ibadge(TICON[th.id].i, TICON[th.id].c, 52)}<div><h2 class="tt">${esc(th.name)} Theme</h2><p class="ts">${esc(th.tag)}</p></div><span class="grow" style="flex:1"></span><button type="button" class="tuser" data-a="goView" data-v="journey" aria-label="Open my journey">${avatarHtml(36, r30 || 0)}<span>${esc(p.name || 'You')}<small>Level ${xpInfo().lvl} · ${xpInfo().title}</small></span></button></div>
     <section class="card hero" aria-label="Today">
       <div class="hero-l">${avatarHtml(104, r30 || 0)}<div class="stack" style="min-width:0;gap:6px">
         <h1 class="hello">${g.e} ${esc(g.g)}${p.name ? ', ' + esc(p.name) : ''}</h1>
@@ -1087,26 +1136,16 @@ function viewHome(){
       </section>
       <div class="stack" style="gap:18px">
         <section class="card" aria-label="This month"><h2>${ibadge('calendar', '#2f80ed', 30)} ${esc(monthLabel(cm))}</h2>${miniCal()}</section>
-        <section class="card" aria-label="Quick actions"><h2>${ibadge('plus', '#f5a623', 30)} Quick actions</h2><div class="qgrid">
-          ${qt('newTask', 'check', '#2fb344', 'Add task')}${qt('newReminder', 'bell', '#f5a623', 'Reminder')}${qt('newExpense', 'expense', '#e5484d', 'Expense')}
-          ${qt('newIncome', 'income', '#2f80ed', 'Income')}${qt('newGoal', 'target', '#a855f7', 'Set goal')}${qt('newCheckin', 'cam', '#0ea5a4', 'Check-in')}</div></section>
+        <section class="card" aria-label="Quick actions"><h2>${esc(th.id === 'car' ? 'Quick Fuel' : th.id === 'space' ? 'Galaxy Actions' : 'Quick Actions')}</h2><div class="qbtns">
+          <button class="qbtn" type="button" data-a="newTask">${icon('plus')} Add Task</button><button class="qbtn" type="button" data-a="newExpense">${icon('plus')} Add Expense</button><button class="qbtn" type="button" data-a="newGoal">${icon('plus')} Set Goal</button></div>
+          <div class="qgrid" style="margin-top:12px">${qt('newReminder', 'bell', '#f5a623', 'Reminder')}${qt('newIncome', 'income', '#2f80ed', 'Income')}${qt('newCheckin', 'cam', '#0ea5a4', 'Check-in')}</div></section>
       </div>
     </div>
-    <div class="showcase">
-      <section class="scard" aria-label="Budget overview"><h3>${ibadge('wallet', '#f5a623', 34)} Budget overview</h3>
-        ${cats.length ? cats.map(([id, v]) => { const c = catById(id) || {name: 'Other', emoji: '🧾', color: '#888'}; return `<div class="hbar"><div class="l"><span>${esc(c.emoji)} ${esc(c.name)}</span><span class="mono muted">${fmt(v)}</span></div><div class="meter" aria-hidden="true"><i style="width:${topSpend ? Math.round(v / topSpend * 100) : 0}%;background:${esc(c.color)}"></i></div></div>`; }).join('') : '<p class="sub">Add an expense to see where your money goes.</p>'}
-        ${tbu ? meter(tbu.used, tbu.over > 0 ? fmt(tbu.over) + ' over' : fmt(tbu.remaining) + ' left') : '<button class="btn small" type="button" data-a="goMoney" data-t="budgets">Set a monthly budget</button>'}</section>
-      <section class="scard" aria-label="Goals"><h3>${ibadge('target', '#a855f7', 34)} Goals</h3>
-        ${goal ? (() => { const gp = Math.min(100, Math.round(Calc.pct(goal.actual, goal.target))); return `<div class="rowf"><span style="font-size:2rem" aria-hidden="true">${esc(goal.emoji || '🎯')}</span><div class="grow"><b>${esc(goal.title)}</b><div class="sub">${goal.actual} / ${goal.target}</div></div><span class="big">${gp}%</span></div><div class="meter xp" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${gp}"><i style="width:${gp}%"></i></div>`; })() : '<p class="sub">Set a goal and link tasks to it to watch it grow.</p><button class="btn small" type="button" data-a="newGoal">Set a goal</button>'}</section>
-      <section class="scard" aria-label="Monthly report"><h3>${ibadge('chart', '#2fb344', 34)} Monthly report</h3>
-        <div class="rowf"><svg class="mring" viewBox="0 0 100 100" role="img" aria-label="Completion ${mp} percent"><circle class="trk" cx="50" cy="50" r="40"/><circle class="val" cx="50" cy="50" r="40" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - mp / 100)).toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="58">${md.rate == null ? '–' : mp + '%'}</text></svg>
-        <div class="grow"><div class="sub">Consistency in ${esc(monthLabel(cm))}</div><button class="btn small" style="margin-top:8px" type="button" data-a="goView" data-v="reports">Open report</button></div></div>
-        <div class="bars" aria-hidden="true">${wk.map(v => `<i style="height:${Math.max(6, v)}%"></i>`).join('')}</div></section>
-    </div>
+    <div class="showcase">${showcase(th, md, {tb, tbu, cats, topSpend, goal, wk, mp, C, r30})}</div>
     <section class="card" aria-label="Habit streaks"><h2>${ibadge('flame', '#f5a623', 30)} Habits &amp; streaks <span class="grow"></span><button class="btn small" type="button" data-a="goView" data-v="habits">All</button></h2>
       ${habits.length ? habits.map(t => habitRow(t, days7)).join('') : emptyState('🌱', 'Repeating tasks become habits with streaks.', '<button class="btn small" type="button" data-a="newTask">Create a habit</button>')}
     </section>
-    <div class="tagbar" role="note">${th.strip.map((x, i) => (i ? '<span class="dot" aria-hidden="true"></span>' : '') + `<b>${esc(x)}</b>`).join('')}</div>
+    <div class="tagbar" role="note">${ibadge(TICON[th.id].i, TICON[th.id].c, 34, true)}${th.strip.map((x, i) => (i ? '<span class="dot" aria-hidden="true"></span>' : '') + `<b>${esc(x)}</b>`).join('')}</div>
   </div>`;
 }
 function habitRow(t, days){
@@ -1716,9 +1755,15 @@ async function processImage(file, o){
 
 /* ---------- background ---------- */
 function bgDimValue(){ const p = db.profile, custom = !!imgGet(p.bg.imgId); return p.bg.dim != null ? p.bg.dim : (custom ? .45 : curTheme().dim); }
+const BGPHOTO = {};
+function probeBgPhotos(){
+  Object.keys(THEMES).forEach(id => { if (id in BGPHOTO) return; BGPHOTO[id] = '';
+    ['jpg', 'webp', 'png'].reduce((chain, ext) => chain.then(ok => ok ? ok : new Promise(res => { const im = new Image(), u = 'assets/backgrounds/' + id + '.' + ext; im.onload = () => res(u); im.onerror = () => res(''); im.src = u; })), Promise.resolve('')).then(u => { if (u){ BGPHOTO[id] = u; if (curTheme().id === id) applyBackground(); } });
+  });
+}
 function applyBackground(){
   const p = db.profile, r = document.documentElement, custom = imgGet(p.bg.imgId);
-  r.style.setProperty('--bg-art', custom ? `url("${custom}")` : `url("${artUri(curTheme().id)}")`);
+  r.style.setProperty('--bg-art', custom ? `url("${custom}")` : `url("${BGPHOTO[curTheme().id] || artUri(curTheme().id)}")`);
   r.style.setProperty('--dim', bgDimValue());
   r.style.setProperty('--bg-blur', (custom ? p.bg.blur : 0) + 'px');
 }
@@ -1888,7 +1933,7 @@ function applyTheme(){
 }
 const VIEWS = {home: viewHome, tasks: viewTasks, calendar: viewCalendar, habits: viewHabits, money: viewMoney, reports: viewReports, journey: viewJourney, settings: viewSettings};
 function render(){
-  applyTheme(); ensureOccs();
+  applyTheme(); ensureOccs(); if (!window.__bgProbed){ window.__bgProbed = 1; probeBgPhotos(); }
   updateSaveState(memOnly ? 'unavailable' : saveState);
   const p = db.profile, r30 = rateOver(30), lv = xpInfo().lvl;
   const btn = (n, cls) => `<button type="button" class="${cls || 'nav-btn'}" data-a="goView" data-v="${n.id}"${ui.view === n.id ? ' aria-current="page"' : ''}>${icon(n.id)}<span>${n.l}</span></button>`;
