@@ -474,6 +474,48 @@ textarea.export{font-family:var(--font-mono);font-size:.78rem;min-height:200px;w
 .tagbar{border-radius:999px;padding:12px 22px;justify-content:center}
 .tagbar .ibadge{--bs:34px}
 @media (max-width:820px){.thead .tuser{display:none}}
+
+/* ===== mobile: compact, phone-mockup layout ===== */
+.weekstrip{display:none}
+@media (max-width:820px){
+  main{padding-inline:14px;padding-top:12px}
+  .page{gap:14px}
+  .banner{padding:8px 12px;font-size:.84rem}
+  .thead{order:1;gap:10px}.thead .ibadge{--bs:40px!important}.thead .tt{font-size:1.15rem}.thead .ts{font-size:.8rem}
+  .hero{order:2;grid-template-columns:minmax(0,1fr);gap:10px;padding:14px}
+  .hero .avatar{--sz:60px!important}
+  .hero-l{flex-direction:row;align-items:center;gap:12px}
+  .hello{font-size:1.2rem}
+  .hero .sub,.hero .quote{display:none}
+  .hero .stack p:last-child{margin:0}
+  .widget{padding:10px 12px}.widget .sub{display:none}.widget .wv{font-size:1.3rem}
+  .stats{order:3;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .stat{flex-direction:column;align-items:flex-start;gap:6px;padding:10px;border-radius:16px}
+  .stat::after{display:none}
+  .stat .ibadge{--bs:30px!important}
+  .stat .sk{font-size:.62rem;letter-spacing:.04em}.stat .sv{font-size:.95rem}
+  .split{order:4;gap:14px}
+  .showcase{order:5;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:14px;gap:10px;margin-inline:-14px;padding:2px 14px 8px;scrollbar-width:none}
+  .showcase::-webkit-scrollbar{display:none}
+  .showcase .scard{flex:0 0 72%;scroll-snap-align:start;border-radius:24px}
+  .page>.card[aria-label="Habit streaks"]{order:6}
+  .tagbar{order:7;padding:10px 14px;gap:8px}.tagbar b{font-size:.78rem}.tagbar .dot{display:none}
+  .weekstrip{display:block;padding:12px}
+  .weekstrip .wsh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .ws{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .ws button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 6px;border:1px solid var(--line);border-radius:16px;background:var(--surface2);min-height:62px}
+  .ws button small{font-size:.66rem;color:var(--muted);font-weight:600}
+  .ws button b{font-size:1rem}
+  .ws button i{width:5px;height:5px;border-radius:50%;background:var(--muted)}.ws button i.all{background:var(--good)}.ws button i.some{background:var(--warn)}
+  .ws button.today{background:var(--accent);color:var(--on-accent);border-color:transparent}.ws button.today small{color:inherit;opacity:.85}.ws button.today i{background:var(--on-accent)}
+  .monthcard{display:none}
+  .qbtns{flex-direction:row;gap:8px}.qbtn{flex:1;flex-direction:column;justify-content:center;gap:4px;min-height:64px;padding:8px 4px;font-size:.78rem;text-align:center}
+  .card{border-radius:22px;padding:14px}
+  .mrow{padding:9px 0}
+  .tabbar{margin:0 10px calc(8px + env(safe-area-inset-bottom,0px));left:0;right:0;border-radius:24px;border:1px solid var(--line);padding:6px}
+  .fab{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  main{padding-bottom:150px}
+}
 </style>
 </head>
 <body>
@@ -1135,7 +1177,8 @@ function viewHome(){
         ${todays.length ? todays.map(missionRow).join('') : emptyState('🌤️', 'Nothing planned today.', '<button class="btn primary" type="button" data-a="newTask">Add your first task</button>')}
       </section>
       <div class="stack" style="gap:18px">
-        <section class="card" aria-label="This month"><h2>${ibadge('calendar', '#2f80ed', 30)} ${esc(monthLabel(cm))}</h2>${miniCal()}</section>
+        <section class="card weekstrip" aria-label="This week"><div class="wsh"><b>${esc(monthLabel(cm))}</b><button class="btn small ghost" type="button" data-a="goView" data-v="calendar">Calendar</button></div><div class="ws">${Array.from({length: 7}, (_, i) => { const d = addDays(td, i - 3), l = db.occs.filter(o => o.date === d && o.status !== 'cancelled'), k = !l.length ? '' : l.every(o => o.status === 'done') ? 'all' : l.some(o => o.status === 'done') ? 'some' : ''; return `<button type="button" class="${d === td ? 'today' : ''}" data-a="miniDay" data-d="${d}" aria-label="${esc(dayLabel(d))}, ${l.length} task${l.length === 1 ? '' : 's'}"><small>${WD[dowOf(d)].slice(0, 3)}</small><b>${pd(d).getDate()}</b>${l.length ? `<i class="${k}"></i>` : '<i style="visibility:hidden"></i>'}</button>`; }).join('')}</div></section>
+        <section class="card monthcard" aria-label="This month"><h2>${ibadge('calendar', '#2f80ed', 30)} ${esc(monthLabel(cm))}</h2>${miniCal()}</section>
         <section class="card" aria-label="Quick actions"><h2>${esc(th.id === 'car' ? 'Quick Fuel' : th.id === 'space' ? 'Galaxy Actions' : 'Quick Actions')}</h2><div class="qbtns">
           <button class="qbtn" type="button" data-a="newTask">${icon('plus')} Add Task</button><button class="qbtn" type="button" data-a="newExpense">${icon('plus')} Add Expense</button><button class="qbtn" type="button" data-a="newGoal">${icon('plus')} Set Goal</button></div>
           <div class="qgrid" style="margin-top:12px">${qt('newReminder', 'bell', '#f5a623', 'Reminder')}${qt('newIncome', 'income', '#2f80ed', 'Income')}${qt('newCheckin', 'cam', '#0ea5a4', 'Check-in')}</div></section>
