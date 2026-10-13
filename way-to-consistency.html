@@ -6,6 +6,15 @@
 <title>Way to Consistency</title>
 <link rel="icon" type="image/png" href="assets/brand-logo.png">
 <style>
+@font-face{font-family:'Poppins';font-weight:500;font-style:normal;font-display:swap;src:url('assets/fonts/poppins-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Poppins';font-weight:600;font-style:normal;font-display:swap;src:url('assets/fonts/poppins-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Poppins';font-weight:700;font-style:normal;font-display:swap;src:url('assets/fonts/poppins-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-weight:400;font-style:normal;font-display:swap;src:url('assets/fonts/inter-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-weight:500;font-style:normal;font-display:swap;src:url('assets/fonts/inter-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-weight:600;font-style:normal;font-display:swap;src:url('assets/fonts/inter-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-weight:700;font-style:normal;font-display:swap;src:url('assets/fonts/inter-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'DM Mono';font-weight:400;font-style:normal;font-display:swap;src:url('assets/fonts/dm-mono-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Kaushan Script';font-weight:400;font-style:normal;font-display:swap;src:url('assets/fonts/kaushan-script-latin-400-normal.woff2') format('woff2')}
 /* Layout: a glass left rail on wide screens and a bottom tab bar on phones, floating over a full-bleed background (a scene per theme, or the user's own picture). Cards are translucent glass so any background stays readable. */
 :root{
   --font-display:'Poppins','Trebuchet MS',system-ui,sans-serif;
@@ -59,6 +68,14 @@
   --fg:#f0ecff; --muted:#b8aee3; --line:rgba(170,140,255,.28); --accent:#9b72ff; --on-accent:#120830;
   --good:#5eead4; --warn:#ffc65c; --bad:#ff8aa6; --info:#8cc0ff; --gold:#ffc65c; --scrim-rgb:6,3,20;
   --shadow:0 0 0 1px rgba(150,110,255,.14),0 14px 34px rgba(0,0,0,.5); color-scheme:dark;
+}
+
+:root[data-skin="shadow"]{
+  --bg:#0c0809; --surface:rgba(24,16,18,.78); --surface-solid:#1b1214; --surface2:rgba(255,255,255,.08); --input:rgba(255,255,255,.07);
+  --fg:#f4ecea; --muted:#bfaaa6; --line:rgba(255,255,255,.16); --accent:#e03a3a; --on-accent:#ffffff;
+  --good:#58e08c; --warn:#ffb340; --bad:#ff8585; --info:#7db4ff; --gold:#d9b25a; --scrim-rgb:8,4,5;
+  --font-script:'Kaushan Script','Brush Script MT',cursive;
+  --shadow:0 0 0 1px rgba(224,58,58,.14),0 14px 34px rgba(0,0,0,.55); color-scheme:dark;
 }
 
 *{box-sizing:border-box}
@@ -248,7 +265,7 @@ label.btn:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 75%,va
 /* mini calendar */
 .mini{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
 .mini .wd{font-size:.68rem;color:var(--muted);font-weight:600;padding:2px 0}
-.mini button{position:relative;aspect-ratio:1;min-height:34px;border:0;border-radius:10px;background:transparent;font-size:.82rem;font-weight:500;display:grid;place-items:center}
+.mini button{position:relative;aspect-ratio:1;min-height:30px;max-height:42px;border:0;border-radius:10px;background:transparent;font-size:.82rem;font-weight:500;display:grid;place-items:center}
 .mini button:hover{background:var(--surface2)}
 .mini button.today{background:var(--accent);color:var(--on-accent);font-weight:700}
 .mini button i{position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--muted)}
@@ -369,6 +386,71 @@ textarea.export{font-family:var(--font-mono);font-size:.78rem;min-height:200px;w
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   .fab:hover{transform:none}
+}
+
+/* ===== design-sheet look: icon badges, mission rows, showcase cards, theme emblems ===== */
+.ibadge{--c:var(--accent);width:var(--bs,46px);height:var(--bs,46px);border-radius:30%;display:grid;place-items:center;flex:none;color:#fff;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 70%,#000));box-shadow:0 6px 14px color-mix(in srgb,var(--c) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.ibadge svg{width:56%;height:56%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ibadge.round{border-radius:50%}
+.stat .si{background:none;font-size:0;width:auto;height:auto;display:block}
+.stat{position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:color-mix(in srgb,var(--c,var(--accent)) 16%,transparent)}
+.stat .sv{font-size:1.5rem}
+:root[data-skin="shadow"] h1,:root[data-skin="shadow"] .hello,:root[data-skin="shadow"] .brand-copy b{font-family:var(--font-script);font-weight:400;letter-spacing:.01em}
+:root[data-skin="shadow"] .hello{font-size:clamp(1.6rem,4.4vw,2.2rem)}
+.hero{position:relative;overflow:hidden}
+.hero .emblem{position:absolute;right:-6px;top:-6px;width:120px;height:120px;border-radius:0 20px 0 60px;background:#e9eef6 center/contain no-repeat;opacity:.95;mix-blend-mode:normal;display:none}
+.mrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:0}
+.mrow .mi{--c:var(--accent);width:42px;height:42px;border-radius:30%;display:grid;place-items:center;font-size:1.25rem;flex:none;background:color-mix(in srgb,var(--c) 26%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+.mrow .mm{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;text-align:left;background:transparent;border:0;padding:0}
+.mrow .mt{font-weight:600;overflow-wrap:anywhere;line-height:1.25}
+.mrow.is-done .mt{text-decoration:line-through;color:var(--muted)}
+.mrow .meter{height:8px}
+.mrow .mp{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);white-space:nowrap;min-width:3.2em;text-align:right}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qtile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 6px;border-radius:16px;border:1px solid var(--line);background:var(--surface2);font-weight:600;font-size:.82rem;min-height:84px;justify-content:center;text-align:center}
+.qtile:hover{background:color-mix(in srgb,var(--accent) 16%,var(--surface2))}
+.qtile .ibadge{--bs:36px}
+.showcase{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.scard{position:relative;border-radius:20px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.scard h3{font-size:1rem;display:flex;align-items:center;gap:10px}
+.scard .hbar{display:flex;flex-direction:column;gap:5px}
+.scard .hbar .l{display:flex;justify-content:space-between;gap:8px;font-size:.88rem}
+.scard .big{font-family:var(--font-display);font-weight:700;font-size:2.4rem;line-height:1}
+.bars{display:flex;align-items:flex-end;gap:6px;height:64px}
+.bars i{flex:1;border-radius:5px 5px 2px 2px;background:linear-gradient(to top,color-mix(in srgb,var(--accent) 55%,transparent),var(--accent));min-height:4px}
+.mring{width:84px;height:84px;flex:none}
+.mring .trk{fill:none;stroke:var(--surface2);stroke-width:9}
+.mring .val{fill:none;stroke:var(--accent);stroke-width:9;stroke-linecap:round}
+.mring text{fill:var(--fg);font:700 22px var(--font-display);text-anchor:middle}
+.tagbar{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 16px;border-radius:18px;background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.tagbar b{font-family:var(--font-display);font-weight:600}
+.tagbar .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+:root[data-skin="shadow"] .tagbar b{font-family:var(--font-script);font-weight:400;font-size:1.15rem}
+/* theme emblem cards, like the "Logos & Themes" row of the design sheet */
+.themes{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}
+.themecard{min-height:0;background:var(--surface-solid);color:var(--fg);justify-content:flex-start;border-radius:18px}
+.themecard::after{display:none}
+.themecard .tc-art{position:relative;inset:auto;display:block;height:92px;background:#eef2f9 center/contain no-repeat;background-origin:content-box;padding:8px}
+.themecard .tc-t{padding:9px 12px 0;display:block}
+.themecard .tc-s{padding:2px 12px 10px;display:block;color:var(--muted);opacity:1}
+/* about card */
+.about{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.about img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--line)}
+.plat{display:flex;gap:8px;flex-wrap:wrap}
+.plat span{padding:4px 12px;border-radius:999px;font-size:.8rem;font-weight:600;border:1px solid var(--line);background:var(--surface2)}
+/* belt widget */
+.belt{display:flex;align-items:center;gap:12px}
+.belt .bt{height:14px;flex:1;border-radius:4px;background:linear-gradient(90deg,var(--bc),color-mix(in srgb,var(--bc) 60%,#000))}
+.profchip{display:none}
+@media (max-width:820px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{padding:12px;gap:10px}.stat .sv{font-size:1.2rem}
+  .topbar .brand-copy small{display:none}
+  .hero-l{flex-direction:column;align-items:flex-start}
+  .profchip{display:flex;align-items:center;gap:8px;border:0;background:var(--surface2);padding:4px 10px 4px 4px;border-radius:999px;font-weight:600;font-size:.82rem}
+  .qgrid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -953,6 +1035,17 @@ function relTime(ms){
   const h = Math.floor(m / 60); if (h < 24) return 'in ' + h + 'h ' + (m % 60) + 'm';
   return 'in ' + Math.round(h / 24) + ' days';
 }
+function missionRow(o){
+  const t = taskById(o.taskId); if (!t) return '';
+  const st = dstatus(o), done = st === 'done', target = Number(t.targetAmount) || 0, prog = Number(o.progress) || 0;
+  const pct = done ? 100 : target ? Math.min(100, Math.round(prog / target * 100)) : st === 'partial' ? 50 : 0;
+  const c = (catById(t.catId) || {}).color || 'var(--accent)';
+  return `<div class="mrow${done ? ' is-done' : ''}">
+    <button class="check" type="button" data-a="toggleDone" data-id="${o.id}" aria-pressed="${done}" aria-label="${done ? 'Mark not done' : 'Mark done'}: ${esc(t.title)}">${done ? '✓' : ''}</button>
+    <span class="mi" style="--c:${esc(c)}" aria-hidden="true">${esc(t.emoji || '✅')}</span>
+    <button class="mm" type="button" data-a="openOcc" data-id="${o.id}"><span class="mt">${esc(t.title)}</span><span class="meter ${done ? '' : 'xp'}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="ometa">${esc(timeLabel(o))}${target ? ` · ${prog} / ${target} ${esc(t.targetUnit || '')}` : ''}</span></button>
+    <span class="mp">${pct}%</span></div>`;
+}
 function viewHome(){
   const td = todayStr(), now = new Date(), p = db.profile, th = curTheme(), g = greet();
   const todays = db.occs.filter(o => o.date === td && o.status !== 'cancelled').sort((a, b) => (a.start || a.due || '99').localeCompare(b.start || b.due || '99'));
@@ -962,7 +1055,13 @@ function viewHome(){
   const tb = budgetOf(null), tbu = Calc.budget(md.tot.spent, tb);
   const habits = db.tasks.filter(t => t.state === 'active' && t.rec.type !== 'none').slice(0, 4);
   const days7 = Array.from({length: 7}, (_, i) => addDays(td, i - 6));
-  const stat = (c, e, k, v) => `<div class="stat" style="--c:${c}"><span class="si" aria-hidden="true">${e}</span><div style="min-width:0"><div class="sk">${k}</div><div class="sv mono">${v}</div></div></div>`;
+  const stat = (c, ic, k, v) => `<div class="stat" style="--c:${c}">${ibadge(ic, c)}<div style="min-width:0"><div class="sk">${k}</div><div class="sv mono">${v}</div></div></div>`;
+  const qt = (a, ic, c, l) => `<button class="qtile" type="button" data-a="${a}">${ibadge(ic, c)}<span>${l}</span></button>`;
+  const cats = Object.entries(md.cats).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const topSpend = cats.length ? cats[0][1] : 0;
+  const goal = db.goals.slice().sort((a, b) => Calc.pct(b.actual, b.target) - Calc.pct(a.actual, a.target)).find(g => g.actual < g.target) || db.goals[0];
+  const wk = Array.from({length: 7}, (_, i) => rateRange(addDays(td, i - 6), addDays(td, i - 6)) || 0);
+  const mp = Math.round(md.rate || 0), C = 2 * Math.PI * 40;
   return `<div class="page">
     ${p.sample ? `<div class="banner"><span aria-hidden="true">🧪</span><span class="grow">You are looking at <b>sample data</b> so you can explore. Clear it any time and start fresh.</span><button class="btn small" type="button" data-a="clearSamples">Clear sample data</button></div>` : ''}
     ${memOnly ? `<div class="banner"><span aria-hidden="true">⚠️</span><span class="grow">This view cannot keep data after you close it. Export a backup from Settings, or open the saved app file in your browser.</span></div>` : ''}
@@ -976,31 +1075,38 @@ function viewHome(){
       ${themeWidget()}
     </section>
     <div class="stats">
-      ${stat('#f5a623', '✅', 'Tasks', doneN + '/' + todays.length)}
-      ${stat('#2fb344', '🌿', 'Habits', hD + '/' + hT.length)}
-      ${stat('#2f80ed', '💰', 'Balance', fmt(md.tot.remainder))}
-      ${stat('#a855f7', '🔥', 'Streak', streakDays() + (streakDays() === 1 ? ' day' : ' days'))}
+      ${stat('#f5a623', 'check', 'Tasks', doneN + '/' + todays.length)}
+      ${stat('#2fb344', 'leaf', 'Habits', hD + '/' + hT.length)}
+      ${stat('#2f80ed', 'wallet', 'Balance', fmt(md.tot.remainder))}
+      ${stat('#a855f7', 'flame', 'Streak', streakDays() + (streakDays() === 1 ? ' day' : ' days'))}
     </div>
     <div class="split">
       <section class="card" aria-label="${esc(th.today)}">
-        <h2>🗒️ ${esc(th.today)} <span class="grow"></span><button class="btn small" type="button" data-a="goView" data-v="calendar">Calendar</button></h2>
-        ${todays.length ? todays.map(o => occRow(o)).join('') : emptyState('🌤️', 'Nothing planned today.', '<button class="btn primary" type="button" data-a="newTask">Add your first task</button>')}
+        <h2>${ibadge('tasks', 'var(--accent)', 30)} ${esc(th.today)} <span class="grow"></span><button class="btn small" type="button" data-a="goView" data-v="calendar">Calendar</button></h2>
+        ${todays.length ? todays.map(missionRow).join('') : emptyState('🌤️', 'Nothing planned today.', '<button class="btn primary" type="button" data-a="newTask">Add your first task</button>')}
       </section>
       <div class="stack" style="gap:18px">
-        <section class="card" aria-label="This month"><h2>🗓️ ${esc(monthLabel(cm))}</h2>${miniCal()}</section>
-        <section class="card" aria-label="Quick actions"><h2>⚡ Quick add</h2><div class="qa">
-          <button class="btn" type="button" data-a="newTask">✅ Task</button><button class="btn" type="button" data-a="newReminder">⏰ Reminder</button>
-          <button class="btn" type="button" data-a="newExpense">💸 Expense</button><button class="btn" type="button" data-a="newIncome">💵 Income</button>
-          <button class="btn" type="button" data-a="newGoal">🎯 Goal</button><button class="btn" type="button" data-a="newCheckin">📸 Check-in</button></div></section>
-        <section class="card" aria-label="Spending snapshot"><h2>💰 Spending snapshot</h2>
-          ${tbu ? meter(tbu.used, tbu.over > 0 ? fmt(tbu.over) + ' over' : fmt(tbu.remaining) + ' left') + `<p class="sub" style="margin-top:8px">Monthly budget ${fmt(tb)} · spent ${fmt(md.tot.spent)}</p>` : emptyState('🎯', 'Set a monthly budget to see progress here.', '<button class="btn small" type="button" data-a="goMoney" data-t="budgets">Set budget</button>')}
-        </section>
-        <section class="card" aria-label="Habit streaks"><h2>🔥 Habits &amp; streaks <span class="grow"></span><button class="btn small" type="button" data-a="goView" data-v="habits">All</button></h2>
-          ${habits.length ? habits.map(t => habitRow(t, days7)).join('') : emptyState('🌱', 'Repeating tasks become habits with streaks.', '<button class="btn small" type="button" data-a="newTask">Create a habit</button>')}
-        </section>
+        <section class="card" aria-label="This month"><h2>${ibadge('calendar', '#2f80ed', 30)} ${esc(monthLabel(cm))}</h2>${miniCal()}</section>
+        <section class="card" aria-label="Quick actions"><h2>${ibadge('plus', '#f5a623', 30)} Quick actions</h2><div class="qgrid">
+          ${qt('newTask', 'check', '#2fb344', 'Add task')}${qt('newReminder', 'bell', '#f5a623', 'Reminder')}${qt('newExpense', 'expense', '#e5484d', 'Expense')}
+          ${qt('newIncome', 'income', '#2f80ed', 'Income')}${qt('newGoal', 'target', '#a855f7', 'Set goal')}${qt('newCheckin', 'cam', '#0ea5a4', 'Check-in')}</div></section>
       </div>
     </div>
-    <p class="strip">${th.strip.map(esc).join(' · ')}</p>
+    <div class="showcase">
+      <section class="scard" aria-label="Budget overview"><h3>${ibadge('wallet', '#f5a623', 34)} Budget overview</h3>
+        ${cats.length ? cats.map(([id, v]) => { const c = catById(id) || {name: 'Other', emoji: '🧾', color: '#888'}; return `<div class="hbar"><div class="l"><span>${esc(c.emoji)} ${esc(c.name)}</span><span class="mono muted">${fmt(v)}</span></div><div class="meter" aria-hidden="true"><i style="width:${topSpend ? Math.round(v / topSpend * 100) : 0}%;background:${esc(c.color)}"></i></div></div>`; }).join('') : '<p class="sub">Add an expense to see where your money goes.</p>'}
+        ${tbu ? meter(tbu.used, tbu.over > 0 ? fmt(tbu.over) + ' over' : fmt(tbu.remaining) + ' left') : '<button class="btn small" type="button" data-a="goMoney" data-t="budgets">Set a monthly budget</button>'}</section>
+      <section class="scard" aria-label="Goals"><h3>${ibadge('target', '#a855f7', 34)} Goals</h3>
+        ${goal ? (() => { const gp = Math.min(100, Math.round(Calc.pct(goal.actual, goal.target))); return `<div class="rowf"><span style="font-size:2rem" aria-hidden="true">${esc(goal.emoji || '🎯')}</span><div class="grow"><b>${esc(goal.title)}</b><div class="sub">${goal.actual} / ${goal.target}</div></div><span class="big">${gp}%</span></div><div class="meter xp" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${gp}"><i style="width:${gp}%"></i></div>`; })() : '<p class="sub">Set a goal and link tasks to it to watch it grow.</p><button class="btn small" type="button" data-a="newGoal">Set a goal</button>'}</section>
+      <section class="scard" aria-label="Monthly report"><h3>${ibadge('chart', '#2fb344', 34)} Monthly report</h3>
+        <div class="rowf"><svg class="mring" viewBox="0 0 100 100" role="img" aria-label="Completion ${mp} percent"><circle class="trk" cx="50" cy="50" r="40"/><circle class="val" cx="50" cy="50" r="40" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - mp / 100)).toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="58">${md.rate == null ? '–' : mp + '%'}</text></svg>
+        <div class="grow"><div class="sub">Consistency in ${esc(monthLabel(cm))}</div><button class="btn small" style="margin-top:8px" type="button" data-a="goView" data-v="reports">Open report</button></div></div>
+        <div class="bars" aria-hidden="true">${wk.map(v => `<i style="height:${Math.max(6, v)}%"></i>`).join('')}</div></section>
+    </div>
+    <section class="card" aria-label="Habit streaks"><h2>${ibadge('flame', '#f5a623', 30)} Habits &amp; streaks <span class="grow"></span><button class="btn small" type="button" data-a="goView" data-v="habits">All</button></h2>
+      ${habits.length ? habits.map(t => habitRow(t, days7)).join('') : emptyState('🌱', 'Repeating tasks become habits with streaks.', '<button class="btn small" type="button" data-a="newTask">Create a habit</button>')}
+    </section>
+    <div class="tagbar" role="note">${th.strip.map((x, i) => (i ? '<span class="dot" aria-hidden="true"></span>' : '') + `<b>${esc(x)}</b>`).join('')}</div>
   </div>`;
 }
 function habitRow(t, days){
@@ -1266,6 +1372,7 @@ function viewSettings(){
   const p = db.profile, perm = window.AndroidReminders ? window.AndroidReminders.notificationStatus() : (('Notification' in window) ? Notification.permission : 'unsupported');
   return `<div class="page">
     <div class="page-head"><div><h1>⚙️ Settings</h1><p class="sub">Make it feel like yours.</p></div></div>
+    <section class="card about" aria-label="About"><img src="assets/logo-512.jpg" alt="Way to Consistency logo"><div class="stack" style="flex:1;min-width:200px;gap:6px"><h2 style="margin:0">Way to Consistency</h2><p class="sub">Plan · Track · Improve · Grow</p><div class="plat"><span>Android</span><span>iOS</span><span>Windows</span><span>macOS</span><span>Works offline</span></div></div></section>
     <section class="card"><h2>🎨 Theme</h2><div class="stack" style="gap:16px">
       ${themeCards()}
       ${p.skin === 'minimal' ? `<div class="field"><span class="lbl-t">Mode (Minimal theme)</span><div class="seg" role="group" aria-label="Mode">${[['system', '🖥️ Auto'], ['light', '☀️ Light'], ['dark', '🌙 Dark']].map(x => `<button type="button" data-a="setTheme" data-v="${x[0]}" aria-pressed="${p.theme === x[0]}">${x[1]}</button>`).join('')}</div></div>` : '<p class="sub">This theme has its own dark look. Switch to Minimal for light and dark modes.</p>'}
@@ -1524,6 +1631,7 @@ const ART = {
   car: () => svgWrap(`<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14060b"/><stop offset=".5" stop-color="#6b1220"/><stop offset=".78" stop-color="#ff5a2b"/><stop offset="1" stop-color="#ffb35a"/></linearGradient><radialGradient id="g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd2a0" stop-opacity=".85"/><stop offset="1" stop-color="#ffd2a0" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#s)"/><circle cx="800" cy="560" r="300" fill="url(#g)"/><path d="M0 600 L220 470 L400 560 L620 430 L800 570 L1000 450 L1240 560 L1420 470 L1600 580 V900 H0Z" fill="#2a0c14"/><path d="M0 640 L300 560 L560 620 L800 560 L1080 630 L1340 570 L1600 640 V900 H0Z" fill="#190709"/><path d="M640 900 L770 600 L830 600 L960 900Z" fill="#0c0406"/><path d="M800 900 L800 600" stroke="#ffb199" stroke-width="8" stroke-dasharray="46 34" opacity=".8"/><path d="M0 900 L770 600 M1600 900 L830 600" stroke="#ff4a4a" stroke-width="3" opacity=".5"/>`),
   space: () => svgWrap(`<defs><radialGradient id="n1" cx=".3" cy=".4" r=".6"><stop offset="0" stop-color="#7b3fe4" stop-opacity=".6"/><stop offset="1" stop-color="#7b3fe4" stop-opacity="0"/></radialGradient><radialGradient id="n2" cx=".75" cy=".7" r=".5"><stop offset="0" stop-color="#e0449a" stop-opacity=".45"/><stop offset="1" stop-color="#e0449a" stop-opacity="0"/></radialGradient><radialGradient id="p" cx=".35" cy=".35" r=".8"><stop offset="0" stop-color="#d98bff"/><stop offset=".6" stop-color="#6a2fd0"/><stop offset="1" stop-color="#1f0a52"/></radialGradient></defs><rect width="1600" height="900" fill="#090620"/><rect width="1600" height="900" fill="url(#n1)"/><rect width="1600" height="900" fill="url(#n2)"/>${starField(260, 21, 900)}<circle cx="1220" cy="320" r="170" fill="url(#p)"/><ellipse cx="1220" cy="330" rx="290" ry="56" fill="none" stroke="#e4c6ff" stroke-width="7" opacity=".55" transform="rotate(-18 1220 330)"/><circle cx="420" cy="640" r="46" fill="#3fa0ff" opacity=".8"/><circle cx="408" cy="628" r="46" fill="#0a0620" opacity=".35"/>`)
 };
+ART.shadow = () => svgWrap(`<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0506"/><stop offset=".6" stop-color="#2a0c10"/><stop offset="1" stop-color="#4a1212"/></linearGradient><radialGradient id="m" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff5a4a" stop-opacity=".55"/><stop offset="1" stop-color="#ff3a2a" stop-opacity="0"/></radialGradient><radialGradient id="d" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#e5483c"/><stop offset=".7" stop-color="#a81f1f"/><stop offset="1" stop-color="#5e0f12"/></radialGradient></defs><rect width="1600" height="900" fill="url(#s)"/><circle cx="1150" cy="300" r="380" fill="url(#m)"/><circle cx="1150" cy="300" r="150" fill="url(#d)"/><g fill="#7a1418" opacity=".55"><circle cx="1105" cy="262" r="26"/><circle cx="1190" cy="350" r="34"/><circle cx="1130" cy="352" r="14"/><circle cx="1205" cy="255" r="12"/></g><path d="M0 640 L220 470 L360 570 L560 400 L760 580 L930 500 L1120 620 L1330 480 L1600 600 V900 H0Z" fill="#1a0a0c"/><g fill="#050203"><rect x="200" y="470" width="14" height="300"/><rect x="420" y="470" width="14" height="300"/><path d="M150 450 Q317 490 484 450 L500 475 Q317 520 134 475Z"/><rect x="190" y="520" width="254" height="12"/></g><path d="M0 760 Q400 700 800 770 T1600 740 V900 H0Z" fill="#050203"/><g fill="#050203"><path d="M1000 700 l-10 -90 q8 -20 20 0 l-4 90z"/><path d="M1060 700 l8 -85 q10 -18 18 2 l-8 83z"/></g>`);
 const THEMES = {
   minimal: {id: 'minimal', name: 'Minimal', emoji: '☀️', tag: 'Simple. Clean. Powerful.', dim: 0, widget: 'progress', today: "Today's Tasks",
     quote: 'Better habits. A brighter future.', strip: ['Clean', 'Simple', 'Productive']},
@@ -1533,9 +1641,13 @@ const THEMES = {
     quote: 'Small steps every day lead to big achievements!', strip: ['Earn XP', 'Unlock achievements', 'Build habits', 'Level up']},
   car: {id: 'car', name: 'Car', emoji: '🏎️', tag: 'Drive your goals', dim: .3, widget: 'fuel', today: "Today's Route",
     quote: 'Discipline is the fuel for your dreams.', strip: ['Track fuel', 'Keep moving', 'Achieve more']},
+  shadow: {id: 'shadow', name: 'Shadow Fight', emoji: '🥷', tag: 'Train. Focus. Overcome.', dim: .32, widget: 'belt', today: "Today's Training",
+    quote: 'Discipline is the sharpest blade.', strip: ['Train', 'Focus', 'Overcome', 'Master']},
   space: {id: 'space', name: 'Space', emoji: '🪐', tag: 'Explore your potential', dim: .22, widget: 'orbit', today: "Today's Orbit",
     quote: 'Aim high. Even a miss can land you among the stars.', strip: ['Dream', 'Track', 'Achieve', 'Repeat']}
 };
+const EMBLEM = {minimal: 'minimal', nature: 'nature', gaming: 'gaming', car: 'car', space: 'space', shadow: 'shadow'};
+const emblemUrl = id => 'assets/emblems/' + (EMBLEM[id] || 'sun') + '.jpg';
 const artCache = {};
 function artUri(id){ if (!artCache[id]) artCache[id] = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(ART[id]()); return artCache[id]; }
 const curTheme = () => THEMES[db.profile.skin] || THEMES.minimal;
@@ -1644,6 +1756,8 @@ function themeWidget(){
   const th = curTheme(), r7 = rateOver(7), r30 = rateOver(30), p7 = Math.round(r7 || 0), p30 = Math.round(r30 || 0);
   switch (th.widget){
     case 'xp': { const x = xpInfo(); return `<div class="widget"><div class="wk">🎮 Level ${x.lvl} · ${esc(x.title)}</div><div class="wv mono">XP ${x.into}<small> / ${x.per}</small></div><div class="meter xp" role="progressbar" aria-valuemin="0" aria-valuemax="${x.per}" aria-valuenow="${x.into}"><i style="width:${x.into / x.per * 100}%"></i></div><p class="sub">${x.per - x.into} XP to Level ${x.lvl + 1}. Every finished task earns 10 XP.</p></div>`; }
+    case 'belt': { const ranks = [['White', '#e8e8e8'], ['Yellow', '#f2c94c'], ['Orange', '#f2994a'], ['Green', '#27ae60'], ['Blue', '#2f80ed'], ['Brown', '#8d5524'], ['Black', '#222']], x = xpInfo(), ri = Math.min(6, Math.floor((x.lvl - 1) / 2)), rk = ranks[ri];
+      return `<div class="widget"><div class="wk">🥷 Belt rank · Level ${x.lvl}</div><div class="belt" style="--bc:${rk[1]}"><span class="wv">${rk[0]} belt</span><span class="bt" aria-hidden="true"></span></div><div class="meter xp" role="progressbar" aria-valuemin="0" aria-valuemax="${x.per}" aria-valuenow="${x.into}"><i style="width:${x.into / x.per * 100}%"></i></div><p class="sub">${x.per - x.into} XP to the next level. ${p30}% consistent over 30 days.</p></div>`; }
     case 'fuel': return `<div class="widget"><div class="wk">⛽ Fuel level (last 7 days)</div><div class="row2"><svg class="gauge" viewBox="0 0 120 72" role="img" aria-label="Fuel level ${p7} percent"><path class="trk" d="M10 62 A50 50 0 0 1 110 62" pathLength="100"/><path class="val" d="M10 62 A50 50 0 0 1 110 62" pathLength="100" stroke-dasharray="${p7} 100"/><line class="needle" x1="60" y1="62" x2="60" y2="26" transform="rotate(${-90 + p7 * 1.8} 60 62)"/><circle class="hub" cx="60" cy="62" r="5"/></svg><div><div class="wv mono">${r7 == null ? '–' : p7 + '%'}</div><p class="sub">${p7 >= 70 ? 'Tank is full. Keep cruising.' : p7 >= 40 ? 'Half a tank. Refuel with one win.' : 'Low fuel. One small task gets you moving.'}</p></div></div></div>`;
     case 'orbit': { const ang = (-90 + Math.min(100, p30) * 3.6) * Math.PI / 180, x = 60 + 44 * Math.cos(ang), y = 60 + 44 * Math.sin(ang), C = 2 * Math.PI * 44; return `<div class="widget"><div class="wk">🪐 Orbit progress (30 days)</div><div class="row2"><svg class="orbit" viewBox="0 0 120 120" role="img" aria-label="Orbit ${p30} percent"><circle class="ring" cx="60" cy="60" r="44"/><circle class="val" cx="60" cy="60" r="44" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - p30 / 100)).toFixed(1)}" transform="rotate(-90 60 60)"/><text x="${x.toFixed(1)}" y="${(y + 6).toFixed(1)}" text-anchor="middle" font-size="18">🪐</text><text x="60" y="66" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor" font-family="Poppins,sans-serif">${r30 == null ? '–' : p30 + '%'}</text></svg><p class="sub">${streakDays()} day streak. Each completed day pushes you further along your orbit.</p></div></div>`; }
     case 'plant': { const g = r30 == null ? '🌱' : p30 < 25 ? '🌱' : p30 < 50 ? '🌿' : p30 < 75 ? '🪴' : '🌳'; return `<div class="widget"><div class="wk">🌿 Your growth (30 days)</div><div class="row2"><span class="plant" aria-hidden="true">${g}</span><div style="flex:1"><div class="wv mono">${r30 == null ? '–' : p30 + '%'}</div><div class="meter" style="margin-top:6px"><i style="width:${p30}%"></i></div></div></div><p class="sub">Breathe. One small action today keeps the roots strong.</p></div>`; }
@@ -1671,14 +1785,33 @@ const ICON = {
   reports: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   journey: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  gamepad: '<path d="M6 8h12a4 4 0 0 1 4 4v3a3 3 0 0 1-5.2 2L15 15H9l-1.8 2A3 3 0 0 1 2 15v-3a4 4 0 0 1 4-4z"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="16" cy="11.5" r=".8"/><circle cx="18" cy="13.5" r=".8"/>',
+  car: '<path d="M3 15l1.6-5A2 2 0 0 1 6.5 8.6h11a2 2 0 0 1 1.9 1.4L21 15v3H3z"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M5 12h14"/>',
+  planet: '<circle cx="12" cy="12" r="5"/><path d="M3 15c-1-2 3-6 9-8M21 9c1 2-3 6-9 8" />',
+  leaf: '<path d="M5 19C4 10 9 4 20 4c0 11-6 16-15 15z"/><path d="M5 19c3-5 6-8 10-10"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',
+  ninja: '<path d="M12 2l2.5 6.5L21 12l-6.5 2.5L12 22l-2.5-7.5L3 12l6.5-3.5z"/><circle cx="12" cy="12" r="1.8"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+  wallet: '<path d="M3 7a2 2 0 0 1 2-2h13v4"/><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="16.5" cy="13.5" r="1.2"/>',
+  flame: '<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-6 1-9z"/>',
+  bell: '<path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4z"/><path d="M10 21h4"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="M14.5 9c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.6 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1 0-2-.5-2.5-1.5M12 6v1.5M12 16.5V18"/>',
+  trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 20h8M10 17h4"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  expense: '<path d="M12 4v12M7 11l5 5 5-5M5 20h14"/>',
+  income: '<path d="M12 20V8M7 13l5-5 5 5M5 4h14"/>',
   more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
 };
 const icon = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>`;
+const ibadge = (n, c, size, round) => `<span class="ibadge${round ? ' round' : ''}" style="--c:${c || 'var(--accent)'}${size ? ';--bs:' + size + 'px' : ''}" aria-hidden="true">${icon(n)}</span>`;
 const LOGO = '<span class="brand-mark" aria-hidden="true"><img class="logo" src="assets/brand-logo.png" alt=""></span>';
 const EMOJIS = ['🍜', '🚌', '🏠', '🛍️', '💊', '🎬', '📚', '✨', '☕', '🎁', '✈️', '🐶', '💡', '📱', '🎮', '🏋️', '🧘', '💼', '🎓', '💰', '🧾', '🚗', '🍎', '🌿'];
 const emojiPicker = target => `<div class="emoji-grid" role="group" aria-label="Pick an emoji">${EMOJIS.map(e => `<button type="button" data-a="pickEmoji" data-t="${target}" data-v="${e}" aria-label="Use ${e}">${e}</button>`).join('')}</div>`;
 function themeCards(){
-  return `<div class="themes">${Object.values(THEMES).map(t => `<button type="button" class="themecard" data-a="setLook" data-v="${t.id}" aria-pressed="${db.profile.skin === t.id}"><span class="tc-art" style='background-image:url("${artUri(t.id)}")'></span><span class="tc-t">${t.emoji} ${t.name}</span><span class="tc-s">${esc(t.tag)}</span></button>`).join('')}</div>`;
+  return `<div class="themes">${Object.values(THEMES).map(t => `<button type="button" class="themecard" data-a="setLook" data-v="${t.id}" aria-pressed="${db.profile.skin === t.id}"><span class="tc-art" style='background-image:url("${emblemUrl(t.id)}")' role="img" aria-label="${esc(t.name)} emblem"></span><span class="tc-t">${t.emoji} ${t.name}</span><span class="tc-s">${esc(t.tag)}</span></button>`).join('')}</div>`;
 }
 
 /* ---------- journey: your photo, your consistency ---------- */
