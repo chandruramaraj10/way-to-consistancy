@@ -1705,27 +1705,144 @@ function trees(n, seed, y0, h, color){
     s += `<path d="M${x.toFixed(0)} ${y0 - hh} L${(x - w).toFixed(0)} ${y0} L${(x + w).toFixed(0)} ${y0}Z" fill="${color}"/>`; }
   return s;
 }
+/* ---------- illustrated theme scenes (generated SVG, layered like a photo: glow, haze, depth, grain) ---------- */
+const f1 = n => (+n).toFixed(1);
+const gr = (id, stops, x2 = 0, y2 = 1) => `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}">${stops.map(([o, c, a]) => `<stop offset="${o}" stop-color="${c}"${a != null ? ` stop-opacity="${a}"` : ''}/>`).join('')}</linearGradient>`;
+const rg = (id, stops, cx = .5, cy = .5, r = .5) => `<radialGradient id="${id}" cx="${cx}" cy="${cy}" r="${r}">${stops.map(([o, c, a]) => `<stop offset="${o}" stop-color="${c}" stop-opacity="${a == null ? 1 : a}"/>`).join('')}</radialGradient>`;
+const blurF = (id, d) => `<filter id="${id}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="${d}"/></filter>`;
+const grainDef = `<filter id="gn" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="5"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0"/></filter>`;
+const grainRect = (o = .07) => `<rect width="1600" height="900" filter="url(#gn)" opacity="${o}"/>`;
+const vignette = (o = .55) => `<defs>${rg('vg', [[.55, '#000', 0], [1, '#000', o]], .5, .5, .75)}</defs><rect width="1600" height="900" fill="url(#vg)"/>`;
+function ridge(seed, y0, amp, fill, o = {}){
+  const r = lcg(seed), n = o.n || 140, p1 = r() * 6, p2 = r() * 6, p3 = r() * 6, f1_ = o.f || 1;
+  let d = `M0 900 L0 ${f1(y0)}`;
+  for (let i = 0; i <= n; i++){
+    const x = i / n * 1600, t = x / 1600 * Math.PI * 2 * f1_;
+    const h = .5 * (1 - Math.abs(Math.sin(t * 1.3 + p1))) + .3 * (1 - Math.abs(Math.sin(t * 3.1 + p2))) + .2 * (1 - Math.abs(Math.sin(t * 7.3 + p3)));
+    d += ` L${f1(x)} ${f1(y0 - amp * Math.pow(h, o.pow || 1.35) + (r() - .5) * (o.jit == null ? 5 : o.jit))}`;
+  }
+  return `<path d="${d} L1600 900Z" fill="${fill}"${o.op ? ` opacity="${o.op}"` : ''}/>`;
+}
+function pines(n, seed, y0, h, color, spread = 1600, x0 = 0){
+  const r = lcg(seed); let s = '';
+  for (let i = 0; i < n; i++){
+    const x = x0 + r() * spread, hh = h * (.55 + r() * .8), w = hh * .28;
+    s += `<path d="M${f1(x)} ${f1(y0 - hh)} L${f1(x - w * .55)} ${f1(y0 - hh * .62)} L${f1(x - w * .8)} ${f1(y0 - hh * .62)} L${f1(x - w * .35)} ${f1(y0 - hh * .3)} L${f1(x - w)} ${f1(y0 - hh * .3)} L${f1(x - w * .1)} ${f1(y0)} L${f1(x + w * .1)} ${f1(y0)} L${f1(x + w)} ${f1(y0 - hh * .3)} L${f1(x + w * .35)} ${f1(y0 - hh * .3)} L${f1(x + w * .8)} ${f1(y0 - hh * .62)} L${f1(x + w * .55)} ${f1(y0 - hh * .62)}Z" fill="${color}"/>`;
+  }
+  return s;
+}
+function blades(n, seed, y0, h, colors){
+  const r = lcg(seed); let s = '';
+  for (let i = 0; i < n; i++){
+    const x = r() * 1600, hh = h * (.4 + r() * .9), lean = (r() - .5) * 38, c = colors[Math.floor(r() * colors.length)];
+    s += `<path d="M${f1(x)} ${f1(y0 + r() * 60)} Q${f1(x + lean * .3)} ${f1(y0 - hh * .5)} ${f1(x + lean)} ${f1(y0 - hh)} Q${f1(x + lean * .5 + 4)} ${f1(y0 - hh * .45)} ${f1(x + 5)} ${f1(y0 + r() * 60)}Z" fill="${c}"/>`;
+  }
+  return s;
+}
+function bigStars(n, seed, maxy){
+  const r = lcg(seed); let s = '';
+  for (let i = 0; i < n; i++){ const x = r() * 1600, y = r() * maxy, k = 6 + r() * 12;
+    s += `<g opacity="${f1(.55 + r() * .4)}"><circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(k * .5)}" fill="#fff" filter="url(#b3)"/><path d="M${f1(x - k)} ${f1(y)}H${f1(x + k)}M${f1(x)} ${f1(y - k)}V${f1(y + k)}" stroke="#fff" stroke-width="1" opacity=".8"/><circle cx="${f1(x)}" cy="${f1(y)}" r="1.8" fill="#fff"/></g>`; }
+  return s;
+}
 const svgWrap = inner => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">${inner}</svg>`;
-const ART = {
-  minimal: () => svgWrap(`<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fbff"/><stop offset="1" stop-color="#e3ecf8"/></linearGradient><radialGradient id="s" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffb347" stop-opacity=".55"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient><radialGradient id="b" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#6aa5ff" stop-opacity=".28"/><stop offset="1" stop-color="#6aa5ff" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#g)"/><circle cx="1380" cy="140" r="360" fill="url(#s)"/><circle cx="1380" cy="140" r="64" fill="#ffb347" opacity=".85"/><circle cx="200" cy="820" r="520" fill="url(#b)"/>`),
-  nature: () => svgWrap(`<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#58b8a6"/><stop offset=".6" stop-color="#bfe6b8"/><stop offset="1" stop-color="#eef7c8"/></linearGradient><radialGradient id="g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff6c2" stop-opacity=".95"/><stop offset="1" stop-color="#fff6c2" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#s)"/><circle cx="1180" cy="250" r="340" fill="url(#g)"/><path d="M0 520 Q300 400 620 500 T1200 470 T1600 510 V900 H0Z" fill="#3d8c58"/><path d="M0 620 Q400 520 820 620 T1600 600 V900 H0Z" fill="#2a7046"/>${trees(46, 5, 660, 150, '#1f5c3a')}<path d="M0 730 Q500 650 960 740 T1600 720 V900 H0Z" fill="#17513a"/>${trees(34, 11, 780, 210, '#0f3d2a')}<path d="M0 820 Q600 760 1100 830 T1600 810 V900 H0Z" fill="#0b2f20"/>`),
-  gaming: () => svgWrap(`<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050b24"/><stop offset=".55" stop-color="#2b2b72"/><stop offset=".82" stop-color="#c8643c"/><stop offset="1" stop-color="#f2a65a"/></linearGradient><radialGradient id="g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#s)"/>${starField(130, 3, 430)}<circle cx="1040" cy="580" r="280" fill="url(#g)"/><path d="M0 640 L180 470 L300 560 L470 380 L640 560 L780 470 L960 620 L1120 450 L1300 580 L1450 430 L1600 540 V900 H0Z" fill="#1b2150"/><path d="M0 740 L200 600 L340 690 L540 540 L720 700 L900 600 L1100 720 L1300 610 L1600 740 V900 H0Z" fill="#0f1535"/>${trees(40, 9, 830, 120, '#070b1f')}<path d="M0 840 Q400 770 800 840 T1600 820 V900 H0Z" fill="#050818"/>`),
-  car: () => svgWrap(`<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14060b"/><stop offset=".5" stop-color="#6b1220"/><stop offset=".78" stop-color="#ff5a2b"/><stop offset="1" stop-color="#ffb35a"/></linearGradient><radialGradient id="g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd2a0" stop-opacity=".85"/><stop offset="1" stop-color="#ffd2a0" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#s)"/><circle cx="800" cy="560" r="300" fill="url(#g)"/><path d="M0 600 L220 470 L400 560 L620 430 L800 570 L1000 450 L1240 560 L1420 470 L1600 580 V900 H0Z" fill="#2a0c14"/><path d="M0 640 L300 560 L560 620 L800 560 L1080 630 L1340 570 L1600 640 V900 H0Z" fill="#190709"/><path d="M640 900 L770 600 L830 600 L960 900Z" fill="#0c0406"/><path d="M800 900 L800 600" stroke="#ffb199" stroke-width="8" stroke-dasharray="46 34" opacity=".8"/><path d="M0 900 L770 600 M1600 900 L830 600" stroke="#ff4a4a" stroke-width="3" opacity=".5"/>`),
-  space: () => svgWrap(`<defs><radialGradient id="n1" cx=".3" cy=".4" r=".6"><stop offset="0" stop-color="#7b3fe4" stop-opacity=".6"/><stop offset="1" stop-color="#7b3fe4" stop-opacity="0"/></radialGradient><radialGradient id="n2" cx=".75" cy=".7" r=".5"><stop offset="0" stop-color="#e0449a" stop-opacity=".45"/><stop offset="1" stop-color="#e0449a" stop-opacity="0"/></radialGradient><radialGradient id="p" cx=".35" cy=".35" r=".8"><stop offset="0" stop-color="#d98bff"/><stop offset=".6" stop-color="#6a2fd0"/><stop offset="1" stop-color="#1f0a52"/></radialGradient></defs><rect width="1600" height="900" fill="#090620"/><rect width="1600" height="900" fill="url(#n1)"/><rect width="1600" height="900" fill="url(#n2)"/>${starField(260, 21, 900)}<circle cx="1220" cy="320" r="170" fill="url(#p)"/><ellipse cx="1220" cy="330" rx="290" ry="56" fill="none" stroke="#e4c6ff" stroke-width="7" opacity=".55" transform="rotate(-18 1220 330)"/><circle cx="420" cy="640" r="46" fill="#3fa0ff" opacity=".8"/><circle cx="408" cy="628" r="46" fill="#0a0620" opacity=".35"/>`)
-};
-ART.shadow = () => svgWrap(`<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0506"/><stop offset=".6" stop-color="#2a0c10"/><stop offset="1" stop-color="#4a1212"/></linearGradient><radialGradient id="m" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff5a4a" stop-opacity=".55"/><stop offset="1" stop-color="#ff3a2a" stop-opacity="0"/></radialGradient><radialGradient id="d" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#e5483c"/><stop offset=".7" stop-color="#a81f1f"/><stop offset="1" stop-color="#5e0f12"/></radialGradient></defs><rect width="1600" height="900" fill="url(#s)"/><circle cx="1150" cy="300" r="380" fill="url(#m)"/><circle cx="1150" cy="300" r="150" fill="url(#d)"/><g fill="#7a1418" opacity=".55"><circle cx="1105" cy="262" r="26"/><circle cx="1190" cy="350" r="34"/><circle cx="1130" cy="352" r="14"/><circle cx="1205" cy="255" r="12"/></g><path d="M0 640 L220 470 L360 570 L560 400 L760 580 L930 500 L1120 620 L1330 480 L1600 600 V900 H0Z" fill="#1a0a0c"/><g fill="#050203"><rect x="200" y="470" width="14" height="300"/><rect x="420" y="470" width="14" height="300"/><path d="M150 450 Q317 490 484 450 L500 475 Q317 520 134 475Z"/><rect x="190" y="520" width="254" height="12"/></g><path d="M0 760 Q400 700 800 770 T1600 740 V900 H0Z" fill="#050203"/><g fill="#050203"><path d="M1000 700 l-10 -90 q8 -20 20 0 l-4 90z"/><path d="M1060 700 l8 -85 q10 -18 18 2 l-8 83z"/></g>`);
+const base = `<defs>${blurF('b3', 3)}${blurF('b8', 8)}${blurF('b20', 20)}${blurF('b40', 40)}${blurF('b70', 70)}${grainDef}</defs>`;
+const hiker = (x, y, k, c) => `<g transform="translate(${x} ${y}) scale(${k})" fill="${c}"><circle cx="0" cy="-58" r="6"/><path d="M-9 -50 Q0 -56 9 -50 L12 -20 L6 -20 L4 0 L-1 0 L0 -18 L-3 0 L-8 0 L-6 -20 L-12 -22Z"/><path d="M10 -46 L26 -62 L28 -60 L13 -42Z"/><rect x="24" y="-66" width="2.4" height="68" rx="1"/></g>`;
+
+const ART = {};
+ART.gaming = () => svgWrap(`${base}<defs>${gr('sk', [[0, '#080c33'], [.38, '#2b2370'], [.62, '#8a3b86'], [.8, '#e0654a'], [.92, '#ffb35c']])}${rg('sun', [[0, '#fff2c8', 1], [.18, '#ffd08a', .9], [.5, '#ff8a4a', .35], [1, '#ff6a3a', 0]], .5, .5, .5)}${gr('hz', [[0, '#ffb86a', 0], [1, '#ffb86a', .55]])}</defs>
+<rect width="1600" height="900" fill="url(#sk)"/>${starField(150, 7, 380)}${bigStars(8, 11, 300)}
+<circle cx="960" cy="610" r="560" fill="url(#sun)"/>
+<g filter="url(#b20)" opacity=".75"><ellipse cx="420" cy="520" rx="380" ry="26" fill="#ff9d6e"/><ellipse cx="1260" cy="470" rx="420" ry="22" fill="#d9689a"/><ellipse cx="900" cy="575" rx="520" ry="18" fill="#ffd9a0"/><ellipse cx="200" cy="400" rx="260" ry="16" fill="#8f6bd6"/></g>
+${ridge(21, 640, 230, '#7a5aa6', {op: .55, pow: 1.6})}${ridge(33, 690, 250, '#4a3f93', {op: .85, pow: 1.5})}
+<g filter="url(#b40)" opacity=".55"><ellipse cx="800" cy="690" rx="900" ry="46" fill="#f7a97c"/></g>
+${ridge(47, 770, 250, '#262a73', {pow: 1.4})}
+<path d="M1010 640 q40 -50 90 -34 q36 6 52 34 z" fill="#0b0f33"/>${hiker(1100, 608, .9, '#04061a')}
+<g filter="url(#b40)" opacity=".4"><ellipse cx="520" cy="800" rx="700" ry="40" fill="#c8a0ff"/></g>
+${ridge(61, 850, 120, '#10153f', {pow: 1.2})}${pines(70, 3, 900, 150, '#070a22')}${pines(26, 9, 900, 230, '#04061a', 700)}${pines(22, 14, 900, 220, '#04061a', 600, 1000)}
+${grainRect(.08)}${vignette(.5)}`);
+
+ART.car = () => svgWrap(`${base}<defs>${gr('sk', [[0, '#12050a'], [.4, '#5a1426'], [.62, '#b42d3a'], [.78, '#ff6a2b'], [.9, '#ffc26b']])}${rg('sun', [[0, '#fff0c0', 1], [.2, '#ffc97a', .85], [.55, '#ff6a3a', .3], [1, '#ff4a2a', 0]])}${gr('rd', [[0, '#2a1218'], [1, '#0a0508']])}${gr('gl', [[0, '#ff4a4a', .9], [1, '#ff4a4a', 0]])}${rg('tl', [[0, '#ff6b6b', 1], [.4, '#ff2a2a', .7], [1, '#ff0000', 0]])}${gr('bd', [[0, '#e0222e'], [.55, '#a50f1c'], [1, '#52060e']])}${gr('gls', [[0, '#1a1f33'], [1, '#05060d']])}</defs>
+<rect width="1600" height="900" fill="url(#sk)"/>${starField(60, 4, 220)}
+<circle cx="800" cy="585" r="620" fill="url(#sun)"/><circle cx="800" cy="585" r="105" fill="#fff0c6" opacity=".95"/>
+<g filter="url(#b20)" opacity=".7"><ellipse cx="300" cy="470" rx="360" ry="20" fill="#ff8a5a"/><ellipse cx="1300" cy="430" rx="400" ry="18" fill="#ff7a6a"/><ellipse cx="800" cy="520" rx="600" ry="14" fill="#ffd79a"/></g>
+${ridge(5, 600, 190, '#6d1f35', {op: .9, pow: 1.5})}${ridge(15, 625, 170, '#3b1226', {pow: 1.4})}
+<g filter="url(#b40)" opacity=".5"><ellipse cx="800" cy="620" rx="800" ry="30" fill="#ff9a5a"/></g>
+<rect y="610" width="1600" height="290" fill="#14080d"/>
+<path d="M800 606 L70 900 H1530Z" fill="url(#rd)"/>
+<path d="M800 606 L70 900" stroke="#ff7a4a" stroke-width="3" opacity=".7" filter="url(#b3)"/><path d="M800 606 L1530 900" stroke="#ff7a4a" stroke-width="3" opacity=".7" filter="url(#b3)"/>
+${[0, 1, 2, 3, 4, 5].map(i => { const t0 = Math.pow(i / 6, 1.7), t1 = Math.pow((i + .55) / 6, 1.7), y0 = 612 + t0 * 288, y1 = 612 + t1 * 288, w0 = 3 + t0 * 22, w1 = 3 + t1 * 22; return `<path d="M${f1(800 - w0)} ${f1(y0)} L${f1(800 + w0)} ${f1(y0)} L${f1(800 + w1)} ${f1(y1)} L${f1(800 - w1)} ${f1(y1)}Z" fill="#ffd9a0" opacity=".85"/>`; }).join('')}
+<ellipse cx="800" cy="840" rx="260" ry="30" fill="#000" opacity=".55" filter="url(#b8)"/>
+<g transform="translate(800 808)"><rect x="-190" y="-30" width="62" height="44" rx="10" fill="#050407"/><rect x="128" y="-30" width="62" height="44" rx="10" fill="#050407"/>
+<path d="M-200 -8 Q-205 -66 -150 -78 L-96 -118 Q0 -140 96 -118 L150 -78 Q205 -66 200 -8 Q200 12 170 14 H-170 Q-200 12 -200 -8Z" fill="url(#bd)"/>
+<path d="M-92 -112 Q0 -132 92 -112 L120 -78 H-120Z" fill="url(#gls)"/><path d="M-70 -108 L-30 -82 H-96Z" fill="#fff" opacity=".07"/>
+<path d="M-188 -50 H-60 V-34 H-186Z" fill="#ff2a35"/><path d="M60 -50 H188 V-34 H60Z" fill="#ff2a35"/>
+<circle cx="-150" cy="-42" r="70" fill="url(#tl)" opacity=".7" filter="url(#b8)"/><circle cx="150" cy="-42" r="70" fill="url(#tl)" opacity=".7" filter="url(#b8)"/>
+<rect x="-44" y="-32" width="88" height="22" rx="4" fill="#12080b"/><path d="M-170 6 H170" stroke="#000" stroke-opacity=".5" stroke-width="6"/></g>
+<g filter="url(#b8)" opacity=".5">${[...Array(14)].map((_, i) => `<circle cx="${120 + i * 110}" cy="${690 + (i % 3) * 30}" r="${6 + i % 4 * 3}" fill="#ffb27a"/>`).join('')}</g>
+${grainRect(.08)}${vignette(.6)}`);
+
+ART.space = () => svgWrap(`${base}<defs>${rg('bg', [[0, '#1a0b45'], [.6, '#0a0626'], [1, '#04020f']], .55, .4, .9)}<filter id="cl" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".0035 .005" numOctaves="5" seed="12"/><feColorMatrix values="0 0 0 0 .62  0 0 0 0 .3  0 0 0 0 1  0 0 0 2.2 -.95"/></filter><filter id="cl2" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".004 .003" numOctaves="4" seed="31"/><feColorMatrix values="0 0 0 0 .95  0 0 0 0 .25  0 0 0 0 .6  0 0 0 2 -.95"/></filter>
+${rg('pl', [[0, '#fff0c9'], [.45, '#d9b074'], [.8, '#7a5230'], [1, '#2a170f']], .35, .3, .8)}${rg('pb', [[0, '#9ae7ff'], [.5, '#3a7fe0'], [1, '#0d1a5a']], .35, .3, .8)}${rg('ga', [[0, '#8f6bff', .6], [1, '#8f6bff', 0]])}${gr('rn', [[0, '#d9c29a', .0], [.2, '#e7d3a8', .95], [.5, '#a98c5c', .9], [.8, '#e3cc9e', .9], [1, '#d9c29a', 0]], 1, 0)}<clipPath id="pc"><circle cx="250" cy="790" r="270"/></clipPath></defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<g filter="url(#b70)"><circle cx="1180" cy="260" r="300" fill="#6a2fe0" opacity=".6"/><circle cx="520" cy="320" r="260" fill="#c43b9b" opacity=".45"/><circle cx="900" cy="640" r="320" fill="#1d7fcf" opacity=".4"/><circle cx="1450" cy="640" r="240" fill="#7b3fe4" opacity=".45"/></g>
+<rect width="1600" height="900" filter="url(#cl)" opacity=".85"/><rect width="1600" height="900" filter="url(#cl2)" opacity=".4"/>
+${starField(320, 17, 900)}${bigStars(14, 23, 700)}
+<path d="M1300 80 L1010 210" stroke="#fff" stroke-width="2.4" opacity=".9" filter="url(#b3)"/><path d="M1300 80 L1180 132" stroke="#fff" stroke-width="1.6"/>
+<circle cx="1360" cy="250" r="150" fill="url(#ga)"/><circle cx="1360" cy="250" r="64" fill="url(#pb)"/><ellipse cx="1348" cy="236" rx="28" ry="20" fill="#fff" opacity=".13"/>
+<g transform="rotate(-18 250 790)"><ellipse cx="250" cy="790" rx="500" ry="104" fill="none" stroke="url(#rn)" stroke-width="30" opacity=".85"/><ellipse cx="250" cy="790" rx="430" ry="86" fill="none" stroke="#c9b189" stroke-width="10" opacity=".55"/></g>
+<circle cx="250" cy="790" r="270" fill="url(#pl)"/><g clip-path="url(#pc)"><g transform="rotate(-18 250 790)" opacity=".4"><rect x="-100" y="640" width="700" height="14" fill="#8a5b34"/><rect x="-100" y="690" width="700" height="22" fill="#b98b5a"/><rect x="-100" y="760" width="700" height="12" fill="#6a4226"/><rect x="-100" y="820" width="700" height="26" fill="#c79a66"/><rect x="-100" y="880" width="700" height="14" fill="#7a5230"/></g><circle cx="330" cy="860" r="300" fill="#000" opacity=".4" filter="url(#b40)"/></g>
+<g transform="rotate(-18 250 790)"><path d="M-250 790 A500 104 0 0 0 750 790" fill="none" stroke="url(#rn)" stroke-width="30" opacity=".95" clip-path="inset(790px 0 0 0)"/></g>
+${grainRect(.07)}${vignette(.5)}`);
+
+ART.nature = () => svgWrap(`${base}<defs>${gr('sk', [[0, '#7ec8d4'], [.45, '#bfe8c8'], [.78, '#f2f5c4'], [1, '#fdf3c0']])}${rg('sun', [[0, '#fffbe0', 1], [.25, '#fff2a8', .7], [1, '#fff2a8', 0]])}${gr('ray', [[0, '#fff8d0', .45], [1, '#fff8d0', 0]])}${gr('ml', [[0, '#d7efe0', 0], [1, '#d7efe0', .85]])}${gr('gs', [[0, '#3c8f3f'], [1, '#18502a']])}</defs>
+<rect width="1600" height="900" fill="url(#sk)"/>
+<circle cx="1180" cy="270" r="420" fill="url(#sun)"/><circle cx="1180" cy="270" r="54" fill="#fffdea"/>
+<g filter="url(#b20)">${[0, 1, 2, 3, 4, 5].map(i => `<path d="M1180 270 L${200 + i * 260} 900 L${300 + i * 260} 900Z" fill="url(#ray)" opacity=".5"/>`).join('')}</g>
+<g filter="url(#b20)" opacity=".9"><ellipse cx="300" cy="190" rx="240" ry="30" fill="#fff" opacity=".7"/><ellipse cx="620" cy="130" rx="170" ry="20" fill="#fff" opacity=".6"/></g>
+${ridge(2, 520, 210, '#8fc7b0', {op: .75, pow: 1.5})}${ridge(8, 560, 190, '#5fa68a', {op: .85, pow: 1.4})}
+<rect y="420" width="1600" height="200" fill="url(#ml)" opacity=".6"/>
+${ridge(12, 650, 130, '#3f9a5a', {pow: 1.2, jit: 3})}${pines(60, 21, 700, 150, '#2c7a49', 1600)}
+<g filter="url(#b40)" opacity=".55"><ellipse cx="800" cy="690" rx="900" ry="36" fill="#eaf8e6"/></g>
+${ridge(19, 760, 90, '#2a7140', {pow: 1.1, jit: 3})}${pines(44, 29, 790, 230, '#1b5a34', 1600)}${pines(22, 33, 800, 330, '#123f27', 520)}${pines(20, 37, 800, 330, '#123f27', 520, 1080)}
+<rect y="770" width="1600" height="130" fill="url(#gs)"/>${blades(520, 41, 880, 90, ['#4fa84a', '#2f8a3e', '#7cc65a', '#1f6a34'])}
+<g>${[...Array(26)].map((_, i) => { const r = lcg(60 + i); return `<circle cx="${f1(r() * 1600)}" cy="${f1(820 + r() * 70)}" r="${f1(2 + r() * 2.4)}" fill="${i % 3 ? '#fff' : '#ffd95a'}"/>`; }).join('')}</g>
+${grainRect(.06)}${vignette(.3)}`);
+
+ART.minimal = () => svgWrap(`${base}<defs>${gr('sk', [[0, '#cfe6fb'], [.55, '#eaf4ff'], [1, '#fdfaf0']])}${rg('sun', [[0, '#fff6d6', 1], [.3, '#ffe6a8', .55], [1, '#ffe6a8', 0]])}</defs>
+<rect width="1600" height="900" fill="url(#sk)"/><circle cx="1300" cy="200" r="380" fill="url(#sun)"/><circle cx="1300" cy="200" r="58" fill="#fff9e6"/>
+<g filter="url(#b20)" fill="#fff"><ellipse cx="320" cy="210" rx="260" ry="34" opacity=".95"/><ellipse cx="520" cy="250" rx="200" ry="26" opacity=".85"/><ellipse cx="1000" cy="150" rx="220" ry="26" opacity=".8"/><ellipse cx="700" cy="400" rx="340" ry="22" opacity=".7"/></g>
+${ridge(3, 600, 190, '#bcd4ee', {op: .8, pow: 1.5, jit: 3})}${ridge(9, 660, 150, '#a6c3e6', {op: .85, pow: 1.4, jit: 3})}
+<g filter="url(#b40)" opacity=".8"><ellipse cx="800" cy="690" rx="900" ry="40" fill="#fff"/></g>
+${ridge(17, 760, 100, '#e7f1fb', {pow: 1.2, jit: 2})}${ridge(27, 840, 70, '#f6faff', {pow: 1.1, jit: 2})}${grainRect(.04)}`);
+
+ART.shadow = () => svgWrap(`${base}<defs>${gr('sk', [[0, '#080304'], [.55, '#2b0b10'], [1, '#5a1414']])}${rg('mg', [[0, '#ff5a4a', .6], [.5, '#ff3a2a', .25], [1, '#ff3a2a', 0]])}${rg('md', [[0, '#f0584a'], [.55, '#b32222'], [1, '#5e0f12']], .38, .32, .75)}<clipPath id="mc"><circle cx="1130" cy="290" r="150"/></clipPath>${gr('gd', [[0, '#1a0809'], [1, '#050203']])}</defs>
+<rect width="1600" height="900" fill="url(#sk)"/>${starField(40, 5, 260)}
+<circle cx="1130" cy="290" r="420" fill="url(#mg)"/><circle cx="1130" cy="290" r="150" fill="url(#md)"/>
+<g clip-path="url(#mc)" fill="#7a1418" opacity=".55"><circle cx="1085" cy="250" r="28"/><circle cx="1185" cy="345" r="36"/><circle cx="1120" cy="350" r="15"/><circle cx="1200" cy="240" r="13"/><circle cx="1070" cy="320" r="10"/></g>
+<g filter="url(#b8)"><path d="M900 270 Q1130 238 1380 292 L1380 312 Q1130 270 900 300Z" fill="#12050a" opacity=".85"/><path d="M960 342 Q1160 320 1320 350 L1320 362 Q1160 340 960 356Z" fill="#12050a" opacity=".6"/></g>
+${ridge(4, 640, 200, '#2a0d11', {op: .9, pow: 1.6})}${ridge(14, 690, 150, '#170709', {pow: 1.5})}
+<g filter="url(#b40)" opacity=".5"><ellipse cx="800" cy="700" rx="900" ry="36" fill="#a8302c"/></g>
+<g fill="#050203"><rect x="150" y="470" width="16" height="320"/><rect x="394" y="470" width="16" height="320"/><path d="M90 456 Q280 506 470 456 L488 484 Q280 540 72 484Z"/><rect x="132" y="534" width="296" height="13"/></g>
+<g fill="#060304"><path d="M560 640 Q760 610 900 640 L1000 690 H460Z"/><path d="M470 690 Q690 640 1010 690 L1040 700 H440Z"/><rect x="540" y="690" width="14" height="120"/><rect x="900" y="690" width="14" height="120"/></g>
+<rect y="790" width="1600" height="110" fill="url(#gd)"/><g filter="url(#b20)" opacity=".5"><ellipse cx="800" cy="800" rx="900" ry="26" fill="#9a2a2a"/></g>
+<g fill="#030102"><g transform="translate(1020 820)"><circle cx="0" cy="-118" r="11"/><path d="M-14 -104 Q0 -112 14 -104 L20 -50 L10 -50 L8 0 L-2 0 L0 -44 L-4 0 L-14 0 L-12 -50 L-20 -54Z"/><path d="M-20 -96 L-72 -122 L-70 -126 L-16 -104Z"/></g><g transform="translate(1180 824) scale(-1 1)"><circle cx="0" cy="-118" r="11"/><path d="M-14 -104 Q0 -112 14 -104 L20 -50 L10 -50 L8 0 L-2 0 L0 -44 L-4 0 L-14 0 L-12 -50 L-20 -54Z"/><path d="M-20 -96 L-76 -80 L-74 -76 L-16 -92Z"/></g></g>
+<g fill="#030102">${[...Array(7)].map((_, i) => `<rect x="${1330 + i * 38}" y="${150 + (i % 3) * 20}" width="${9 + i % 2 * 3}" height="${760 - (i % 3) * 20}" rx="3"/>`).join('')}</g>
+<g fill="#ff6a3a" filter="url(#b3)">${[...Array(30)].map((_, i) => { const r = lcg(90 + i); return `<circle cx="${f1(r() * 1600)}" cy="${f1(300 + r() * 580)}" r="${f1(1 + r() * 2.2)}" opacity="${f1(.3 + r() * .6)}"/>`; }).join('')}</g>
+${grainRect(.09)}${vignette(.6)}`);
+
 const THEMES = {
   minimal: {id: 'minimal', name: 'Minimal', emoji: '☀️', tag: 'Simple. Clean. Powerful.', dim: 0, widget: 'progress', today: "Today's Tasks",
     quote: 'Better habits. A brighter future.', strip: ['Clean', 'Simple', 'Productive']},
-  nature: {id: 'nature', name: 'Nature', emoji: '🌿', tag: 'A calmer path to consistency', dim: .28, widget: 'plant', today: "Today's Focus",
+  nature: {id: 'nature', name: 'Nature', emoji: '🌿', tag: 'A calmer path to consistency', dim: .12, widget: 'plant', today: "Today's Focus",
     quote: 'Growth takes time. Small progress each day still counts.', strip: ['Breathe', 'Focus', 'Stay consistent']},
-  gaming: {id: 'gaming', name: 'Gaming', emoji: '🎮', tag: 'Level up your life', dim: .3, widget: 'xp', today: "Today's Missions",
+  gaming: {id: 'gaming', name: 'Gaming', emoji: '🎮', tag: 'Level up your life', dim: .16, widget: 'xp', today: "Today's Missions",
     quote: 'Small steps every day lead to big achievements!', strip: ['Earn XP', 'Unlock achievements', 'Build habits', 'Level up']},
-  car: {id: 'car', name: 'Car', emoji: '🏎️', tag: 'Drive your goals', dim: .3, widget: 'fuel', today: "Today's Route",
+  car: {id: 'car', name: 'Car', emoji: '🏎️', tag: 'Drive your goals', dim: .16, widget: 'fuel', today: "Today's Route",
     quote: 'Discipline is the fuel for your dreams.', strip: ['Track fuel', 'Keep moving', 'Achieve more']},
-  shadow: {id: 'shadow', name: 'Shadow Fight', emoji: '🥷', tag: 'Train. Focus. Overcome.', dim: .32, widget: 'belt', today: "Today's Training",
+  shadow: {id: 'shadow', name: 'Shadow Fight', emoji: '🥷', tag: 'Train. Focus. Overcome.', dim: .18, widget: 'belt', today: "Today's Training",
     quote: 'Discipline is the sharpest blade.', strip: ['Train', 'Focus', 'Overcome', 'Master']},
-  space: {id: 'space', name: 'Space', emoji: '🪐', tag: 'Explore your potential', dim: .22, widget: 'orbit', today: "Today's Orbit",
+  space: {id: 'space', name: 'Space', emoji: '🪐', tag: 'Explore your potential', dim: .1, widget: 'orbit', today: "Today's Orbit",
     quote: 'Aim high. Even a miss can land you among the stars.', strip: ['Dream', 'Track', 'Achieve', 'Repeat']}
 };
 const EMBLEM = {minimal: 'minimal', nature: 'nature', gaming: 'gaming', car: 'car', space: 'space', shadow: 'shadow'};
