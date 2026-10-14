@@ -25,3 +25,9 @@ Open the `android` directory in Android Studio with JDK 17 and Android SDK Platf
 
 ## Photo backgrounds
 Put `minimal|nature|gaming|car|space|shadow.jpg` in `assets/backgrounds/` and each theme shows that photo instead of the built-in illustration (see the README.txt in that folder). Users can still upload their own picture in Settings.
+
+## Pictures from the media sheet
+- `assets/photos/` – 6 car + 6 nature photos (thumbs in `thumbs/`). Gaming, Car, Nature and Minimal use one by default; the Photo library in Settings lets users pick any.
+- `assets/heroes/` – 6 character cards for the Home hero card (Settings → Hero card). Gaming and Shadow Fight show one by default.
+- `assets/fx/` – transparent effect sprites: used for the task-complete pop, floating particles (leaves, sparks, specks), widget glows and the spinning ring around the profile photo.
+- The character cards depict well-known anime characters; keep them for personal use or replace them before publishing the app.
