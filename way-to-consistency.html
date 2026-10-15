@@ -293,7 +293,7 @@ th{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 td.num,th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
 tr:last-child td{border-bottom:0}
 .chart{width:100%;height:auto;display:block}
-.chart .bar{fill:var(--accent)}.chart .axis{stroke:var(--line);stroke-width:1}
+.chart .bar{fill:var(--accent)}.chart .bar.refund{fill:var(--good)}.chart .axis{stroke:var(--line);stroke-width:1}
 .chart .t{fill:var(--muted);font:10px var(--font-mono)}.chart .tv{fill:var(--fg);font:600 10px var(--font-mono)}
 .donut{width:170px;height:170px;flex:none}
 .donut circle{fill:none;stroke-width:6}
@@ -322,6 +322,22 @@ tr:last-child td{border-bottom:0}
 .ci-prev{min-height:180px;border-radius:16px;border:1px dashed var(--line);display:grid;place-items:center;background:var(--input);overflow:hidden}
 .ci-prev img{max-width:100%;max-height:300px;display:block}
 .camv{width:100%;max-height:60vh;border-radius:16px;background:#000;transform:scaleX(-1)}
+.run-map{width:100%;height:260px;display:block;border-radius:14px;background:color-mix(in srgb,var(--accent) 8%,var(--surface-solid));border:1px solid var(--line)}
+.run-map .route{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.run-map .route-dot{fill:var(--good);stroke:var(--surface-solid);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.run-live{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.run-metric{padding:14px;border-radius:14px;background:var(--surface2);min-width:0}
+.run-metric b{display:block;font:700 clamp(1.45rem,5vw,2rem)/1.1 var(--font-display);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.run-metric span{font-size:.76rem;color:var(--muted);font-weight:600;text-transform:uppercase}
+.run-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center}
+.run-hero .run-live{grid-column:1/-1}
+.run-controls{display:flex;gap:8px;flex-wrap:wrap}
+.run-history-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.run-history-row:last-child{border-bottom:0}
+.run-history-row b{display:block;overflow-wrap:anywhere}
+.run-history-row small{color:var(--muted)}
+.run-split{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.run-split:last-child{border-bottom:0}
 .bigphoto{width:100%;max-height:60vh;object-fit:contain;border-radius:16px;background:#000;display:block}
 .wave{display:flex;align-items:center;gap:3px;height:44px}
 .wave span{width:4px;height:40%;border-radius:3px;background:var(--accent);opacity:.5}
@@ -551,6 +567,64 @@ textarea.export{font-family:var(--font-mono);font-size:.78rem;min-height:200px;w
 @media (prefers-reduced-motion:reduce){.avatar::after,#ambient .amb{animation:none}}
 @media (max-width:900px){.hero.has-hero{grid-template-columns:minmax(0,1fr)}.hero.has-hero .herofig{position:absolute;right:0;top:0;bottom:0;width:30%;margin:0;min-height:0}.hero.has-hero .herofig::before{background:linear-gradient(90deg,var(--surface) 0,transparent 70%)}.hero.has-hero .hero-l{padding-right:26%}.hero.has-hero .widget{margin-right:28%}}
 @media (max-width:820px){.hero.has-hero{min-height:150px}.widget{background-size:auto 80%}.hero .avatar::after{inset:-12%}}
+
+/* ===== v4: polished application shell ===== */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 82% 4%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 28rem),radial-gradient(circle at 20% 100%,color-mix(in srgb,var(--good) 10%,transparent),transparent 32rem)}
+.app{grid-template-columns:270px minmax(0,1fr)}
+.rail{padding:20px 16px 16px;gap:5px;background:color-mix(in srgb,var(--surface-solid) 82%,transparent);box-shadow:12px 0 36px rgba(0,0,0,.06);border-right-color:color-mix(in srgb,var(--line) 72%,transparent)}
+.rail .brand{margin:-4px -2px 10px;padding:8px 10px 18px;border-bottom:1px solid var(--line)}
+.brand-mark{box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 24%,transparent)}
+.nav-btn{position:relative;border-radius:14px;padding:11px 13px;transition:transform .16s ease,background .16s ease,color .16s ease}
+.nav-btn:hover{transform:translateX(3px)}
+.nav-btn[aria-current="page"]{background:linear-gradient(100deg,color-mix(in srgb,var(--accent) 24%,transparent),color-mix(in srgb,var(--accent) 9%,transparent));box-shadow:inset 3px 0 0 var(--accent),0 8px 24px color-mix(in srgb,var(--accent) 10%,transparent)}
+main{max-width:1320px;padding-inline:clamp(18px,3.2vw,46px);padding-top:30px}
+.page{gap:20px;animation:page-in .28s ease both}
+@keyframes page-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.page-head{padding:2px 2px 4px}.page-head h1{letter-spacing:-.035em}.page-head .sub{margin-top:5px;max-width:68ch}
+.card,.scard{border-color:color-mix(in srgb,var(--line) 82%,transparent);box-shadow:0 1px 1px rgba(0,0,0,.04),0 16px 45px rgba(8,18,38,.09)}
+.card{padding:20px;border-radius:24px}.scard{border-radius:22px}
+.card:hover,.scard:hover{border-color:color-mix(in srgb,var(--accent) 24%,var(--line))}
+.hero{isolation:isolate;min-height:210px;padding:24px;background:linear-gradient(125deg,color-mix(in srgb,var(--surface-solid) 96%,transparent),color-mix(in srgb,var(--accent) 13%,var(--surface)))}
+.hero::after{content:"";position:absolute;z-index:-1;width:260px;height:260px;right:-100px;bottom:-150px;border-radius:50%;background:color-mix(in srgb,var(--accent) 18%,transparent);filter:blur(4px)}
+.hero .hello{font-size:clamp(1.55rem,3.4vw,2.35rem);letter-spacing:-.045em}
+.stats{gap:12px}.stat{min-height:104px;padding:15px;border-radius:20px;border-color:color-mix(in srgb,var(--c) 24%,var(--line));background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--c) 8%,var(--surface)))}
+.stat .sk{font-size:.7rem}.stat .sv{letter-spacing:-.04em}
+.btn,.iconbtn,.chipbtn,input,select,textarea{transition:border-color .16s ease,box-shadow .16s ease,background .16s ease,transform .12s ease}
+.btn{border-radius:13px}.btn.primary,.qbtn{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 88%,white),var(--accent));box-shadow:0 9px 22px color-mix(in srgb,var(--accent) 25%,transparent)}
+.btn.primary:hover,.qbtn:hover{transform:translateY(-1px);filter:brightness(1.06)}
+input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,input[type=time]:focus,input[type=month]:focus,input[type=search]:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 14%,transparent);outline:0}
+.orow,.tx,.mrow{border-radius:14px;padding-inline:9px;transition:background .15s ease,transform .15s ease}.orow:hover,.tx:hover,.mrow:hover{background:var(--surface2)}
+.orow-main,.mrow .mm{text-align:left}.check{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--line) 80%,transparent)}
+.empty{border:1px dashed color-mix(in srgb,var(--accent) 36%,var(--line));border-radius:18px;background:color-mix(in srgb,var(--accent) 4%,transparent);padding:26px}
+.fab{width:auto;min-width:62px;padding:0 20px;border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 82%,white),var(--accent));box-shadow:0 15px 38px color-mix(in srgb,var(--accent) 38%,transparent)}
+.fab::before{content:"Quick add";font-size:.86rem;font-weight:700;margin-right:8px}
+.fab:hover{transform:translateY(-2px) scale(1.02)}
+.scrim{background:rgba(3,8,22,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.sheet{padding:0;overflow:auto;border-radius:28px;background:color-mix(in srgb,var(--surface-solid) 97%,transparent);box-shadow:0 28px 90px rgba(0,0,0,.36)}
+.sheet-h{position:sticky;top:0;z-index:4;margin:0;padding:18px 20px 14px;background:color-mix(in srgb,var(--surface-solid) 92%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.sheet>.form,.sheet>.stack,.sheet>.menu-list,.sheet>p,.sheet>.rowf,.sheet>.seg,.sheet>textarea{margin-left:20px;margin-right:20px}
+.sheet>.form,.sheet>.stack,.sheet>.menu-list{margin-top:18px;margin-bottom:20px}
+.sheet>.form>.rowf:last-child{position:sticky;bottom:0;z-index:3;margin:5px -20px -20px;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface-solid) 94%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.availability-card{width:100%;min-height:112px!important;padding:16px!important;display:grid!important;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:14px;text-align:left;justify-content:stretch!important;border-radius:18px!important}
+.availability-card .choice-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:color-mix(in srgb,var(--accent) 17%,transparent);font-size:1.35rem}
+.availability-card .sub{font-weight:400;display:block;margin-top:4px}.availability-card .choice-state{font-size:.78rem;color:var(--muted)}
+.availability-card.primary .sub,.availability-card.primary .choice-state{color:inherit;opacity:.84}
+.searchbox{position:relative;min-width:min(100%,320px)}.searchbox .search-glyph{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);z-index:1}.searchbox input{padding-left:42px;background:var(--surface);border-radius:14px}
+.table-wrap{position:relative;box-shadow:inset -16px 0 18px -20px rgba(0,0,0,.5)}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}main{padding-inline:12px;padding-top:12px}.page{gap:12px}.card{padding:14px;border-radius:20px}
+  .topbar{padding:8px 12px;background:color-mix(in srgb,var(--surface-solid) 88%,transparent);box-shadow:0 8px 30px rgba(0,0,0,.08)}
+  .hero{min-height:156px;padding:16px}.stats{gap:7px}.stat{min-height:88px;padding:10px}
+  .fab{width:56px;min-width:56px;padding:0}.fab::before{display:none}
+  .tabbar{background:color-mix(in srgb,var(--surface-solid) 91%,transparent);box-shadow:0 12px 45px rgba(0,0,0,.28)}
+  .sheet{max-height:94dvh;border-radius:26px 26px 0 0}.sheet-h{padding:15px 16px 12px}.sheet>.form,.sheet>.stack,.sheet>.menu-list,.sheet>p,.sheet>.rowf,.sheet>.seg,.sheet>textarea{margin-left:16px;margin-right:16px}.sheet>.form>.rowf:last-child{margin-left:-16px;margin-right:-16px;margin-bottom:-20px;padding-inline:16px}
+  .availability-card{grid-template-columns:42px minmax(0,1fr);min-height:104px!important}.availability-card .choice-icon{width:42px;height:42px}.availability-card .choice-state{display:none}
+  .themes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin-inline:-16px;padding:2px 16px 10px;scrollbar-width:none}.themes::-webkit-scrollbar{display:none}.themecard{flex:0 0 154px;scroll-snap-align:start}
+  .table-wrap::after{content:"Swipe to see more →";position:sticky;left:12px;display:inline-block;padding:5px 9px;margin:8px;border-radius:999px;background:var(--surface-solid);color:var(--muted);font-size:.72rem;border:1px solid var(--line)}
+  .page-head .btn.primary{width:100%}.searchbox{width:100%;min-width:0}
+}
+@media (max-width:390px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{min-height:76px;flex-direction:row}.qgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.qbtn{font-size:.72rem}.run-history-row{grid-template-columns:minmax(0,1fr) auto}.run-history-row>:nth-child(3){grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}.nav-btn:hover,.btn.primary:hover,.qbtn:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -661,6 +735,7 @@ const daysInMonth = m => { const [y, mo] = m.split('-').map(Number); return new 
 const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const clampDay = (m, d) => m + '-' + pad(Math.min(d, daysInMonth(m)));
 const tzName = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'local'; } catch (e) { return 'local'; } };
+const appWarn = (scope, error) => { try { console.warn('[Way to Consistency] ' + scope, error); } catch (_) {} };
 
 const PALETTE = ['#0a7c7c', '#c93f0c', '#8a2cb0', '#1f7a36', '#c4235c', '#2b5fd9', '#b07d00', '#6b7280', '#e0334f', '#0e8fc4'];
 const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'AED', 'SGD'];
@@ -679,15 +754,15 @@ const TONES = {
 
 /* ---------- data ---------- */
 const KEY = 'wtc.v1';
-let db, memOnly = false, warnedSave = false, saveState = 'saved', syncChannel = null, saveTimer = null;
+let db, memOnly = false, warnedSave = false, saveState = 'saved', syncChannel = null, saveTimer = null, pendingRunAck = '';
 
 function defaultDB(){
   const mk = (id, kind, name, emoji, color, order, extra) => Object.assign({id, kind, name, emoji, color, order, archived: false}, extra || {});
   return {
-    v: 1,
+    v: 2,
     profile: {name: '', currency: 'INR', theme: 'system', skin: 'minimal', scale: 1, highContrast: false, confetti: true, volume: .7,
       defaultSound: 'tone:chime', lead: 10, snooze: 10, quietOn: false, quietStart: '22:00', quietEnd: '07:00',
-      dailySummary: false, summaryTime: '08:00', lastSummary: '', partialCredit: 0, skippedCounts: false,
+      dailySummary: false, summaryTime: '08:00', lastSummary: '', partialCredit: 0, skippedCounts: false, streakFreezeWeeks: [],
       thresholds: [50, 80, 100], onboarded: false, sample: false, tz: tzName(),
       bg: {imgId: '', dim: null, blur: 0, preset: ''}, hero: '', avatarId: '', journeyDay: -1, journeyTime: '09:00', lastJourney: ''},
     cats: [
@@ -700,7 +775,7 @@ function defaultDB(){
       mk('t-health', 'task', 'Health', '🏃', PALETTE[3], 2), mk('t-home', 'task', 'Home', '🧺', PALETTE[6], 3),
       mk('t-personal', 'task', 'Personal', '🌟', PALETTE[0], 4)
     ],
-    tasks: [], occs: [], goals: [], income: [], expenses: [], budgets: [], audio: [], log: [], alerts: {}, checkins: []
+    tasks: [], occs: [], goals: [], income: [], expenses: [], budgets: [], audio: [], log: [], alerts: {}, checkins: [], runs: []
   };
 }
 
@@ -714,7 +789,21 @@ function load(){
 function migrate(){
   const d = defaultDB();
   db.profile = Object.assign({}, d.profile, db.profile || {});
-  for (const k of ['cats', 'tasks', 'occs', 'goals', 'income', 'expenses', 'budgets', 'audio', 'log', 'checkins']) if (!Array.isArray(db[k])) db[k] = d[k];
+  if (!Array.isArray(db.profile.streakFreezeWeeks)) db.profile.streakFreezeWeeks = [];
+  for (const k of ['cats', 'tasks', 'occs', 'goals', 'income', 'expenses', 'budgets', 'audio', 'log', 'checkins', 'runs']) if (!Array.isArray(db[k])) db[k] = d[k];
+  let version = Math.max(1, Number(db.v) || 1);
+  if (version < 2){
+    db.tasks.forEach(t => {
+      t.availabilityPolicy = t.allowEarly === false ? 'scheduled' : 'anytime';
+      delete t.allowEarly;
+    });
+    version = 2;
+  }
+  db.tasks.forEach(t => {
+    if (!['anytime', 'scheduled'].includes(t.availabilityPolicy)) t.availabilityPolicy = t.allowEarly === false ? 'scheduled' : 'anytime';
+    delete t.allowEarly;
+  });
+  db.v = version;
   if (!db.alerts) db.alerts = {};
   if (!THEMES[db.profile.skin]) db.profile.skin = 'minimal';
   db.profile.bg = Object.assign({imgId: '', dim: null, blur: 0, preset: ''}, db.profile.bg || {}); if (db.profile.hero == null) db.profile.hero = '';
@@ -736,12 +825,18 @@ function save(){
     try {
       db.updatedAt = Math.max(Date.now(), Number(db.updatedAt || 0) + 1);
       localStorage.setItem(KEY, JSON.stringify(db));
+      if (window.AndroidReminders && window.AndroidReminders.saveBackupSnapshot) window.AndroidReminders.saveBackupSnapshot(JSON.stringify(db));
       memOnly = false;
       updateSaveState('saved');
       if (syncChannel) syncChannel.postMessage({key: KEY, updatedAt: db.updatedAt});
       syncNativeReminders();
+      if (pendingRunAck && window.AndroidReminders && window.AndroidReminders.acknowledgeCompletedRun){
+        window.AndroidReminders.acknowledgeCompletedRun(pendingRunAck);
+        pendingRunAck = '';
+      }
     }
     catch (e) {
+      appWarn('Local save failed', e);
       memOnly = true;
       updateSaveState('unavailable');
       if (!warnedSave){ warnedSave = true; toast('This browser view cannot save data. Export a backup from Settings.', '⚠️'); }
@@ -751,6 +846,10 @@ function save(){
 function syncNativeReminders(){
   const bridge = window.AndroidReminders;
   if (!bridge) return;
+  for (const audio of db.audio){
+    if (!audio.id || !audio.url || !bridge.syncSound || nativeSoundsSynced.has(audio.id)) continue;
+    try { if (bridge.syncSound(audio.id, audio.url)) nativeSoundsSynced.add(audio.id); } catch (e) {}
+  }
   const now = Date.now(), reminders = [];
   for (const o of db.occs){
     if (o.status !== 'pending') continue;
@@ -761,11 +860,12 @@ function syncNativeReminders(){
     if (triggerAt < now - 20 * 60000) continue;
     reminders.push({id: o.id, title: (t.emoji || '⏰') + ' ' + t.title,
       body: 'Scheduled ' + dayLabel(o.date) + ((o.start || o.due) ? ' at ' + (o.start || o.due) : ''),
+      unlockAt: availabilityPolicy(t) === 'scheduled' ? occurrenceUnlockAt(o, t).getTime() : 0,
       triggerAt, sound: t.rem.sound || 'tone:chime', vibrate: !!t.rem.vibrate,
       quietOn: !!db.profile.quietOn, quietStart: db.profile.quietStart || '22:00', quietEnd: db.profile.quietEnd || '07:00',
       snoozeMinutes: Math.max(1, Number(db.profile.snooze) || 10)});
   }
-  try { bridge.syncReminders(JSON.stringify(reminders)); } catch (e) {}
+  try { bridge.syncReminders(JSON.stringify(reminders)); } catch (e) { appWarn('Native reminder sync failed', e); }
 }
 function commit(){ save(); render(); }
 function applyRemoteSave(raw){
@@ -776,7 +876,7 @@ function applyRemoteSave(raw){
     db = incoming; migrate(); genKey = ''; fmtCache = {}; memOnly = false;
     syncNativeReminders(); render(); updateSaveState('saved', 'Updated from another tab');
     setTimeout(() => updateSaveState('saved'), 2400);
-  } catch (e) {}
+  } catch (e) { appWarn('Cross-tab data update was invalid', e); }
 }
 window.addEventListener('storage', e => {
   if (e.key !== KEY) return;
@@ -824,6 +924,10 @@ function occursOn(t, d){
   }
   return false;
 }
+function firstOccurrenceDate(t){
+  for (let d = t.date, i = 0; i < 370 && (!t.rec.end || d <= t.rec.end); d = addDays(d, 1), i++) if (occursOn(t, d)) return d;
+  return '';
+}
 function ruleText(t){
   const r = t.rec;
   switch (r.type){
@@ -865,13 +969,39 @@ function ensureOccs(force){
   if (added) save();
 }
 function occDue(o){ return dtOf(o.date, o.due || o.start || '23:59'); }
+function availabilityPolicy(t){ return t && t.availabilityPolicy === 'scheduled' ? 'scheduled' : 'anytime'; }
+function occurrenceUnlockAt(o, t){ return dtOf(o.date, o.start || (t && t.startTime) || '00:00'); }
+function occurrenceLocked(o, t, now){ return availabilityPolicy(t) === 'scheduled' && occurrenceUnlockAt(o, t) > (now || new Date()); }
+function unlockLabel(o, t){
+  return occurrenceUnlockAt(o, t).toLocaleString(undefined, {weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit'});
+}
+function guardOccurrenceUpdate(o, t){
+  if (!o || !t || !occurrenceLocked(o, t)) return true;
+  toast('This task unlocks ' + unlockLabel(o, t) + '.', '🔒');
+  return false;
+}
 function dstatus(o, now){
   if (o.status !== 'pending') return o.status;
   return occDue(o) < (now || new Date()) ? 'missed' : 'pending';
 }
+function isoWeekKey(dateValue){
+  const date = new Date(String(dateValue).slice(0, 10) + 'T00:00:00Z');
+  if (!Number.isFinite(date.getTime())) return '';
+  date.setUTCDate(date.getUTCDate() + 3 - (date.getUTCDay() + 6) % 7);
+  const weekYear = date.getUTCFullYear(), weekOne = new Date(Date.UTC(weekYear, 0, 4));
+  const week = 1 + Math.round(((date - weekOne) / 86400000 - 3 + (weekOne.getUTCDay() + 6) % 7) / 7);
+  return weekYear + '-W' + String(week).padStart(2, '0');
+}
+function streakFreezeAvailable(dateValue){
+  const key = isoWeekKey(dateValue), currentWeek = isoWeekKey(todayStr());
+  return !!key && key === currentWeek && !(db.profile.streakFreezeWeeks || []).includes(key);
+}
 function statusesOfTask(taskId, upTo){
   const now = new Date();
-  return db.occs.filter(o => o.taskId === taskId && o.date <= (upTo || todayStr())).sort((a, b) => a.date.localeCompare(b.date)).map(o => dstatus(o, now));
+  return db.occs.filter(o => o.taskId === taskId && o.date <= (upTo || todayStr())).sort((a, b) => a.date.localeCompare(b.date)).map(o => {
+    const status = dstatus(o, now);
+    return o.streakFreeze && status === 'missed' ? 'skipped' : status;
+  });
 }
 function logAct(occId, action, prev, next, note){
   db.log.push({id: uid(), occId, action, ts: new Date().toISOString(), prev: prev || '', next: next || '', note: note || ''});
@@ -880,6 +1010,7 @@ function logAct(occId, action, prev, next, note){
 
 /* ---------- sounds ---------- */
 let ac = null, soundUnlocked = false;
+const nativeSoundsSynced = new Set();
 function audioCtx(){
   if (!ac){ const C = window.AudioContext || window.webkitAudioContext; if (C) { try { ac = new C(); } catch (e) { ac = null; } } }
   if (ac && ac.state === 'suspended') ac.resume().catch(() => {});
@@ -912,12 +1043,14 @@ function soundLabel(spec){
   if (!spec) return 'Chime';
   if (spec === 'none') return 'Popup only';
   if (spec === 'silent') return 'Silent notification';
+  if (spec.startsWith('device:')) return spec === 'device:default' ? 'Default device ringtone' : 'Device ringtone';
   if (spec.startsWith('tone:')) return (TONES[spec.slice(5)] || TONES.chime).label;
   const a = audioById(spec.slice(6)); return a ? a.name : 'Missing sound';
 }
 function soundOptions(sel){
   const o = x => `<option value="${esc(x[0])}"${x[0] === sel ? ' selected' : ''}>${esc(x[1])}</option>`;
   let h = '<optgroup label="Built-in tones">' + Object.keys(TONES).map(k => o(['tone:' + k, TONES[k].e + ' ' + TONES[k].label])).join('') + '</optgroup>';
+  if (sel && sel.startsWith('device:')) h += '<option value="' + esc(sel) + '" selected>📳 ' + esc(soundLabel(sel)) + '</option>';
   if (db.audio.length) h += '<optgroup label="My sounds">' + db.audio.map(a => o(['audio:' + a.id, (a.kind === 'voice' ? '🎙️ ' : '🎵 ') + a.name])).join('') + '</optgroup>';
   h += '<optgroup label="No sound">' + o(['none', '👁️ Popup only']) + o(['silent', '🔕 Silent notification']) + '</optgroup>';
   return h;
@@ -990,11 +1123,12 @@ function fireReminder(o, t){
 }
 function showCard(emoji, title, body, occId, extra){
   const el = document.createElement('div');
+  const occurrence = occId && occById(occId), task = occurrence && taskById(occurrence.taskId), locked = occurrence && occurrenceLocked(occurrence, task);
   el.className = 'rcard'; el.setAttribute('role', 'alertdialog'); el.setAttribute('aria-label', title);
   el.innerHTML = `<h3><span aria-hidden="true">${emoji}</span> ${esc(title)}</h3><p class="muted">${esc(body)}</p>
     <div class="rowf" style="margin-top:12px">${occId ? `
-      <button class="btn primary small" type="button" data-a="remDone" data-id="${occId}">✅ Complete</button>
-      <button class="btn small" type="button" data-a="remSnooze" data-id="${occId}">💤 Snooze ${db.profile.snooze}m</button>
+      ${locked ? '<span class="chip">🔒 Updates unlock ' + esc(unlockLabel(occurrence, task)) + '</span>' : `<button class="btn primary small" type="button" data-a="remDone" data-id="${occId}">✅ Complete</button>
+      <button class="btn small" type="button" data-a="remSnooze" data-id="${occId}">💤 Snooze ${db.profile.snooze}m</button>`}
       <button class="btn small ghost" type="button" data-a="remOpen" data-id="${occId}">Open</button>` : ''}
       ${extra === 'journey' ? '<button class="btn primary small" type="button" data-a="remJourney">📸 Check in</button>' : ''}
       <button class="btn small ghost" type="button" data-a="remDismiss">Dismiss</button></div>`;
@@ -1079,11 +1213,11 @@ function clearSamples(){
 
 /* ---------- ui state ---------- */
 const NAV = [
-  {id: 'home', l: 'Home'}, {id: 'tasks', l: 'Tasks'}, {id: 'calendar', l: 'Calendar'}, {id: 'habits', l: 'Habits'},
-  {id: 'money', l: 'Money'}, {id: 'reports', l: 'Reports'}, {id: 'journey', l: 'Journey'}, {id: 'settings', l: 'Settings'}
+  {id: 'home', l: 'Home'}, {id: 'tasks', l: 'Tasks'}, {id: 'calendar', l: 'Calendar'}, {id: 'runs', l: 'Run'}, {id: 'habits', l: 'Habits'},
+  {id: 'money', l: 'Money'}, {id: 'reports', l: 'Reports'}, {id: 'journey', l: 'Journey'}, {id: 'tutorial', l: 'Tutorial'}, {id: 'settings', l: 'Settings'}
 ];
-const ui = {view: 'home', calMode: 'month', calMonth: monthOf(todayStr()), calSel: todayStr(), fCat: '', fStatus: '', fPrio: '',
-  moneyTab: 'overview', moneyMonth: monthOf(todayStr()), repMonth: monthOf(todayStr()), txQ: '', txType: '', txCat: '', showArchived: false};
+const ui = {view: 'home', calMode: 'month', calMonth: monthOf(todayStr()), calSel: todayStr(), fCat: '', fStatus: '', fPrio: '', taskQ: '',
+  moneyTab: 'overview', moneyMonth: monthOf(todayStr()), repMonth: monthOf(todayStr()), txQ: '', txType: '', txCat: '', showArchived: false, tutorialStep: 0};
 
 /* ---------- small view parts ---------- */
 const timeLabel = o => (o.start || o.due) ? ((o.start || '') + (o.start && o.due ? '–' : (o.due && !o.start ? 'by ' : '')) + (o.due || '')) : 'Any time';
@@ -1096,13 +1230,13 @@ function ring(pct, label, sub){
 }
 function occRow(o, drag){
   const t = taskById(o.taskId); if (!t) return '';
-  const s = dstatus(o), done = s === 'done';
+  const s = dstatus(o), done = s === 'done', locked = occurrenceLocked(o, t);
   const target = Number(t.targetAmount) || 0, progress = Number(o.progress) || 0;
-  return `<div class="orow${done ? ' is-done' : ''}"${drag ? ` draggable="true" data-occ="${o.id}"` : ''}>
-    <button class="check" type="button" data-a="toggleDone" data-id="${o.id}" aria-pressed="${done}" aria-label="${done ? 'Mark not done' : 'Mark done'}: ${esc(t.title)}">${done ? '✓' : ''}</button>
+  return `<div class="orow${done ? ' is-done' : ''}"${drag && !locked ? ` draggable="true" data-occ="${o.id}"` : ''}>
+    <button class="check" type="button" data-a="toggleDone" data-id="${o.id}" aria-pressed="${done}" aria-label="${locked ? 'Locked until ' + esc(unlockLabel(o, t)) : (done ? 'Mark not done' : 'Mark done') + ': ' + esc(t.title)}"${locked ? ' disabled' : ''}>${done ? '✓' : locked ? '🔒' : ''}</button>
     <button class="orow-main" type="button" data-a="openOcc" data-id="${o.id}">
       <span class="otitle"><span aria-hidden="true">${esc(t.emoji || '✅')}</span> ${esc(t.title)}</span>
-      <span class="ometa">${esc(timeLabel(o))} · ${prioTxt(t.prio)}${catById(t.catId) ? ' · ' + esc(catById(t.catId).emoji + ' ' + catById(t.catId).name) : ''}${target ? ` · ${progress} / ${target} ${esc(t.targetUnit || '')}` : ''}${o.date > todayStr() && t.allowEarly !== false ? ' · Early completion allowed' : ''}</span>
+      <span class="ometa">${esc(timeLabel(o))} · ${prioTxt(t.prio)}${catById(t.catId) ? ' · ' + esc(catById(t.catId).emoji + ' ' + catById(t.catId).name) : ''}${target ? ` · ${progress} / ${target} ${esc(t.targetUnit || '')}` : ''}${locked ? ' · 🔒 Unlocks ' + esc(unlockLabel(o, t)) : availabilityPolicy(t) === 'anytime' && o.date > todayStr() ? ' · Available anytime' : ''}</span>
     </button>${statusBadge(s, o.moved)}</div>`;
 }
 const emptyState = (emoji, text, btn) => `<div class="empty"><div class="big" aria-hidden="true">${emoji}</div><p>${text}</p>${btn || ''}</div>`;
@@ -1138,13 +1272,13 @@ function relTime(ms){
 }
 function missionRow(o){
   const t = taskById(o.taskId); if (!t) return '';
-  const st = dstatus(o), done = st === 'done', target = Number(t.targetAmount) || 0, prog = Number(o.progress) || 0;
+  const st = dstatus(o), done = st === 'done', locked = occurrenceLocked(o, t), target = Number(t.targetAmount) || 0, prog = Number(o.progress) || 0;
   const pct = done ? 100 : target ? Math.min(100, Math.round(prog / target * 100)) : st === 'partial' ? 50 : 0;
   const c = (catById(t.catId) || {}).color || 'var(--accent)';
   return `<div class="mrow${done ? ' is-done' : ''}">
-    <button class="check" type="button" data-a="toggleDone" data-id="${o.id}" aria-pressed="${done}" aria-label="${done ? 'Mark not done' : 'Mark done'}: ${esc(t.title)}">${done ? '✓' : ''}</button>
+    <button class="check" type="button" data-a="toggleDone" data-id="${o.id}" aria-pressed="${done}" aria-label="${locked ? 'Locked until ' + esc(unlockLabel(o, t)) : (done ? 'Mark not done' : 'Mark done') + ': ' + esc(t.title)}"${locked ? ' disabled' : ''}>${done ? '✓' : locked ? '🔒' : ''}</button>
     <span class="mi" style="--c:${esc(c)}" aria-hidden="true">${esc(t.emoji || '✅')}</span>
-    <button class="mm" type="button" data-a="openOcc" data-id="${o.id}"><span class="mt">${esc(t.title)}</span><span class="meter ${done ? '' : 'xp'}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="ometa">${esc(timeLabel(o))}${target ? ` · ${prog} / ${target} ${esc(t.targetUnit || '')}` : ''}</span></button>
+    <button class="mm" type="button" data-a="openOcc" data-id="${o.id}"><span class="mt">${esc(t.title)}</span><span class="meter ${done ? '' : 'xp'}" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="ometa">${esc(timeLabel(o))}${target ? ` · ${prog} / ${target} ${esc(t.targetUnit || '')}` : ''}${locked ? ' · 🔒 Locked' : ''}</span></button>
     <span class="mp">${pct}%</span></div>`;
 }
 const TICON = {minimal: {i: 'sun', c: '#f5a623'}, nature: {i: 'leaf', c: '#2fb344'}, gaming: {i: 'gamepad', c: '#f5a623'}, car: {i: 'car', c: '#e5484d'}, space: {i: 'planet', c: '#8b5cf6'}, shadow: {i: 'ninja', c: '#e03a3a'}};
@@ -1301,18 +1435,21 @@ function taskRow(t){
 }
 function viewTasks(){
   const td = todayStr(), now = new Date();
-  const up = Array.from({length: 7}, (_, i) => addDays(td, i)).map(d => ({d, list: db.occs.filter(o => o.date === d && o.status !== 'cancelled').sort((a, b) => (a.start || a.due || '99').localeCompare(b.start || b.due || '99'))})).filter(x => x.list.length);
-  const act = db.tasks.filter(t => t.state !== 'archived'), arch = db.tasks.filter(t => t.state === 'archived');
+  const q = ui.taskQ.trim().toLocaleLowerCase(), matches = t => !q || [t.title, t.desc, (catById(t.catId) || {}).name, ruleText(t)].join(' ').toLocaleLowerCase().includes(q);
+  const up = Array.from({length: 7}, (_, i) => addDays(td, i)).map(d => ({d, list: db.occs.filter(o => { const t = taskById(o.taskId); return o.date === d && o.status !== 'cancelled' && t && matches(t); }).sort((a, b) => (a.start || a.due || '99').localeCompare(b.start || b.due || '99'))})).filter(x => x.list.length);
+  const act = db.tasks.filter(t => t.state !== 'archived' && matches(t)), arch = db.tasks.filter(t => t.state === 'archived' && matches(t));
   return `<div class="page">
     <div class="page-head"><div><h1>✅ Tasks</h1><p class="sub">Everything coming up this week, plus every task you have set.</p></div><button class="btn primary" type="button" data-a="newTask">＋ New task</button></div>
+    <label class="searchbox"><span class="sr">Search tasks</span><span class="search-glyph" aria-hidden="true">⌕</span><input type="search" inputmode="search" autocomplete="off" placeholder="Search tasks, notes or categories…" value="${esc(ui.taskQ)}" data-input="taskQ"></label>
     <section class="card"><h2>📆 Coming up</h2>${up.length ? up.map(x => `<div class="lbl-t" style="margin:10px 0 2px">${x.d === td ? 'Today' : esc(dayLabel(x.d))}</div>${x.list.map(o => occRow(o)).join('')}`).join('') : emptyState('🌤️', 'Nothing planned for the next 7 days.', '<button class="btn primary" type="button" data-a="newTask">Add a task</button>')}</section>
-    <section class="card"><h2>🗒️ All tasks</h2>${act.length ? act.map(taskRow).join('') : emptyState('📝', 'No tasks yet.', '')}</section>
+    <section class="card"><h2>🗒️ ${q ? act.length + ' matching task' + (act.length === 1 ? '' : 's') : 'All tasks'}</h2>${act.length ? act.map(taskRow).join('') : emptyState(q ? '🔎' : '📝', q ? 'No tasks match your search.' : 'No tasks yet.', q ? '' : '<button class="btn small" type="button" data-a="newTask">Create a task</button>')}</section>
     ${arch.length ? `<section class="card flat"><h2>🗄️ Archived <span class="grow"></span><button class="btn small" type="button" data-a="toggleArchived">${ui.showArchived ? 'Hide' : 'Show ' + arch.length}</button></h2>${ui.showArchived ? arch.map(t => `<div class="tx"><span aria-hidden="true">${esc(t.emoji)}</span><b style="flex:1" class="otitle">${esc(t.title)}</b><button class="btn small" type="button" data-a="restoreTask" data-id="${t.id}">Restore</button></div>`).join('') : '<p class="sub">History of archived tasks stays in your reports.</p>'}</section>` : ''}
     <section class="card flat"><h2>🏷️ Task categories</h2>${catManager('task')}</section>
   </div>`;
 }
 function viewHabits(){
   const td = todayStr(), days = Array.from({length: 14}, (_, i) => addDays(td, i - 13)), now = new Date();
+  const freezeUsed = (db.profile.streakFreezeWeeks || []).includes(isoWeekKey(td));
   const rec = db.tasks.filter(t => t.state !== 'archived' && t.rec.type !== 'none');
   const card = t => {
     const sts = statusesOfTask(t.id), from = addDays(td, -29);
@@ -1323,7 +1460,7 @@ function viewHabits(){
       <div class="rowf" style="margin-top:10px;justify-content:space-between"><span class="streak">🔥 ${Calc.streak(sts)} now</span><span class="streak muted">🏅 ${Calc.bestStreak(sts)} best</span><span class="streak muted">${pctTxt(r30)} · 30d</span></div></div>`;
   };
   return `<div class="page">
-    <div class="page-head"><div><h1>🔥 Habits &amp; goals</h1><p class="sub">Streak = consecutive completed days on your schedule. Skipped days do not break it.</p></div><button class="btn primary" type="button" data-a="newTask">＋ New habit</button></div>
+    <div class="page-head"><div><h1>🔥 Habits &amp; goals</h1><p class="sub">One streak freeze per week across all habits. ${freezeUsed ? 'This week’s freeze has been used.' : 'One freeze is available this week; apply it from a missed habit day.'} Skipped days do not break a streak.</p></div><button class="btn primary" type="button" data-a="newTask">＋ New habit</button></div>
     <section><div class="grid g2">${rec.length ? rec.map(card).join('') : `<div class="card" style="grid-column:1/-1">${emptyState('🌱', 'Make a task repeat to turn it into a habit.', '<button class="btn primary" type="button" data-a="newTask">Create a habit</button>')}</div>`}</div></section>
     <section class="card"><h2>🎯 Goals <span class="grow"></span><button class="btn small" type="button" data-a="newGoal">＋ Goal</button></h2>
       ${db.goals.length ? `<div class="grid g2">${db.goals.map(g => { const p = Calc.pct(g.actual, g.target); return `<div class="tile"><div class="rowf" style="justify-content:space-between"><b>${esc(g.emoji || '🎯')} ${esc(g.title)}</b><button class="iconbtn sm" type="button" data-a="editGoal" data-id="${g.id}" aria-label="Edit goal ${esc(g.title)}">✏️</button></div>
@@ -1420,16 +1557,19 @@ function donut(md){
 function dailyBars(md){
   const n = daysInMonth(md.m), vals = Array(n).fill(0);
   for (const e of md.exp){ if (e.kind === 'saving') continue; vals[Number(e.date.slice(8)) - 1] += e.kind === 'refund' ? -e.amount : e.amount; }
-  const max = Math.max(1, ...vals), W = 320, H = 120, bw = (W - 20) / n;
-  const bars = vals.map((v, i) => { const h = Math.max(0, v) / max * 84; return v > 0 ? `<rect class="bar" x="${(10 + i * bw + 1).toFixed(1)}" y="${(96 - h).toFixed(1)}" width="${Math.max(2, bw - 2).toFixed(1)}" height="${h.toFixed(1)}" rx="2"/>` : ''; }).join('');
-  const lbl = [1, Math.ceil(n / 2), n].map(d => `<text class="t" x="${(10 + (d - 1) * bw + bw / 2).toFixed(1)}" y="112" text-anchor="middle">${d}</text>`).join('');
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily spending, highest day ${esc(fmt(max))}"><line class="axis" x1="10" x2="${W - 10}" y1="96" y2="96"/>${bars}${lbl}<text class="tv" x="10" y="10">Peak day ${esc(fmt(max))}</text></svg>`;
+  if (!md.exp.some(e => e.kind !== 'saving')) return emptyState('📊', 'No spending or refunds to graph for this month.');
+  const max = Math.max(1, ...vals.map(Math.abs)), W = 320, H = 130, bw = (W - 20) / n, base = 66;
+  const bars = vals.map((v, i) => { const h = Math.abs(v) / max * 44, x = (10 + i * bw + 1).toFixed(1), width = Math.max(2, bw - 2).toFixed(1); return v ? `<rect class="bar${v < 0 ? ' refund' : ''}" x="${x}" y="${(v > 0 ? base - h : base).toFixed(1)}" width="${width}" height="${h.toFixed(1)}" rx="2"/>` : ''; }).join('');
+  const lbl = [1, Math.ceil(n / 2), n].map(d => `<text class="t" x="${(10 + (d - 1) * bw + bw / 2).toFixed(1)}" y="124" text-anchor="middle">${d}</text>`).join('');
+  const net = vals.reduce((sum, value) => sum + value, 0), summary = `Daily net spending for ${monthLabel(md.m)}. Largest daily movement ${fmt(max)}; monthly net ${fmt(net)}. Green bars are net-refund days.`;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(summary)}"><line class="axis" x1="10" x2="${W - 10}" y1="${base}" y2="${base}"/>${bars}${lbl}<text class="tv" x="10" y="12">Largest movement ${esc(fmt(max))}</text></svg><p class="sr">${esc(summary)}</p>`;
 }
 function trendBars(){
   const ms = Array.from({length: 6}, (_, i) => addMonths(ui.repMonth, i - 5)), W = 320, H = 130, bw = 34, gap = (W - 20 - bw * 6) / 5;
   const bars = ms.map((m, i) => { const r = monthData(m).rate, x = 10 + i * (bw + gap), h = (r || 0) / 100 * 80;
-    return `<rect class="bar" x="${x.toFixed(1)}" y="${(100 - h).toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" rx="4" opacity="${m === ui.repMonth ? 1 : .55}"/><text class="tv" x="${(x + bw / 2).toFixed(1)}" y="${(94 - h).toFixed(1)}" text-anchor="middle">${r == null ? '–' : Math.round(r) + '%'}</text><text class="t" x="${(x + bw / 2).toFixed(1)}" y="118" text-anchor="middle">${esc(monthShort(m))}</text>`; }).join('');
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Task completion rate, last six months"><line class="axis" x1="10" x2="${W - 10}" y1="100" y2="100"/>${bars}</svg>`;
+    return `${r == null ? `<line class="axis" x1="${x.toFixed(1)}" x2="${(x + bw).toFixed(1)}" y1="100" y2="100" stroke-dasharray="2 2"/>` : `<rect class="bar" x="${x.toFixed(1)}" y="${(100 - h).toFixed(1)}" width="${bw}" height="${Math.max(2, h).toFixed(1)}" rx="4" opacity="${m === ui.repMonth ? 1 : .55}"/>`}<text class="tv" x="${(x + bw / 2).toFixed(1)}" y="${(r == null ? 94 : Math.max(12, 94 - h)).toFixed(1)}" text-anchor="middle">${r == null ? '–' : Math.round(r) + '%'}</text><text class="t" x="${(x + bw / 2).toFixed(1)}" y="118" text-anchor="middle">${esc(monthShort(m))}</text>`; }).join('');
+  const summary = ms.map(m => monthShort(m) + ': ' + (monthData(m).rate == null ? 'no eligible tasks' : Math.round(monthData(m).rate) + '%')).join('; ');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Task completion rate, last six months. ${esc(summary)}"><line class="axis" x1="10" x2="${W - 10}" y1="100" y2="100"/>${bars}</svg><p class="sr">${esc(summary)}</p>`;
 }
 function suggestions(md, pmd){
   const s = [];
@@ -1531,7 +1671,7 @@ function viewSettings(){
       <div class="lbl-t">Built-in tones</div>
       ${Object.keys(TONES).map(k => `<div class="tx"><span aria-hidden="true">${TONES[k].e}</span><b style="flex:1" class="otitle">${TONES[k].label}</b><button class="iconbtn sm" type="button" data-a="playTone" data-v="${k}" aria-label="Play ${TONES[k].label}">▶️</button></div>`).join('')}
       <div class="lbl-t" style="margin-top:6px">My sounds</div>
-      ${db.audio.length ? db.audio.map(a => `<div class="tx"><span aria-hidden="true">${a.kind === 'voice' ? '🎙️' : '🎵'}</span><b style="flex:1" class="otitle">${esc(a.name)}</b><button class="iconbtn sm" type="button" data-a="playAudio" data-id="${a.id}" aria-label="Play ${esc(a.name)}">▶️</button><button class="iconbtn sm" type="button" data-a="delAudio" data-id="${a.id}" aria-label="Delete ${esc(a.name)}">🗑️</button></div>`).join('') : '<p class="sub">Record a short voice reminder or import an audio file (up to about 1 MB).</p>'}
+      ${db.audio.length ? db.audio.map(a => `<div class="tx"><span aria-hidden="true">${a.kind === 'voice' ? '🎙️' : '🎵'}</span><b style="flex:1" class="otitle">${esc(a.name)}</b><button class="iconbtn sm" type="button" data-a="playAudio" data-id="${a.id}" aria-label="Play ${esc(a.name)}">▶️</button><button class="iconbtn sm" type="button" data-a="delAudio" data-id="${a.id}" aria-label="Delete ${esc(a.name)}">🗑️</button></div>`).join('') : '<p class="sub">Import an audio file from this device or record a short voice reminder. Then select it as the default or task reminder sound.</p>'}
       <div class="wave${rec ? ' on' : ''}" id="recWave" aria-hidden="true">${Array.from({length: 28}, (_, i) => `<span style="--i:${i}"></span>`).join('')}</div>
       <div class="rowf"><button class="btn" type="button" data-a="recToggle" id="recBtn">${rec ? '⏹️ Stop recording' : '🎙️ Record voice'}</button><label class="btn" for="audioFile" tabindex="0">🎵 Import audio</label><input id="audioFile" type="file" accept="audio/*" class="sr" data-change="audioFile"></div>
       <p class="sub" id="recStatus">Microphone access is only requested when you tap Record. Recordings stay on this device.</p></div></section>
@@ -1539,10 +1679,31 @@ function viewSettings(){
       <div class="field"><span class="lbl-t">Partial tasks count as</span><div class="seg" role="group" aria-label="Partial credit">${[[0, '0% (strict)'], [.5, '50%']].map(x => `<button type="button" data-a="setPartial" data-v="${x[0]}" aria-pressed="${p.partialCredit === x[0]}">${x[1]}</button>`).join('')}</div></div>
       <label class="check-row"><input type="checkbox" id="s-skip" data-change="skippedCounts"${p.skippedCounts ? ' checked' : ''}> Count skipped tasks in the completion denominator</label></div></section>
     <section class="card"><h2>🗄️ Your data</h2><div class="stack">
-      <p class="sub">${memOnly ? '⚠️ This view cannot store data after closing.' : '🔒 Stored only in this browser on this device. Nothing is sent anywhere.'} Never put card numbers or bank passwords in notes.</p>
+      <p class="sub">${memOnly ? '⚠️ This view cannot store data after closing.' : '🔒 Stored only on this device. Nothing is sent anywhere.'} Never put card numbers or bank passwords in notes.</p>
+      ${window.AndroidReminders ? '<p class="sub">Automatic weekly backups are saved as JSON files in Downloads → WayToConsistency → Backups on Android 10+. Older Android versions keep them in the app Documents folder. Backups do not sync to cloud and will not protect against losing this device.</p><div class="rowf"><button class="btn" type="button" data-a="createAutomaticBackup">📦 Create backup now</button><button class="btn" type="button" data-a="restoreAutomaticBackup">↩️ Restore latest backup</button></div>' : ''}
       <div class="rowf"><button class="btn" type="button" data-a="openExport" data-f="backup">📤 Export / backup</button><button class="btn" type="button" data-a="openImport">📥 Restore</button>
       ${p.sample ? '<button class="btn" type="button" data-a="clearSamples">🧹 Clear sample data</button>' : '<button class="btn" type="button" data-a="loadSample">🧪 Load sample data</button>'}
       <button class="btn danger" type="button" data-a="wipe">🗑️ Delete everything</button></div></div></section>
+  </div>`;
+}
+
+const TUTORIAL_STEPS = [
+  {icon: '🏠', title: 'Your daily dashboard', text: 'Home brings today’s tasks, your week, progress, goals, and money summary together. Use the bottom tabs for Home, Calendar, Tasks, and Money; open More for the rest.', view: 'home', action: 'Open Home'},
+  {icon: '✅', title: 'Create tasks and habits', text: 'Add a task, choose its date and times, then set Repeat to make it a daily, weekly, or custom habit. Add a target such as kilometres or pages to log progress. Mark work Done, Partly, Skipped, or reschedule it from its detail sheet.', view: 'tasks', action: 'Open Tasks'},
+  {icon: '⏰', title: 'Set reminders', text: 'Turn on Remind me while creating a task. Pick when it should alert, select a built-in tone or a sound from your device, and choose vibration. Android may ask you to allow notifications and exact alarms. Quiet hours can silence alerts.', view: 'settings', action: 'Open reminder settings'},
+  {icon: '💸', title: 'Track money and goals', text: 'Record income, expenses, refunds, and savings in Money. Set monthly budgets to monitor spending, and create goals to follow progress. Your records stay on this device.', view: 'money', action: 'Open Money'},
+  {icon: '🏃', title: 'Record a GPS run', text: 'In Run, start outdoors and allow precise location. Keep Location enabled; the Android foreground notification shows recording is active and keeps the run going when the screen is locked. Pause or finish from the app. Open a saved run to review the route, splits, notes, and GPX export. Google Maps route tiles require a Maps SDK key and internet.', view: 'runs', action: 'Open Run'},
+  {icon: '📊', title: 'Review your progress', text: 'Reports summarize task completion and monthly finances. Habits shows streaks; one missed recurring day per week can use the streak freeze. Journey keeps photo check-ins on this device.', view: 'reports', action: 'Open Reports'},
+  {icon: '🔒', title: 'Back up and keep control', text: 'Settings contains data export and restore. On Android, automatic JSON backups are created weekly in Downloads → WayToConsistency → Backups, with a manual backup option. These backups do not sync to cloud. Export one somewhere safe if you need protection from losing the device.', view: 'settings', action: 'Open Settings'}
+];
+function viewTutorial(){
+  const index = Math.max(0, Math.min(TUTORIAL_STEPS.length - 1, Number(ui.tutorialStep) || 0));
+  const step = TUTORIAL_STEPS[index];
+  return `<div class="page"><div class="page-head"><div><h1>📘 App tutorial</h1><p class="sub">A quick guided tour. Your progress here does not change your records.</p></div><button class="btn" type="button" data-a="resetTutorial">↺ Start over</button></div>
+    <section class="card"><div class="rowf" style="justify-content:space-between"><span class="chip">Step ${index + 1} of ${TUTORIAL_STEPS.length}</span><span class="sub">${Math.round((index + 1) / TUTORIAL_STEPS.length * 100)}% complete</span></div><div class="meter" style="margin:12px 0 18px" role="progressbar" aria-label="Tutorial progress" aria-valuemin="0" aria-valuemax="${TUTORIAL_STEPS.length}" aria-valuenow="${index + 1}"><i style="width:${(index + 1) / TUTORIAL_STEPS.length * 100}%"></i></div>
+      <div class="stack" style="gap:14px"><div class="rowf"><span class="ibadge round" style="--c:var(--accent);--bs:52px" aria-hidden="true"><span style="font-size:1.7rem">${step.icon}</span></span><h2 style="margin:0">${esc(step.title)}</h2></div><p>${esc(step.text)}</p>
+        <div class="rowf"><button class="btn primary" type="button" data-a="tutorialGo" data-v="${step.view}">${esc(step.action)} ↗</button>${index > 0 ? '<button class="btn" type="button" data-a="tutorialPrev">← Previous</button>' : ''}${index < TUTORIAL_STEPS.length - 1 ? '<button class="btn" type="button" data-a="tutorialNext">Next →</button>' : '<span class="chip">Tour complete</span>'}</div></div></section>
+    <section class="card"><h2>Tour chapters</h2><div class="stack">${TUTORIAL_STEPS.map((item, i) => `<button type="button" class="tx" style="width:100%;text-align:left;background:${i === index ? 'var(--surface2)' : 'transparent'};border:0;color:inherit" data-a="tutorialSetStep" data-step="${i}" aria-current="${i === index ? 'step' : 'false'}"><span aria-hidden="true">${item.icon}</span><span style="flex:1">${i + 1}. ${esc(item.title)}</span><span class="muted">${i === index ? 'Current' : 'Open'}</span></button>`).join('')}</div></section>
   </div>`;
 }
 
@@ -1550,11 +1711,12 @@ function viewSettings(){
 let sheetOpener = null;
 function openSheet(title, html, opts){
   sheetOpener = document.activeElement;
-  $('#sheetRoot').innerHTML = `<div class="scrim" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="sheet-h"><h2>${title}</h2><button class="iconbtn" type="button" data-a="closeSheet" aria-label="Close">✕</button></div>${html}</div></div>`;
-  const f = $('#sheetRoot input:not([type=hidden]):not([type=checkbox]), #sheetRoot select, #sheetRoot textarea, #sheetRoot .btn');
+  $('#app').inert = true; $('#tabbar').inert = true; $('#fab').inert = true;
+  $('#sheetRoot').innerHTML = `<div class="scrim" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-h"><h2 id="sheetTitle">${title}</h2><button class="iconbtn" type="button" data-a="closeSheet" aria-label="Close">✕</button></div>${html}</div></div>`;
+  const f = $('#sheetRoot [autofocus]') || $('#sheetRoot input:not([type=hidden]):not([type=checkbox]), #sheetRoot select, #sheetRoot textarea, #sheetRoot .btn');
   if (f && !(opts && opts.noFocus)) try { f.focus({preventScroll: true}); } catch (e) {}
 }
-function closeSheet(){ camStopStream(); $('#sheetRoot').innerHTML = ''; if (sheetOpener && document.contains(sheetOpener)) try { sheetOpener.focus(); } catch (e) {} sheetOpener = null; if (rec) recCancel(); }
+function closeSheet(){ camStopStream(); $('#sheetRoot').innerHTML = ''; $('#app').inert = false; $('#tabbar').inert = false; $('#fab').inert = false; if (sheetOpener && document.contains(sheetOpener)) try { sheetOpener.focus(); } catch (e) {} sheetOpener = null; if (rec) recCancel(); }
 const sheetOpen = () => !!$('#sheetRoot .sheet');
 
 function quickAdd(){
@@ -1566,22 +1728,22 @@ function quickAdd(){
     <button class="btn" type="button" data-a="newCheckin">📸 Progress check-in</button></div>`);
 }
 function moreSheet(){
-  openSheet('More', `<div class="menu-list">${['habits', 'reports', 'journey', 'settings'].map(id => { const n = NAV.find(x => x.id === id); return `<button class="btn" type="button" data-a="goView" data-v="${id}">${icon(id)} ${n.l}</button>`; }).join('')}</div>`, {noFocus: true});
+  openSheet('More', `<div class="menu-list">${['runs', 'habits', 'reports', 'journey', 'tutorial', 'settings'].map(id => { const n = NAV.find(x => x.id === id); return `<button class="btn" type="button" data-a="goView" data-v="${id}">${id === 'tutorial' ? '<span aria-hidden="true">📘</span>' : icon(id)} ${n.l}</button>`; }).join('')}</div>`, {noFocus: true});
 }
 function taskForm(t, preDate, reminderMode){
   const isNew = !t;
-  t = t || {emoji: '✅', title: '', desc: '', date: preDate || todayStr(), startTime: '', dueTime: '', prio: 'med', catId: (cats('task')[0] || {}).id || '', goalId: '', targetAmount: '', targetUnit: '', allowEarly: true, rec: {type: 'none', days: [], n: 2, end: ''}, rem: {on: true, lead: db.profile.lead, sound: db.profile.defaultSound, vibrate: true, repeat: 0}};
+  t = t || {emoji: '✅', title: '', desc: '', date: preDate || todayStr(), startTime: '', dueTime: '', prio: 'med', catId: (cats('task')[0] || {}).id || '', goalId: '', targetAmount: '', targetUnit: '', availabilityPolicy: 'anytime', rec: {type: 'none', days: [], n: 2, end: ''}, rem: {on: true, lead: db.profile.lead, sound: db.profile.defaultSound, vibrate: true, repeat: 0}};
   const r = t.rec, rm = t.rem;
   openSheet(isNew ? (reminderMode ? '⏰ New reminder' : '✅ New task') : '✏️ Edit task', `<form class="form" data-form="task" data-id="${isNew ? '' : t.id}">
     <div class="fgrid" style="grid-template-columns:90px minmax(0,1fr)"><div class="field"><label for="tf-emoji">Emoji</label><input id="tf-emoji" name="emoji" type="text" maxlength="4" value="${esc(t.emoji)}" style="text-align:center;font-size:1.3rem"></div>
-      <div class="field"><label for="tf-title">What do you want to do?</label><input id="tf-title" name="title" type="text" maxlength="90" required value="${esc(t.title)}" placeholder="e.g. 20 minute run"></div></div>
+      <div class="field"><label for="tf-title">What do you want to do?</label><input id="tf-title" name="title" type="text" maxlength="90" required autofocus value="${esc(t.title)}" placeholder="e.g. 20 minute run"></div></div>
     ${emojiPicker('#tf-emoji')}
     <div class="field"><label for="tf-desc">Notes (optional)</label><textarea id="tf-desc" name="desc" maxlength="500">${esc(t.desc)}</textarea></div>
     <fieldset class="task-options"><legend>Target and completion</legend>
       <p class="sub">For distance, pages, repetitions, or any amount you want to track separately for each scheduled date.</p>
       <div class="fgrid"><div class="field"><label for="tf-target">Target per scheduled date</label><input id="tf-target" name="targetAmount" type="number" min="0.01" step="any" inputmode="decimal" value="${esc(t.targetAmount || '')}" placeholder="Optional"></div>
         <div class="field"><label for="tf-unit">Unit</label><input id="tf-unit" name="targetUnit" type="text" maxlength="16" value="${esc(t.targetUnit || '')}" placeholder="km, pages, reps"></div></div>
-      <label class="check-row"><input type="checkbox" name="allowEarly"${t.allowEarly !== false ? ' checked' : ''}> Allow completion before the scheduled date</label>
+      <p class="sub">🔐 Completion availability is chosen in a required confirmation after you tap ${isNew ? 'Add task' : 'Save changes'}. Current choice: <b>${availabilityPolicy(t) === 'scheduled' ? 'Unlock at scheduled date/time' : 'Available anytime'}</b>.</p>
     </fieldset>
     <div class="fgrid"><div class="field"><label for="tf-date">Date</label><input id="tf-date" name="date" type="date" required value="${t.date}"></div>
       <div class="field"><label for="tf-start">Start time</label><input id="tf-start" name="startTime" type="time" value="${t.startTime}"></div>
@@ -1595,6 +1757,7 @@ function taskForm(t, preDate, reminderMode){
       <label class="check-row"><input type="checkbox" name="remOn"${rm.on ? ' checked' : ''}> Remind me</label>
       <div class="fgrid"><div class="field"><label for="tf-lead">When</label><select id="tf-lead" name="lead">${[0, 5, 10, 15, 30, 60].map(n => `<option value="${n}"${rm.lead === n ? ' selected' : ''}>${n ? n + ' min before' : 'At task time'}</option>`).join('')}</select></div>
         <div class="field"><label for="tf-sound">Sound</label><select id="tf-sound" name="sound">${soundOptions(rm.sound)}</select></div>
+        ${window.AndroidReminders && window.AndroidReminders.pickDeviceRingtone ? '<div class="rowf"><button class="btn small" type="button" data-a="pickTaskRingtone">Choose from device…</button><span class="sub" id="tf-device-ringtone">' + (rm.sound && rm.sound.startsWith('device:') ? esc(soundLabel(rm.sound)) : 'Choose a ringtone stored on this device.') + '</span></div>' : ''}
         <div class="field"><label for="tf-rep">Repeat if ignored</label><select id="tf-rep" name="repeat">${[0, 1, 2, 3].map(n => `<option value="${n}"${rm.repeat === n ? ' selected' : ''}>${n ? n + ' more time' + (n > 1 ? 's' : '') : 'Do not repeat'}</option>`).join('')}</select></div></div>
       <label class="check-row"><input type="checkbox" name="vibrate"${rm.vibrate ? ' checked' : ''}> 📳 Vibrate where supported</label>
       <button class="btn small" type="button" data-a="previewFormSound" style="align-self:flex-start">▶️ Preview sound</button></fieldset>
@@ -1611,15 +1774,17 @@ function occSheet(id){
   const o = occById(id); if (!o) return;
   const t = taskById(o.taskId), s = dstatus(o), hist = db.log.filter(l => l.occId === id).slice(-6).reverse();
   const target = Number(t.targetAmount) || 0, progress = Number(o.progress) || 0, targetDone = !target || progress >= target;
-  const earlyBlocked = o.date > todayStr() && t.allowEarly === false;
+  const locked = occurrenceLocked(o, t);
+  const freezeCanApply = s === 'missed' && t.rec.type !== 'none' && streakFreezeAvailable(o.date);
   openSheet(esc(t.emoji) + ' ' + esc(t.title), `<div class="stack" style="gap:14px">
     <div class="rowf">${statusBadge(s, o.moved)}<span class="chip">🗓️ ${esc(dayLabel(o.date))}</span><span class="chip">🕒 ${esc(timeLabel(o))}</span>${catChip(catById(t.catId))}</div>
     ${t.desc ? `<p class="sub">${esc(t.desc)}</p>` : ''}
     ${target ? `<div class="task-progress"><div class="rowf" style="justify-content:space-between"><b>Today's target</b><span class="mono">${progress} / ${target} ${esc(t.targetUnit || '')}</span></div><div class="meter" role="progressbar" aria-label="${esc(t.title)} progress" aria-valuemin="0" aria-valuemax="${target}" aria-valuenow="${Math.min(target, progress)}"><i style="width:${Math.min(100, progress / target * 100)}%"></i></div></div>
-      ${s !== 'done' ? `<form class="form" data-form="progress" data-id="${id}"><div class="field"><label for="progress-add">Log ${esc(t.targetUnit || 'progress')} for ${esc(dayLabel(o.date))}</label><input id="progress-add" name="amount" type="number" min="0.01" step="any" inputmode="decimal" required placeholder="Amount completed"></div><button class="btn primary" type="submit">Save progress</button></form>` : ''}` : ''}
-    ${earlyBlocked ? '<p class="banner">This task is due on ' + esc(dayLabel(o.date)) + '. Early completion is turned off for this task.</p>' : ''}
-    <div class="rowf">${targetDone ? `<button class="btn primary" type="button" data-a="occSet" data-id="${id}" data-s="done"${earlyBlocked ? ' disabled' : ''}>✅ Done</button>` : ''}<button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="partial">🌗 Partly</button><button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="skipped">⏭️ Skip</button><button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="cancelled">🚫 Cancel</button>${o.status !== 'pending' ? `<button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="pending">↩️ Reopen</button>` : ''}</div>
-    <form class="form" data-form="resched" data-id="${id}"><div class="lbl-t">🕒 Reschedule just this one</div><div class="fgrid"><div class="field"><label for="rs-d">Date</label><input id="rs-d" name="date" type="date" required value="${o.date}"></div><div class="field"><label for="rs-s">Start</label><input id="rs-s" name="start" type="time" value="${o.start}"></div><div class="field"><label for="rs-e">Due</label><input id="rs-e" name="due" type="time" value="${o.due}"></div></div><button class="btn" type="submit">Move it</button></form>
+      ${s !== 'done' ? `<form class="form" data-form="progress" data-id="${id}"><div class="field"><label for="progress-add">Log ${esc(t.targetUnit || 'progress')} for ${esc(dayLabel(o.date))}</label><input id="progress-add" name="amount" type="number" min="0.01" step="any" inputmode="decimal" required placeholder="Amount completed"${locked ? ' disabled' : ''}></div><button class="btn primary" type="submit"${locked ? ' disabled' : ''}>Save progress</button></form>` : ''}` : ''}
+    ${locked ? '<p class="banner">🔒 This occurrence is read-only until ' + esc(unlockLabel(o, t)) + '. Edit the whole task if its schedule needs to change.</p>' : ''}
+    ${o.streakFreeze && s === 'missed' ? '<p class="banner">🧊 Weekly streak freeze applied. This missed occurrence remains in reports but does not break the streak.</p>' : freezeCanApply ? '<button class="btn" type="button" data-a="applyStreakFreeze" data-id="' + id + '">🧊 Use this week’s streak freeze</button>' : ''}
+    <div class="rowf">${targetDone ? `<button class="btn primary" type="button" data-a="occSet" data-id="${id}" data-s="done"${locked ? ' disabled' : ''}>✅ Done</button>` : ''}<button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="partial"${locked ? ' disabled' : ''}>🌗 Partly</button><button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="skipped"${locked ? ' disabled' : ''}>⏭️ Skip</button><button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="cancelled"${locked ? ' disabled' : ''}>🚫 Cancel</button>${o.status !== 'pending' ? `<button class="btn" type="button" data-a="occSet" data-id="${id}" data-s="pending"${locked ? ' disabled' : ''}>↩️ Reopen</button>` : ''}</div>
+    <form class="form" data-form="resched" data-id="${id}"><div class="lbl-t">🕒 Reschedule just this one</div><div class="fgrid"><div class="field"><label for="rs-d">Date</label><input id="rs-d" name="date" type="date" required value="${o.date}"${locked ? ' disabled' : ''}></div><div class="field"><label for="rs-s">Start</label><input id="rs-s" name="start" type="time" value="${o.start}"${locked ? ' disabled' : ''}></div><div class="field"><label for="rs-e">Due</label><input id="rs-e" name="due" type="time" value="${o.due}"${locked ? ' disabled' : ''}></div></div><button class="btn" type="submit"${locked ? ' disabled' : ''}>Move it</button></form>
     <div class="rowf"><button class="btn small" type="button" data-a="editTask" data-id="${t.id}">✏️ Edit whole task</button><span class="sub">${esc(ruleText(t))}</span></div>
     ${hist.length ? `<div class="hist"><b>History</b>${hist.map(l => `<span>${esc(new Date(l.ts).toLocaleString())}: ${esc(l.action)}${l.prev ? ' (' + esc(l.prev) + ' → ' + esc(l.next) + ')' : ''}</span>`).join('')}</div>` : ''}</div>`, {noFocus: true});
 }
@@ -2076,6 +2241,7 @@ const ICON = {
   flame: '<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-6 1-9z"/>',
   bell: '<path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4z"/><path d="M10 21h4"/>',
   target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+  runs: '<circle cx="15.5" cy="4.5" r="2"/><path d="m12 8 3-1 2 3 3 1M11 9l-3 4 4 2 2 5M8 13l-4 2-1 4M13 7l-3 1-2 5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   coin: '<circle cx="12" cy="12" r="9"/><path d="M14.5 9c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.6 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1 0-2-.5-2.5-1.5M12 6v1.5M12 16.5V18"/>',
@@ -2140,6 +2306,112 @@ function checkinDetail(id){
     ${c.note ? `<p>${esc(c.note)}</p>` : ''}
     <button class="btn danger" type="button" data-a="askDelCheckin" data-id="${id}">🗑️ Delete this photo</button></div>`, {noFocus: true});
 }
+let nativeRunState = null, runClock = null, runClockBaseAt = 0, runClockBaseMs = 0;
+function runDuration(ms){
+  const seconds = Math.max(0, Math.floor((Number(ms) || 0) / 1000)), hours = Math.floor(seconds / 3600), minutes = Math.floor(seconds % 3600 / 60), rest = seconds % 60;
+  return hours ? hours + ':' + String(minutes).padStart(2, '0') + ':' + String(rest).padStart(2, '0') : String(minutes).padStart(2, '0') + ':' + String(rest).padStart(2, '0');
+}
+function runPace(distanceMeters, elapsedMs){
+  const paceSeconds = Math.round((Number(elapsedMs) || 0) / 60000 / ((Number(distanceMeters) || 0) / 1000) * 60);
+  if (!Number.isFinite(paceSeconds) || paceSeconds <= 0 || paceSeconds > 3600) return '--:--';
+  return Math.floor(paceSeconds / 60) + ':' + String(paceSeconds % 60).padStart(2, '0');
+}
+function runRouteSvg(points){
+  const valid = (Array.isArray(points) ? points : []).filter(p => Number.isFinite(Number(p.lat)) && Number(p.lat) >= -90 && Number(p.lat) <= 90 && Number.isFinite(Number(p.lon)) && Number(p.lon) >= -180 && Number(p.lon) <= 180);
+  if (valid.length < 2) return '<svg class="run-map" viewBox="0 0 100 100" role="img" aria-label="Route will appear as GPS points are recorded"><text x="50" y="52" text-anchor="middle" fill="currentColor" opacity=".55" font-size="5">Waiting for a clear GPS route</text></svg>';
+  const latMean = valid.reduce((sum, p) => sum + Number(p.lat), 0) / valid.length, cosLat = Math.max(.1, Math.cos(latMean * Math.PI / 180));
+  const xs = valid.map(p => Number(p.lon) * cosLat), ys = valid.map(p => Number(p.lat));
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const midX = (minX + maxX) / 2, midY = (minY + maxY) / 2, span = Math.max(maxX - minX, maxY - minY, 1e-9);
+  const pointsText = valid.map((p, i) => {
+    const x = 50 + (xs[i] - midX) / span * 80;
+    const y = 50 - (ys[i] - midY) / span * 80;
+    return x.toFixed(2) + ',' + y.toFixed(2);
+  });
+  const [firstX, firstY] = pointsText[0].split(','), [lastX, lastY] = pointsText[pointsText.length - 1].split(',');
+  const groups = [];
+  valid.forEach((point, index) => {
+    const segment = Number(point.segment) || 0;
+    if (!groups.length || groups[groups.length - 1].segment !== segment) groups.push({segment, points: []});
+    groups[groups.length - 1].points.push(pointsText[index]);
+  });
+  const routes = groups.filter(group => group.points.length > 1).map(group => `<polyline class="route" points="${group.points.join(' ')}"/>`).join('');
+  return `<svg class="run-map" viewBox="0 0 100 100" role="img" aria-label="Recorded GPS route">${routes}<circle class="route-dot" cx="${firstX}" cy="${firstY}" r="2.2"/><circle class="route-dot" cx="${lastX}" cy="${lastY}" r="2.2"/></svg>`;
+}
+function runDistanceTrend(runs){
+  const td = todayStr(), buckets = Array.from({length: 8}, (_, i) => {
+    const to = addDays(td, -(7 - i) * 7), from = addDays(to, -6);
+    const km = runs.filter(r => String(r.startedAt || '').slice(0, 10) >= from && String(r.startedAt || '').slice(0, 10) <= to).reduce((sum, r) => sum + (Number(r.distanceMeters) || 0), 0) / 1000;
+    return {from, to, km};
+  });
+  if (!buckets.some(b => b.km > 0)) return emptyState('📈', 'Complete a run to see your eight-week distance trend.');
+  const W = 320, H = 120, max = Math.max(...buckets.map(b => b.km), .01), bw = 24, gap = (W - 24 - bw * buckets.length) / (buckets.length - 1);
+  const bars = buckets.map((b, i) => { const x = 12 + i * (bw + gap), h = b.km / max * 72; return `<rect class="bar" x="${x.toFixed(1)}" y="${(90 - h).toFixed(1)}" width="${bw}" height="${Math.max(2, h).toFixed(1)}" rx="4"/><text class="tv" x="${(x + bw / 2).toFixed(1)}" y="${Math.max(10, 85 - h).toFixed(1)}" text-anchor="middle">${b.km.toFixed(1)}</text><text class="t" x="${(x + bw / 2).toFixed(1)}" y="108" text-anchor="middle">${esc(monthShort(monthOf(b.to)))}/${Number(b.to.slice(8))}</text>`; }).join('');
+  const summary = buckets.map(b => dayLabel(b.from) + ' to ' + dayLabel(b.to) + ': ' + b.km.toFixed(2) + ' km').join('; ');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Run distance by week in kilometres. ${esc(summary)}"><line class="axis" x1="10" x2="${W - 10}" y1="90" y2="90"/>${bars}</svg><p class="sr">${esc(summary)}</p>`;
+}
+function googleRouteButton(points, runId){
+  if (!window.AndroidReminders || !window.AndroidReminders.showRunMap) return '';
+  const configured = window.AndroidReminders.googleMapsConfigured && window.AndroidReminders.googleMapsConfigured();
+  return `<div class="rowf"><button class="btn" type="button" data-a="showGoogleRunMap"${runId ? ` data-id="${esc(runId)}"` : ''}${configured ? '' : ' disabled title="Google Maps SDK key is not configured for this build"'}>🗺️ ${configured ? 'Open Google Maps route' : 'Google Maps key required'}</button>${configured ? '' : '<span class="sub">Configure a Google Maps SDK key in the Android build to load map tiles.</span>'}</div>`;
+}
+function gpsStatusText(state){
+  if (!state) return 'Waiting for GPS status.';
+  if (state.gpsStatus === 'location_disabled') return 'Location is turned off. Enable it in Android settings to record the route.';
+  if (state.gpsStatus === 'paused_after_restart') return 'The run was paused safely after a device or clock restart. Resume when you are ready.';
+  if (state.gpsStatus === 'poor_accuracy') return 'GPS accuracy is weak (' + Math.round(Number(state.gpsAccuracy) || 0) + ' m). Move outdoors and wait for a stronger fix.';
+  if (state.gpsStatus === 'recording') return 'GPS recording · accuracy ' + Math.round(Number(state.gpsAccuracy) || 0) + ' m.';
+  return 'Waiting for an accurate GPS fix. Keep Location enabled and wait outdoors.';
+}
+function runSplitsHtml(splits){
+  let previousMs = 0;
+  return (Array.isArray(splits) ? splits : []).map(s => {
+    const cumulative = Number(s.elapsedMs) || 0, duration = cumulative - previousMs; previousMs = cumulative;
+    return `<div class="run-split"><span>${Number(s.km)} km</span><b class="mono">${runDuration(duration)}</b></div>`;
+  }).join('') || '<p class="sub">Kilometer splits will appear as you run.</p>';
+}
+function addCompletedRun(state){
+  if (!state || !state.id || db.runs.some(run => run.id === state.id)) return false;
+  const run = {id: state.id, startedAt: new Date(Number(state.startedAt) || Date.now()).toISOString(), finishedAt: new Date(Number(state.finishedAt) || Date.now()).toISOString(),
+    elapsedMs: Number(state.elapsedMs) || 0, distanceMeters: Number(state.distanceMeters) || 0, points: Array.isArray(state.points) ? state.points : [], splits: Array.isArray(state.splits) ? state.splits : [], note: '', goalId: db.profile.runGoalId || ''};
+  db.runs.push(run);
+  const goal = db.goals.find(g => g.id === run.goalId && /^(km|kms|kilometers?|kilometres?)$/i.test(String(g.unit || '').trim()));
+  if (goal && run.distanceMeters > 0){ goal.actual = Math.round((Number(goal.actual || 0) + run.distanceMeters / 1000) * 100) / 100; run.goalApplied = goal.id; }
+  return true;
+}
+function runGoalOptions(){
+  const options = [['', 'Do not link a goal'], ...db.goals.filter(g => /^(km|kms|kilometers?|kilometres?)$/i.test(String(g.unit || '').trim())).map(g => [g.id, g.title + ' · ' + g.actual + ' / ' + g.target + ' km'])];
+  return options.map(([id, title]) => `<option value="${esc(id)}"${id === (db.profile.runGoalId || '') ? ' selected' : ''}>${esc(title)}</option>`).join('');
+}
+function runDetail(id){
+  const run = db.runs.find(x => x.id === id); if (!run) return;
+  openSheet('🏃 Run · ' + esc(dayLabel(run.startedAt.slice(0, 10))), `<div class="stack" style="gap:14px">${runRouteSvg(run.points)}${googleRouteButton(run.points, run.id)}
+    <div class="run-live"><div class="run-metric"><b>${(run.distanceMeters / 1000).toFixed(2)}</b><span>Distance · km</span></div><div class="run-metric"><b>${runDuration(run.elapsedMs)}</b><span>Time</span></div><div class="run-metric"><b>${runPace(run.distanceMeters, run.elapsedMs)}</b><span>Average pace · /km</span></div><div class="run-metric"><b>${run.points.length}</b><span>GPS fixes</span></div></div>
+    <div><h3>Kilometer splits</h3>${runSplitsHtml(run.splits)}</div><form class="form" data-form="runNote" data-id="${esc(run.id)}"><div class="field"><label for="run-note">Notes</label><textarea id="run-note" name="note" maxlength="300" placeholder="How did it feel?">${esc(run.note || '')}</textarea></div><button class="btn" type="submit">Save note</button></form>
+    <div class="run-controls"><button class="btn" type="button" data-a="exportRun" data-id="${esc(run.id)}">Export GPX</button><button class="btn danger" type="button" data-a="deleteRun" data-id="${esc(run.id)}">Delete run</button></div></div>`, {noFocus: true});
+}
+function viewRuns(){
+  if (window.AndroidReminders && window.AndroidReminders.getRunState){
+    try {
+      nativeRunState = JSON.parse(window.AndroidReminders.getRunState());
+      if (nativeRunState.status === 'completed' && addCompletedRun(nativeRunState)) setTimeout(() => { pendingRunAck = nativeRunState.id; commit(); }, 0);
+    } catch (e) { appWarn('Native run state could not be read', e); }
+  }
+  const active = nativeRunState && ['running', 'paused'].includes(nativeRunState.status) ? nativeRunState : null;
+  const now = Date.now(), weekStart = new Date(); weekStart.setHours(0, 0, 0, 0); weekStart.setDate(weekStart.getDate() - 6);
+  const weekly = db.runs.filter(r => new Date(r.startedAt).getTime() >= weekStart.getTime()).reduce((sum, r) => sum + (Number(r.distanceMeters) || 0), 0) / 1000;
+  const total = db.runs.reduce((sum, r) => sum + (Number(r.distanceMeters) || 0), 0) / 1000;
+  const runs = db.runs.slice().sort((a, b) => String(b.startedAt).localeCompare(String(a.startedAt)));
+  const liveElapsed = active ? Number(active.elapsedMs) || 0 : 0, distance = active ? Number(active.distanceMeters) || 0 : 0;
+  return `<div class="page"><div class="page-head"><div><h1>🏃 Run tracking</h1><p class="sub">GPS-recorded distance, pace, route, and training history. Runs stay on this device.</p></div></div>
+    <section class="stats"><div class="stat"><span class="si" style="--c:#e5484d">🏁</span><div><div class="sk">Runs</div><div class="sv">${db.runs.length}</div></div></div><div class="stat"><span class="si" style="--c:#2f80ed">📏</span><div><div class="sk">Total distance</div><div class="sv">${total.toFixed(1)} km</div></div></div><div class="stat"><span class="si" style="--c:#16a085">📅</span><div><div class="sk">Last 7 days</div><div class="sv">${weekly.toFixed(1)} km</div></div></div></section>
+    ${active ? `<section class="card"><div class="run-hero"><div><h2>${active.status === 'paused' ? '⏸ Run paused' : '📡 GPS run in progress'}</h2><p class="sub" id="gpsStatus">${esc(gpsStatusText(active))}</p></div><div class="run-controls">${active.status === 'running' ? '<button class="btn" type="button" data-a="pauseRun">Pause</button>' : '<button class="btn primary" type="button" data-a="resumeRun">Resume</button>'}<button class="btn danger" type="button" data-a="askFinishRun">Finish</button></div>
+      <div class="run-live"><div class="run-metric"><b id="runDistance">${(distance / 1000).toFixed(2)}</b><span>Distance · km</span></div><div class="run-metric"><b id="runElapsed">${runDuration(liveElapsed)}</b><span>Moving time</span></div><div class="run-metric"><b id="runPace">${runPace(distance, liveElapsed)}</b><span>Average pace · /km</span></div><div class="run-metric"><b id="runFixes">${active.pointCount == null ? (active.points ? active.points.length : 0) : active.pointCount}</b><span>GPS fixes</span></div></div></div>
+      <div id="runRoute">${runRouteSvg(active.points)}</div>${googleRouteButton(active.points)}<div><h3>Kilometer splits</h3><div id="runSplits">${runSplitsHtml(active.splits)}</div></div></section>` : `<section class="card"><div class="run-hero"><div><h2>Start a run</h2><p class="sub">GPS permission is requested only when you start. Recording continues with your screen locked.</p></div><button class="btn primary" type="button" data-a="startRun">▶ Start run</button><div class="field"><label for="run-goal">Add distance to a goal</label><select id="run-goal" data-change="runGoal">${runGoalOptions()}</select></div></div>${window.AndroidReminders ? '' : '<div class="banner" style="margin-top:14px"><span>📱</span><span class="grow">Background GPS tracking needs the Android app. The browser version can’t record a reliable screen-locked run.</span></div>'}</section>`}
+    <section class="card"><h2>📈 Eight-week distance</h2>${runDistanceTrend(runs)}</section>
+    <section class="card"><h2>Run history</h2>${runs.length ? runs.map(run => `<button type="button" class="run-history-row" data-a="openRun" data-id="${esc(run.id)}"><span><b>${esc(dayLabel(run.startedAt.slice(0, 10)))}</b><small>${runDuration(run.elapsedMs)} · ${runPace(run.distanceMeters, run.elapsedMs)} min/km</small></span><strong class="mono">${(run.distanceMeters / 1000).toFixed(2)} km</strong><span aria-hidden="true">›</span></button>`).join('') : emptyState('👟', 'Your completed GPS runs will appear here.')}</section>
+  </div>`;
+}
 async function camStart(){
   closeSheet();
   openSheet('📷 Take a photo', `<div class="stack" style="gap:12px"><video id="camVideo" class="camv" autoplay playsinline muted></video><p class="sub" id="camMsg">Starting the camera…</p><div class="rowf"><button class="btn primary" type="button" data-a="camShot">📸 Capture</button><button class="btn" type="button" data-a="camCancel">Back</button></div></div>`, {noFocus: true});
@@ -2166,22 +2438,25 @@ function applyTheme(){
   r.style.setProperty('--scale', p.scale);
   applyBackground(); setAmbient();
 }
-const VIEWS = {home: viewHome, tasks: viewTasks, calendar: viewCalendar, habits: viewHabits, money: viewMoney, reports: viewReports, journey: viewJourney, settings: viewSettings};
+const VIEWS = {home: viewHome, tasks: viewTasks, calendar: viewCalendar, runs: viewRuns, habits: viewHabits, money: viewMoney, reports: viewReports, journey: viewJourney, tutorial: viewTutorial, settings: viewSettings};
 function render(){
   applyTheme(); ensureOccs(); if (!window.__bgProbed){ window.__bgProbed = 1; probeBgPhotos(); }
   updateSaveState(memOnly ? 'unavailable' : saveState);
   const p = db.profile, r30 = rateOver(30), lv = xpInfo().lvl;
   const btn = (n, cls) => `<button type="button" class="${cls || 'nav-btn'}" data-a="goView" data-v="${n.id}"${ui.view === n.id ? ' aria-current="page"' : ''}>${icon(n.id)}<span>${n.l}</span></button>`;
-  $('#rail').innerHTML = `<div class="brand">${LOGO}<span class="brand-copy"><b>Way to<br>Consistency</b><small>Plan · Track · Improve · Grow</small></span></div>` + NAV.slice(0, 7).map(n => btn(n)).join('') + '<div class="spacer"></div>' + btn(NAV[7]) +
+  $('#rail').innerHTML = `<div class="brand">${LOGO}<span class="brand-copy"><b>Way to<br>Consistency</b><small>Plan · Track · Improve · Grow</small></span></div>` + NAV.slice(0, 9).map(n => btn(n)).join('') + '<div class="spacer"></div>' + btn(NAV[9]) +
     `<button type="button" class="usercard" data-a="goView" data-v="journey" aria-label="Open my journey">${avatarHtml(46, r30 || 0)}<span style="min-width:0"><b>${esc(p.name || 'Your journey')}</b><small>Level ${lv} · ${pctTxt(r30)} 30 days</small></span></button><div class="save-state" id="railSaveState" role="status" aria-live="polite" data-state="${saveState}">${saveState === 'unavailable' ? 'Local storage unavailable' : 'Saved on this device'}</div>`;
   const tab = id => btn(NAV.find(n => n.id === id), 'tab');
-  const moreOn = ['habits', 'reports', 'journey', 'settings'].includes(ui.view);
+  const moreOn = ['runs', 'habits', 'reports', 'journey', 'tutorial', 'settings'].includes(ui.view);
   $('#tabbar').innerHTML = ['home', 'calendar', 'tasks', 'money'].map(tab).join('') + `<button type="button" class="tab" data-a="openMore"${moreOn ? ' aria-current="page"' : ''}>${icon('more')}<span>More</span></button>`;
   $('#topbar').innerHTML = `<div class="brand">${LOGO}<span class="brand-copy"><b>Way to Consistency</b><small>Plan · Track · Improve · Grow</small></span></div><span class="save-state" id="topSaveState" role="status" aria-live="polite" data-state="${saveState}">${saveState === 'unavailable' ? 'Local storage unavailable' : 'Saved on this device'}</span><button type="button" class="iconbtn" data-a="goView" data-v="journey" aria-label="My journey" style="border-radius:50%;padding:0;overflow:hidden">${avatarHtml(40, r30 || 0)}</button>`;
   $('#main').innerHTML = (VIEWS[ui.view] || viewHome)();
   document.title = 'Way to Consistency';
 }
-function go(v){ ui.view = v; render(); window.scrollTo(0, 0); }
+function go(v){
+  ui.view = v; render(); window.scrollTo(0, 0);
+  if (v === 'runs') startRunClock(); else { clearInterval(runClock); runClock = null; }
+}
 
 /* ---------- actions ---------- */
 function snapshotUndo(msg, emoji){
@@ -2189,15 +2464,13 @@ function snapshotUndo(msg, emoji){
   return () => { db = JSON.parse(snap); genKey = ''; commit(); };
 }
 function setOcc(id, s, silent){
-  const o = occById(id); if (!o) return;
+  const o = occById(id); if (!o) return false;
   const t = taskById(o.taskId);
+  if (!guardOccurrenceUpdate(o, t)) return false;
   if (s === 'done' && t && Number(t.targetAmount) > 0 && (Number(o.progress) || 0) < Number(t.targetAmount)){
-    toast('Log the full ' + t.targetAmount + ' ' + (t.targetUnit || 'target') + ' before marking this done.', '🎯'); return;
+    toast('Log the full ' + t.targetAmount + ' ' + (t.targetUnit || 'target') + ' before marking this done.', '🎯'); return false;
   }
-  if (s === 'done' && o.date > todayStr() && t && t.allowEarly === false){
-    toast('This task can only be completed on or after ' + dayLabel(o.date) + '.', '🗓️'); return;
-  }
-  const prev = o.status; if (prev === s) return;
+  const prev = o.status; if (prev === s) return false;
   o.status = s;
   if (s === 'done' || s === 'partial') o.completedAt = new Date().toISOString(); else o.completedAt = '';
   if (s === 'pending'){ o.fires = 0; o.snoozeUntil = null; }
@@ -2205,6 +2478,7 @@ function setOcc(id, s, silent){
   commit();
   if (!silent && s === 'done') celebrate($(`[data-a="toggleDone"][data-id="${id}"]`));
   else if (!silent) toast({partial: 'Partly done counts too. Nice effort.', skipped: 'Skipped. No guilt, it is saved as skipped.', cancelled: 'Cancelled and kept in your history.', pending: 'Back on your list.'}[s] || 'Updated', {partial: '🌗', skipped: '⏭️', cancelled: '🚫', pending: '↩️'}[s] || '✨');
+  return true;
 }
 function budgetAlerts(e, isNew){
   if (e.kind !== 'expense' || !isNew) return;
@@ -2239,13 +2513,58 @@ function applyEdit(t, data, scope){
   closeSheet(); commit(); toast('Task saved.', '💾');
 }
 let pendingEdit = null;
+let pendingAvailabilitySave = null;
+
+function finishTaskSave(id, data){
+  if (!id){
+    db.tasks.push(Object.assign({id: uid(), state: 'active', ruleFrom: ''}, data)); ensureOccs(true); closeSheet(); commit();
+    toast('Task added. Small steps add up!', '🚀'); burst(['🚀', '✨', '⭐'], innerWidth / 2, innerHeight / 3, 12); return;
+  }
+  const t = taskById(id); if (!t) return;
+  if (sig(t) !== sig(data) && (t.rec.type !== 'none' || data.rec.type !== 'none')){
+    pendingEdit = {id, data};
+    closeSheet();
+    return openSheet('Apply this change to…', `<div class="stack" style="gap:12px"><p>You changed the schedule of a repeating task. Completed history is always kept.</p>
+      <button class="btn primary" type="button" data-a="scope" data-s="future">📅 Future days only</button><button class="btn" type="button" data-a="scope" data-s="all">🔁 The whole series (rebuilds days not yet completed)</button><button class="btn ghost" type="button" data-a="closeSheet">Cancel</button></div>`);
+  }
+  applyEdit(t, data, 'all');
+}
+
+function availabilityChoiceSheet(id, data){
+  data.availabilityPolicy = id && taskById(id) ? availabilityPolicy(taskById(id)) : 'anytime';
+  pendingAvailabilitySave = {id, data};
+  const firstDate = firstOccurrenceDate(data) || data.date;
+  const example = {date: firstDate, start: data.startTime || '', due: data.dueTime || ''};
+  const when = unlockLabel(example, data);
+  const current = id && taskById(id) ? availabilityPolicy(taskById(id)) : '';
+  openSheet('🔐 When can this task be updated?', `<div class="stack" style="gap:12px"><p>Choose one option. This controls completion, progress, skipping, cancelling, and rescheduling for each occurrence.</p>
+    <button class="btn availability-card${current === 'anytime' ? ' primary' : ''}" type="button" data-a="chooseAvailability" data-v="anytime"><span class="choice-icon" aria-hidden="true">⚡</span><span><b>Available anytime</b><span class="sub">Best for reading, assignments, and work that may finish early.</span></span><span class="choice-state">Choose</span></button>
+    <button class="btn availability-card${current === 'scheduled' ? ' primary' : ''}" type="button" data-a="chooseAvailability" data-v="scheduled"><span class="choice-icon" aria-hidden="true">🔒</span><span><b>Unlock at scheduled time</b><span class="sub">First occurrence unlocks ${esc(when)}. Best for runs and date-specific routines.</span></span><span class="choice-state">Choose</span></button>
+    <button class="btn ghost" type="button" data-a="cancelAvailability">Cancel</button></div>`);
+  const close = $('#sheetRoot .sheet-h [data-a="closeSheet"]'); if (close) close.dataset.a = 'cancelAvailability';
+}
 
 const A = {
   goView: el => { closeSheet(); go(el.dataset.v); },
+  tutorialNext: () => { ui.tutorialStep = Math.min(TUTORIAL_STEPS.length - 1, (Number(ui.tutorialStep) || 0) + 1); render(); },
+  tutorialPrev: () => { ui.tutorialStep = Math.max(0, (Number(ui.tutorialStep) || 0) - 1); render(); },
+  tutorialSetStep: el => { ui.tutorialStep = Math.max(0, Math.min(TUTORIAL_STEPS.length - 1, Number(el.dataset.step) || 0)); render(); },
+  resetTutorial: () => { ui.tutorialStep = 0; render(); },
+  tutorialGo: el => { closeSheet(); go(el.dataset.v); },
   goMoney: el => { ui.moneyTab = el.dataset.t || 'overview'; go('money'); },
   quickAdd: () => quickAdd(),
   closeSheet: () => closeSheet(),
-  scrim: (el, e) => { if (e.target === el) closeSheet(); },
+  cancelAvailability: () => {
+    const pending = pendingAvailabilitySave; pendingAvailabilitySave = null; closeSheet();
+    if (pending) taskForm(Object.assign({}, pending.data, pending.id ? {id: pending.id} : {}));
+  },
+  chooseAvailability: el => {
+    if (!pendingAvailabilitySave) return closeSheet();
+    const pending = pendingAvailabilitySave; pendingAvailabilitySave = null;
+    pending.data.availabilityPolicy = el.dataset.v === 'scheduled' ? 'scheduled' : 'anytime';
+    closeSheet(); finishTaskSave(pending.id, pending.data);
+  },
+  scrim: (el, e) => { if (e.target === el){ if (pendingAvailabilitySave) A.cancelAvailability(); else closeSheet(); } },
   newTask: el => { closeSheet(); taskForm(null, el.dataset.d); },
   newReminder: () => { closeSheet(); taskForm(null, todayStr(), true); },
   editTask: el => { const t = taskById(el.dataset.id); if (t){ closeSheet(); taskForm(t); } },
@@ -2266,6 +2585,16 @@ const A = {
   toggleDone: el => { const o = occById(el.dataset.id); if (o) setOcc(o.id, o.status === 'done' ? 'pending' : 'done'); },
   openOcc: el => { closeSheet(); occSheet(el.dataset.id); },
   occSet: el => { const id = el.dataset.id, s = el.dataset.s; closeSheet(); setOcc(id, s); },
+  applyStreakFreeze: el => {
+    const o = occById(el.dataset.id), t = o && taskById(o.taskId);
+    if (!o || !t || dstatus(o) !== 'missed' || t.rec.type === 'none' || !streakFreezeAvailable(o.date)) return toast('The weekly streak freeze is unavailable for this occurrence.', '🧊');
+    const week = isoWeekKey(o.date);
+    db.profile.streakFreezeWeeks = db.profile.streakFreezeWeeks || [];
+    db.profile.streakFreezeWeeks.push(week);
+    o.streakFreeze = true;
+    logAct(o.id, 'streak freeze', 'missed', 'protected', week);
+    closeSheet(); commit(); toast('Streak protected. Your missed day remains in reports.', '🧊');
+  },
   pickDay: el => { ui.calSel = el.dataset.d; if (ui.calMode === 'month' && monthOf(ui.calSel) !== ui.calMonth) ui.calMonth = monthOf(ui.calSel); render(); },
   calPrev: () => { if (ui.calMode === 'month'){ ui.calMonth = addMonths(ui.calMonth, -1); ui.calSel = ui.calMonth + '-01'; } else ui.calSel = addDays(ui.calSel, -7); render(); },
   calNext: () => { if (ui.calMode === 'month'){ ui.calMonth = addMonths(ui.calMonth, 1); ui.calSel = ui.calMonth + '-01'; } else ui.calSel = addDays(ui.calSel, 7); render(); },
@@ -2302,7 +2631,60 @@ const A = {
   newCheckin: () => { closeSheet(); checkinSheet(); },
   openCheckin: el => { closeSheet(); checkinDetail(el.dataset.id); },
   askDelCheckin: el => openSheet('Delete this photo?', `<div class="stack" style="gap:14px"><p>The photo and its note will be removed from this device.</p><div class="rowf"><button class="btn danger" type="button" data-a="delCheckin" data-id="${el.dataset.id}">Yes, delete it</button><button class="btn" type="button" data-a="closeSheet">Keep it</button></div></div>`),
+  startRun: () => {
+    if (!window.AndroidReminders || !window.AndroidReminders.startRun) return toast('GPS run recording is available in the Android app.', '📱');
+    window.AndroidReminders.startRun();
+  },
+  pauseRun: () => { if (window.AndroidReminders) window.AndroidReminders.pauseRun(); },
+  resumeRun: () => { if (window.AndroidReminders) window.AndroidReminders.resumeRun(); },
+  askFinishRun: () => openSheet('Finish this run?', `<div class="stack" style="gap:14px"><p>Your recorded route, time, splits, and distance will be saved on this device.</p><div class="rowf"><button class="btn primary" type="button" data-a="finishRun">Finish and save</button><button class="btn" type="button" data-a="closeSheet">Keep running</button></div></div>`),
+  finishRun: () => { closeSheet(); if (window.AndroidReminders) window.AndroidReminders.finishRun(); },
+  openRun: el => runDetail(el.dataset.id),
+  showGoogleRunMap: el => {
+    const run = el.dataset.id ? db.runs.find(x => x.id === el.dataset.id) : nativeRunState;
+    if (!run || !Array.isArray(run.points) || run.points.length < 2) return toast('Wait for at least two GPS fixes before opening the route map.', '📍');
+    if (window.AndroidReminders && window.AndroidReminders.showRunMap) window.AndroidReminders.showRunMap(JSON.stringify(run.points));
+  },
+  pickTaskRingtone: () => {
+    const select = $('#tf-sound');
+    if (select && window.AndroidReminders) window.AndroidReminders.pickDeviceRingtone(select.value);
+  },
+  deleteRun: el => openSheet('Delete this run?', `<div class="stack" style="gap:14px"><p>This removes the run and its locally stored route.</p><div class="rowf"><button class="btn danger" type="button" data-a="confirmDeleteRun" data-id="${esc(el.dataset.id)}">Delete run</button><button class="btn" type="button" data-a="closeSheet">Cancel</button></div></div>`),
+  confirmDeleteRun: el => {
+    const run = db.runs.find(x => x.id === el.dataset.id);
+    const goal = run && db.goals.find(g => g.id === run.goalApplied);
+    if (goal) goal.actual = Math.max(0, Math.round((Number(goal.actual || 0) - run.distanceMeters / 1000) * 100) / 100);
+    db.runs = db.runs.filter(x => x.id !== el.dataset.id); closeSheet(); commit(); toast('Run deleted.', '🗑️');
+  },
+  exportRun: el => {
+    const run = db.runs.find(x => x.id === el.dataset.id); if (!run || !run.points.length) return toast('This run has no GPS points to export.', '📍');
+    const xml = value => String(value).replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'}[ch]));
+    const track = run.points.map(p => `<trkpt lat="${Number(p.lat)}" lon="${Number(p.lon)}"><time>${xml(new Date(Number(p.time)).toISOString())}</time></trkpt>`).join('');
+    const gpx = `<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="Way to Consistency" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>${xml(run.startedAt)}</name><trkseg>${track}</trkseg></trk></gpx>`;
+    const filename = 'run-' + run.startedAt.slice(0, 10) + '.gpx';
+    if (window.AndroidReminders && window.AndroidReminders.exportGpx) return window.AndroidReminders.exportGpx(filename, gpx);
+    const url = URL.createObjectURL(new Blob([gpx], {type: 'application/gpx+xml'})), a = document.createElement('a');
+    a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  },
   delCheckin: el => { const c = db.checkins.find(x => x.id === el.dataset.id); if (c){ imgDel(c.imgId); db.checkins = db.checkins.filter(x => x.id !== c.id); } closeSheet(); commit(); toast('Photo deleted.', '🗑️'); },
+  createAutomaticBackup: () => {
+    if (!window.AndroidReminders || !window.AndroidReminders.createBackupNow) return;
+    if (window.AndroidReminders.saveBackupSnapshot) window.AndroidReminders.saveBackupSnapshot(JSON.stringify(db));
+    window.AndroidReminders.createBackupNow(); toast('Backup queued. It will appear in your device backup folder shortly.', '📦');
+  },
+  restoreAutomaticBackup: () => {
+    if (!window.AndroidReminders || !window.AndroidReminders.getLatestBackup) return;
+    try {
+      const candidate = JSON.parse(window.AndroidReminders.getLatestBackup());
+      if (!candidate || !candidate.profile || !Array.isArray(candidate.tasks) || !Array.isArray(candidate.expenses)) throw new Error('invalid');
+      pendingAutomaticBackup = candidate;
+      openSheet('Restore automatic backup?', `<div class="stack" style="gap:14px"><p>This replaces the app data currently on this device with the latest automatic backup. Export your current data first if you need to keep it.</p><p class="sub">Backup date: ${esc(candidate.updatedAt ? new Date(candidate.updatedAt).toLocaleString() : 'unknown')}</p><div class="rowf"><button class="btn danger" type="button" data-a="applyAutomaticBackup">Replace with backup</button><button class="btn" type="button" data-a="closeSheet">Cancel</button></div></div>`);
+    } catch (e) { toast('No valid automatic backup is available yet. Create one or export a backup file.', '⚠️'); }
+  },
+  applyAutomaticBackup: () => {
+    if (!pendingAutomaticBackup) return closeSheet();
+    db = pendingAutomaticBackup; pendingAutomaticBackup = null; migrate(); genKey = ''; fmtCache = {}; db.profile.onboarded = true; closeSheet(); commit(); toast('Automatic backup restored.', '📥');
+  },
   camStart: () => camStart(),
   camShot: () => camShot(),
   camCancel: () => { camStopStream(); closeSheet(); checkinSheet(); },
@@ -2314,7 +2696,7 @@ const A = {
   setScale: el => { db.profile.scale = Number(el.dataset.v); commit(); },
   setPartial: el => { db.profile.partialCredit = Number(el.dataset.v); commit(); },
   previewSound: () => playSound(db.profile.defaultSound),
-  previewFormSound: () => { const s = $('#tf-sound'); if (s) playSound(s.value); },
+  previewFormSound: () => { const s = $('#tf-sound'); if (!s) return; if (s.value.startsWith('device:') && window.AndroidReminders) window.AndroidReminders.previewDeviceRingtone(s.value); else playSound(s.value); },
   testReminder: () => { playSound(db.profile.defaultSound); showCard('🔔', 'Test reminder', 'This is how your reminders will appear. Quiet hours and sound settings apply to real ones.', null); },
   askNotif: () => {
     if (window.AndroidReminders){ window.AndroidReminders.requestPermissions(); toast('Allow notifications and exact alarms in Android settings for scheduled alerts.', '🔔'); return; }
@@ -2322,7 +2704,7 @@ const A = {
   },
   recToggle: () => { if (rec) recStop(); else recStart(); },
   playAudio: el => playSound('audio:' + el.dataset.id),
-  delAudio: el => { const undo = snapshotUndo(); const id = el.dataset.id; db.audio = db.audio.filter(a => a.id !== id); db.tasks.forEach(t => { if (t.rem && t.rem.sound === 'audio:' + id) t.rem.sound = 'tone:chime'; }); if (db.profile.defaultSound === 'audio:' + id) db.profile.defaultSound = 'tone:chime'; commit(); toast('Sound deleted.', '🗑️', undo); },
+  delAudio: el => { const undo = snapshotUndo(); const id = el.dataset.id; db.audio = db.audio.filter(a => a.id !== id); db.tasks.forEach(t => { if (t.rem && t.rem.sound === 'audio:' + id) t.rem.sound = 'tone:chime'; }); if (db.profile.defaultSound === 'audio:' + id) db.profile.defaultSound = 'tone:chime'; nativeSoundsSynced.delete(id); if (window.AndroidReminders && window.AndroidReminders.deleteSound) window.AndroidReminders.deleteSound(id); commit(); toast('Sound deleted.', '🗑️', undo); },
   openExport: el => exportSheet(el.dataset.f),
   copyExport: () => {
     const ta = $('#exportText'); if (!ta) return;
@@ -2334,8 +2716,8 @@ const A = {
   clearSamples: () => { const undo = snapshotUndo(); clearSamples(); commit(); toast('Sample data cleared.', '🧹', undo); },
   wipe: () => openSheet('Delete everything?', `<div class="stack" style="gap:14px"><p>This removes every task, expense, goal and sound on this device. Export a backup first if you might want them back.</p><div class="rowf"><button class="btn danger" type="button" data-a="wipeConfirm">Yes, delete everything</button><button class="btn" type="button" data-a="closeSheet">Keep my data</button></div></div>`),
   wipeConfirm: () => { imgClearAll(); db = defaultDB(); genKey = ''; try { localStorage.removeItem(KEY); } catch (e) {} closeSheet(); ui.view = 'home'; render(); onboarding(); },
-  remDone: el => { const card = el.closest('.rcard'); setOcc(el.dataset.id, 'done'); if (card) card.remove(); },
-  remSnooze: el => { const o = occById(el.dataset.id), card = el.closest('.rcard'); if (o){ o.snoozeUntil = new Date(Date.now() + db.profile.snooze * 60000).toISOString(); o.snoozes = (o.snoozes || 0) + 1; logAct(o.id, 'snoozed', '', db.profile.snooze + ' min'); save(); toast('Snoozed for ' + db.profile.snooze + ' minutes.', '💤'); } if (card) card.remove(); },
+  remDone: el => { const card = el.closest('.rcard'); if (setOcc(el.dataset.id, 'done') && card) card.remove(); },
+  remSnooze: el => { const o = occById(el.dataset.id), card = el.closest('.rcard'), t = o && taskById(o.taskId); if (o && guardOccurrenceUpdate(o, t)){ o.snoozeUntil = new Date(Date.now() + db.profile.snooze * 60000).toISOString(); o.snoozes = (o.snoozes || 0) + 1; logAct(o.id, 'snoozed', '', db.profile.snooze + ' min'); save(); toast('Snoozed for ' + db.profile.snooze + ' minutes.', '💤'); if (card) card.remove(); } },
   remOpen: el => { const card = el.closest('.rcard'); if (card) card.remove(); occSheet(el.dataset.id); },
   remDismiss: el => { const c = el.closest('.rcard'); if (c) c.remove(); }
 };
@@ -2363,29 +2745,20 @@ const F = {
     if (!Number.isFinite(targetAmount) || targetAmount < 0) return toast('Enter a valid target amount.', '🎯');
     if (targetAmount > 0 && !targetUnit) return toast('Add a unit for the target, such as km, pages, or reps.', '🎯');
     const data = {emoji: String(fd.get('emoji') || '').trim() || '✅', title, desc: String(fd.get('desc') || '').trim(), date, startTime: st, dueTime: due, prio: fd.get('prio'), catId: fd.get('catId'), goalId: fd.get('goalId') || '',
-      targetAmount, targetUnit, allowEarly: !!fd.get('allowEarly'),
+      targetAmount, targetUnit,
       rec: {type: rtype, days, n: Math.max(2, Number(fd.get('n')) || 2), end}, rem: {on: !!fd.get('remOn'), lead: Number(fd.get('lead')), sound: fd.get('sound'), vibrate: !!fd.get('vibrate'), repeat: Number(fd.get('repeat'))}};
-    if (!id){
-      db.tasks.push(Object.assign({id: uid(), state: 'active', ruleFrom: ''}, data)); ensureOccs(true); closeSheet(); commit();
-      toast('Task added. Small steps add up!', '🚀'); burst(['🚀', '✨', '⭐'], innerWidth / 2, innerHeight / 3, 12); return;
-    }
-    const t = taskById(id);
-    if (sig(t) !== sig(data) && (t.rec.type !== 'none' || data.rec.type !== 'none')){
-      pendingEdit = {id, data};
-      closeSheet();
-      return openSheet('Apply this change to…', `<div class="stack" style="gap:12px"><p>You changed the schedule of a repeating task. Completed history is always kept.</p>
-        <button class="btn primary" type="button" data-a="scope" data-s="future">📅 Future days only</button><button class="btn" type="button" data-a="scope" data-s="all">🔁 The whole series (rebuilds days not yet completed)</button><button class="btn ghost" type="button" data-a="closeSheet">Cancel</button></div>`);
-    }
-    applyEdit(t, data, 'all');
+    if (!firstOccurrenceDate(data)) return toast('That repeat schedule has no occurrence before its stop date.', '📅');
+    closeSheet(); availabilityChoiceSheet(id, data);
   },
   progress: f => {
     const amount = Number(new FormData(f).get('amount')), o = occById(f.dataset.id);
     if (!o || !Number.isFinite(amount) || amount <= 0) return toast('Enter progress greater than zero.', '🎯');
-    const t = taskById(o.taskId), before = Number(o.progress) || 0;
+    const t = taskById(o.taskId); if (!guardOccurrenceUpdate(o, t)) return;
+    const before = Number(o.progress) || 0;
     o.progress = Math.round((before + amount) * 1000) / 1000;
     const target = Number(t && t.targetAmount) || 0, reached = target > 0 && o.progress >= target;
     logAct(o.id, 'progress', String(before), String(o.progress), t ? t.targetUnit || '' : '');
-    if (reached && o.status === 'pending' && (o.date <= todayStr() || !t || t.allowEarly !== false)){
+    if (reached && o.status === 'pending'){
       o.status = 'done'; o.completedAt = new Date().toISOString(); logAct(o.id, 'done', 'pending', 'done', 'target reached');
     }
     closeSheet(); commit();
@@ -2393,6 +2766,7 @@ const F = {
   },
   resched: f => {
     const fd = new FormData(f), o = occById(f.dataset.id); if (!o) return;
+    if (!guardOccurrenceUpdate(o, taskById(o.taskId))) return;
     const d = fd.get('date'), s = fd.get('start') || '', e = fd.get('due') || '';
     if (s && e && e < s) return toast('The due time is before the start time.', '🕒');
     if (d === o.date && s === o.start && e === o.due) return toast('Nothing changed.', '🙂');
@@ -2455,6 +2829,10 @@ const F = {
     imgPut(img, ciPending); ciPending = ''; db.checkins.push(entry);
     closeSheet(); ui.view = 'journey'; commit(); celebrate(null); burst(['📸', '✨', '🎉'], innerWidth / 2, innerHeight / 3, 14);
   },
+  runNote: f => {
+    const run = db.runs.find(x => x.id === f.dataset.id); if (!run) return;
+    run.note = String(new FormData(f).get('note') || '').trim(); closeSheet(); commit(); runDetail(run.id); toast('Run note saved.', '📝');
+  },
   profile: f => { const fd = new FormData(f); db.profile.name = String(fd.get('name') || '').trim(); db.profile.currency = fd.get('currency'); fmtCache = {}; commit(); toast('Saved.', '🙂'); },
   onboard: (f, e) => {
     const fd = new FormData(f), mode = (e.submitter && e.submitter.value) || 'empty';
@@ -2473,19 +2851,92 @@ const F = {
   }
 };
 A.scope = el => { if (!pendingEdit) return closeSheet(); const t = taskById(pendingEdit.id); const d = pendingEdit.data; pendingEdit = null; if (t) applyEdit(t, d, el.dataset.s); };
+window.handleDeviceRingtonePicked = (spec, title) => {
+  const select = $('#tf-sound');
+  if (!select || !spec) return;
+  let option = Array.from(select.options).find(item => item.value === spec);
+  if (!option){ option = document.createElement('option'); option.value = spec; select.appendChild(option); }
+  option.textContent = '📳 ' + String(title || 'Device ringtone');
+  select.value = spec;
+  const label = $('#tf-device-ringtone');
+  if (label) label.textContent = String(title || 'Device ringtone');
+};
+function tickRunClock(){
+  if (!nativeRunState || nativeRunState.status !== 'running') return;
+  const elapsed = runClockBaseMs + Math.max(0, Date.now() - runClockBaseAt), distance = Number(nativeRunState.distanceMeters) || 0;
+  const time = $('#runElapsed'), pace = $('#runPace');
+  if (time) time.textContent = runDuration(elapsed);
+  if (pace) pace.textContent = runPace(distance, elapsed);
+}
+function startRunClock(){
+  clearInterval(runClock); runClock = null;
+  if (!nativeRunState || nativeRunState.status !== 'running') return;
+  runClock = setInterval(tickRunClock, 1000); tickRunClock();
+}
+function receiveNativeRunState(state){
+  if (!state || !state.status) return;
+  const previousStatus = nativeRunState && nativeRunState.status;
+  if (!Array.isArray(state.points) && nativeRunState && nativeRunState.id === state.id){
+    state.points = Array.isArray(nativeRunState.points) ? nativeRunState.points.slice() : [];
+    const latest = state.latestPoint;
+    const samePoint = (a, b) => a && b && (a.seq != null && b.seq != null ? Number(a.seq) === Number(b.seq) : Number(a.time) === Number(b.time) && Number(a.lat) === Number(b.lat) && Number(a.lon) === Number(b.lon));
+    if (latest && !state.points.some(point => samePoint(point, latest))) state.points.push(latest);
+    state.splits = Array.isArray(state.splits) ? state.splits : (nativeRunState.splits || []);
+  }
+  nativeRunState = state; runClockBaseMs = Number(state.elapsedMs) || 0; runClockBaseAt = Date.now();
+  if (state.status === 'completed'){
+    clearInterval(runClock); runClock = null;
+    if (addCompletedRun(state)){
+      pendingRunAck = state.id;
+      commit();
+      toast('Run saved to your history.', '🏁');
+    }
+    else if (ui.view === 'runs') render();
+    return;
+  }
+  if (ui.view === 'runs'){
+    if (previousStatus !== state.status || !$('#runElapsed')) render();
+    else {
+      const distance = Number(state.distanceMeters) || 0;
+      const distanceEl = $('#runDistance'), fixesEl = $('#runFixes'), route = $('#runRoute'), splits = $('#runSplits'), gps = $('#gpsStatus');
+      if (distanceEl) distanceEl.textContent = (distance / 1000).toFixed(2);
+      if (fixesEl) fixesEl.textContent = String(state.pointCount == null ? state.points.length : state.pointCount);
+      if (route) route.innerHTML = runRouteSvg(state.points);
+      if (splits) splits.innerHTML = runSplitsHtml(state.splits);
+      if (gps) gps.textContent = gpsStatusText(state);
+    }
+  }
+  startRunClock();
+}
+window.handleNativeRunUpdate = receiveNativeRunState;
+window.refreshNativeRun = () => {
+  if (!window.AndroidReminders || !window.AndroidReminders.getRunState) return;
+  try {
+    const state = JSON.parse(window.AndroidReminders.getRunState());
+    if (state.status) receiveNativeRunState(state);
+  } catch (e) { appWarn('Native run refresh failed', e); }
+};
+window.handleRunPermissionResult = granted => {
+  if (!granted) toast('Location permission is needed to record a GPS run.', '📍');
+};
 window.refreshAndroidPermissions = () => { if (ui.view === 'settings') render(); };
 window.handleNativeReminderAction = payload => {
   if (!payload || !payload.id) return;
   const o = occById(payload.id);
   if (!o) return;
   closeSheet();
+  const t = taskById(o.taskId);
+  if (!guardOccurrenceUpdate(o, t)){ go('tasks'); occSheet(o.id); return; }
+  if (payload.action === 'skip'){
+    if (!setOcc(o.id, 'skipped')) return;
+    go('tasks');
+    toast('Skipped from your notification.', '⏭️');
+    return;
+  }
   if (payload.action === 'done'){
-    const t = taskById(o.taskId), target = Number(t && t.targetAmount) || 0;
+    const target = Number(t && t.targetAmount) || 0;
     if (target > 0 && (Number(o.progress) || 0) < target){
       go('tasks'); occSheet(o.id); toast('Log this date’s progress to reach its target.', '🎯'); return;
-    }
-    if (o.date > todayStr() && t && t.allowEarly === false){
-      go('tasks'); occSheet(o.id); toast('This task is not available to complete early.', '🗓️'); return;
     }
     setOcc(o.id, 'done');
     go('tasks');
@@ -2507,6 +2958,7 @@ const C = {
   volume: v => { db.profile.volume = Number(v); save(); },
   quietOn: (v, el) => { db.profile.quietOn = el.checked; commit(); }, quietStart: v => { db.profile.quietStart = v; save(); }, quietEnd: v => { db.profile.quietEnd = v; save(); },
   dailySummary: (v, el) => { db.profile.dailySummary = el.checked; db.profile.lastSummary = ''; save(); }, summaryTime: v => { db.profile.summaryTime = v || '08:00'; db.profile.lastSummary = ''; save(); },
+  runGoal: v => { db.profile.runGoalId = v; save(); },
   skippedCounts: (v, el) => { db.profile.skippedCounts = el.checked; commit(); },
   recType: v => { const m = $('#recMore'); if (m) m.innerHTML = recMore({type: v, days: [], n: 2, end: ''}); },
   audioFile: (v, el) => {
@@ -2555,11 +3007,12 @@ document.addEventListener('change', e => {
 document.addEventListener('input', e => {
   const k = e.target.dataset && e.target.dataset.input;
   if (k === 'txQ'){ ui.txQ = e.target.value; const l = $('#txList'); if (l) l.innerHTML = txList(); }
+  else if (k === 'taskQ'){ ui.taskQ = e.target.value; const pos = e.target.selectionStart; render(); const next = $('[data-input="taskQ"]'); if (next){ next.focus({preventScroll:true}); try { next.setSelectionRange(pos, pos); } catch (err) {} } }
   else if (k === 'bgDim'){ db.profile.bg.dim = Number(e.target.value) / 100; applyBackground(); save(); }
   else if (k === 'bgBlur'){ db.profile.bg.blur = Number(e.target.value); applyBackground(); save(); }
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && sheetOpen()) { closeSheet(); return; }
+  if (e.key === 'Escape' && sheetOpen()) { if (pendingAvailabilitySave) A.cancelAvailability(); else closeSheet(); return; }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('label.btn[for]')){ e.preventDefault(); const i = document.getElementById(e.target.getAttribute('for')); if (i) i.click(); }
   if (e.key === 'Tab' && sheetOpen()){
     const f = $$('#sheetRoot button, #sheetRoot input:not(.sr), #sheetRoot select, #sheetRoot textarea, #sheetRoot [tabindex="0"]').filter(x => !x.disabled && x.offsetParent !== null);
@@ -2575,6 +3028,7 @@ document.addEventListener('dragleave', e => { const c = e.target.closest && e.ta
 document.addEventListener('drop', e => {
   const c = e.target.closest && e.target.closest('[data-drop]'); if (!c) return; e.preventDefault(); c.classList.remove('over');
   const id = e.dataTransfer.getData('text/plain'), o = occById(id); const d = c.dataset.drop; if (!o || o.date === d) return;
+  if (!guardOccurrenceUpdate(o, taskById(o.taskId))) return;
   const prev = o.date + ' ' + timeLabel(o); o.orig = o.orig || o.date; o.date = d; o.moved = true; o.fires = 0; o.snoozeUntil = null; o.lastFire = '';
   logAct(o.id, 'rescheduled', prev, d + ' ' + timeLabel(o)); ui.calSel = d; commit(); toast('Moved to ' + dayLabel(d) + '.', '🕒');
 });

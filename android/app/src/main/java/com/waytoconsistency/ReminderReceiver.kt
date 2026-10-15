@@ -23,13 +23,20 @@ class ReminderReceiver : BroadcastReceiver() {
     private fun showReminder(context: Context, intent: Intent) {
         val id = intent.getStringExtra("id") ?: return
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createChannels(manager)
-
         val title = intent.getStringExtra("title") ?: "Way to Consistency"
         val body = intent.getStringExtra("body") ?: "A reminder is due."
-        val silent = isQuietNow(intent) || intent.getStringExtra("sound") in listOf("none", "silent")
+        val soundSpec = intent.getStringExtra("sound") ?: "tone:chime"
+        val silent = isQuietNow(intent) || soundSpec in listOf("none", "silent")
         val vibrate = intent.getBooleanExtra("vibrate", true)
-        val channelId = channelId(silent, vibrate)
+        val notificationSound = if (silent) null else when {
+            soundSpec == "device:default" -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            soundSpec.startsWith("device:") -> Uri.parse(soundSpec.removePrefix("device:"))
+            soundSpec.startsWith("audio:") -> SoundStorage.uri(context, soundSpec)
+            else -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        }
+        val customChannelSound = !silent && (soundSpec.startsWith("device:") || soundSpec.startsWith("audio:"))
+        val channelId = channelId(silent, vibrate, soundSpec.takeIf { customChannelSound })
+        createChannels(manager, channelId.takeIf { customChannelSound }, notificationSound, vibrate)
         val openIntent = activityIntent(context, id, "open")
         val snoozeIntent = PendingIntent.getBroadcast(
             context,
@@ -43,13 +50,15 @@ class ReminderReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val doneIntent = activityIntent(context, id, "done")
+        val skipIntent = activityIntent(context, id, "skip")
+        val occurrenceLocked = intent.getLongExtra("unlockAt", 0L) > System.currentTimeMillis()
         val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder(context, channelId)
         } else {
             @Suppress("DEPRECATION")
-            Notification.Builder(context).setSound(if (silent) null else RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            Notification.Builder(context).setSound(notificationSound)
         }
-        val notification = builder
+        val notificationBuilder = builder
             .setSmallIcon(android.R.drawable.ic_popup_reminder)
             .setContentTitle(title)
             .setContentText(body)
@@ -58,9 +67,13 @@ class ReminderReceiver : BroadcastReceiver() {
             .setAutoCancel(true)
             .setCategory(Notification.CATEGORY_REMINDER)
             .setVisibility(Notification.VISIBILITY_PRIVATE)
-            .addAction(android.R.drawable.checkbox_on_background, "Done", doneIntent)
-            .addAction(android.R.drawable.ic_lock_idle_alarm, "Snooze", snoozeIntent)
-            .build()
+        if (!occurrenceLocked) {
+            notificationBuilder
+                .addAction(android.R.drawable.checkbox_on_background, "Done", doneIntent)
+                .addAction(android.R.drawable.ic_lock_idle_alarm, "Snooze", snoozeIntent)
+                .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Skip", skipIntent)
+        }
+        val notification = notificationBuilder.build()
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notification.flags = notification.flags or Notification.FLAG_INSISTENT
             if (!vibrate) notification.vibrate = longArrayOf(0)
@@ -93,14 +106,17 @@ class ReminderReceiver : BroadcastReceiver() {
         return try { parts[0].toInt() * 60 + parts[1].toInt() } catch (_: Exception) { fallback }
     }
 
-    private fun channelId(silent: Boolean, vibrate: Boolean): String = when {
+    private fun channelId(silent: Boolean, vibrate: Boolean, customSound: String?): String {
+        if (!silent && customSound != null) return "reminders_audio_${Integer.toHexString(customSound.hashCode())}_${if (vibrate) "v" else "s"}"
+        return when {
         silent && vibrate -> "reminders_silent_vibrate"
         silent -> "reminders_silent"
         vibrate -> "reminders_sound_vibrate"
         else -> "reminders_sound"
+        }
     }
 
-    private fun createChannels(manager: NotificationManager) {
+    private fun createChannels(manager: NotificationManager, customChannelId: String?, customSound: Uri?, vibrate: Boolean) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val attrs = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
@@ -110,6 +126,12 @@ class ReminderReceiver : BroadcastReceiver() {
             NotificationChannel("reminders_silent_vibrate", "Silent reminders with vibration", NotificationManager.IMPORTANCE_HIGH).apply { setSound(null, null); enableVibration(true) },
             NotificationChannel("reminders_silent", "Silent reminders", NotificationManager.IMPORTANCE_DEFAULT).apply { setSound(null, null); enableVibration(false) }
         ).forEach(manager::createNotificationChannel)
+        if (customChannelId != null && customSound != null) {
+            manager.createNotificationChannel(NotificationChannel(customChannelId, "Custom reminder sounds", NotificationManager.IMPORTANCE_HIGH).apply {
+                setSound(customSound, attrs)
+                enableVibration(vibrate)
+            })
+        }
     }
 
     companion object {

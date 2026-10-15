@@ -91,6 +91,7 @@ object ReminderScheduler {
             putExtra("quietStart", reminder.optString("quietStart", "22:00"))
             putExtra("quietEnd", reminder.optString("quietEnd", "07:00"))
             putExtra("snoozeMinutes", reminder.optInt("snoozeMinutes", 10).coerceIn(1, 120))
+            putExtra("unlockAt", reminder.optLong("unlockAt"))
         }
         val pending = PendingIntent.getBroadcast(
             context,

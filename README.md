@@ -2,6 +2,10 @@
 
 An offline-first tasks, habits, reminders, personal finance, reports, and progress-journal app.
 
+## Task availability
+
+Saving a task requires choosing whether its occurrences are available immediately or unlock at their scheduled date and start time. A scheduled occurrence without a start time unlocks at local midnight. Until it unlocks, occurrence-level completion, progress, skip/cancel, and rescheduling actions are read-only; editing the whole task remains available. Backups created before schema version 2 are migrated automatically and keep their previous early-completion behavior.
+
 ## Browser app
 
 Open [way-to-consistency.html](way-to-consistency.html) in a modern browser. The interface and its supplied images are local. User records are stored in that browser on that device; use the app's backup export before moving or clearing browser data.
@@ -11,6 +15,8 @@ Browser reminders are best-effort while the page is open. For Android alarms tha
 ## Android build
 
 Open the `android` directory in Android Studio with JDK 17 and Android SDK Platform 35 installed. Build the debug variant to create `android/app/build/outputs/apk/debug/app-debug.apk`. The Android app bundles the HTML and local image assets for offline use.
+
+GPS distance uses accepted, accuracy-filtered fixes. Small movements accumulate from the last accepted anchor, paused movement is excluded, and route segments are separated after resume. The inline route preview works offline; Google Maps tiles still require a configured SDK key and an internet connection. Real-device outdoor testing remains important because GPS accuracy varies by device and environment.
 
 ## Project assets
 
