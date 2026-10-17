@@ -6,7 +6,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -22,11 +25,19 @@ import java.util.UUID
 class RunTrackingService : Service(), LocationListener {
     private lateinit var locationManager: LocationManager
     private var state = JSONObject()
+    private val locationModeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == LocationManager.MODE_CHANGED_ACTION && !isLocationEnabled()) pauseForLocationDisabled()
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         state = loadState(this)
+        val filter = IntentFilter(LocationManager.MODE_CHANGED_ACTION)
+        if (Build.VERSION.SDK_INT >= 33) registerReceiver(locationModeReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        else @Suppress("DEPRECATION") registerReceiver(locationModeReceiver, filter)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -98,17 +109,21 @@ class RunTrackingService : Service(), LocationListener {
     }
 
     override fun onProviderDisabled(provider: String) {
-        state.put("gpsStatus", "location_disabled")
-        persistAndBroadcast()
+        if (provider == LocationManager.GPS_PROVIDER) pauseForLocationDisabled()
     }
 
     override fun onDestroy() {
         locationManager.removeUpdates(this)
+        try { unregisterReceiver(locationModeReceiver) } catch (_: IllegalArgumentException) {}
         super.onDestroy()
     }
 
     private fun startRun() {
         if (state.optString("status") == STATUS_RUNNING || state.optString("status") == STATUS_PAUSED) return
+        if (!isLocationEnabled()) {
+            Log.i(TAG, "Run start blocked because device location services are disabled")
+            return
+        }
         state = JSONObject()
             .put("id", UUID.randomUUID().toString())
             .put("status", STATUS_RUNNING)
@@ -131,8 +146,8 @@ class RunTrackingService : Service(), LocationListener {
         state.put("elapsedMs", elapsedMillis())
             .put("status", STATUS_PAUSED)
             .put("segment", state.optInt("segment") + 1)
-            .remove("segmentStartedAt")
-            .remove("lastFix")
+        state.remove("segmentStartedAt")
+        state.remove("lastFix")
         locationManager.removeUpdates(this)
         persistAndBroadcast()
         updateNotification()
@@ -140,6 +155,11 @@ class RunTrackingService : Service(), LocationListener {
 
     private fun resumeRun() {
         if (state.optString("status") != STATUS_PAUSED) return
+        if (!isLocationEnabled()) {
+            state.put("gpsStatus", "location_disabled")
+            persistAndBroadcast()
+            return
+        }
         state.put("status", STATUS_RUNNING).put("segmentStartedAt", SystemClock.elapsedRealtime()).put("bootEpochMs", bootEpochMs())
         startForeground(NOTIFICATION_ID, notification())
         persistAndBroadcast()
@@ -191,8 +211,8 @@ class RunTrackingService : Service(), LocationListener {
             state.put("status", STATUS_PAUSED)
                 .put("gpsStatus", "paused_after_restart")
                 .put("segment", state.optInt("segment") + 1)
-                .remove("segmentStartedAt")
-                .remove("lastFix")
+            state.remove("segmentStartedAt")
+            state.remove("lastFix")
             persistAndBroadcast()
         }
     }
@@ -201,16 +221,17 @@ class RunTrackingService : Service(), LocationListener {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
-            state.put("elapsedMs", elapsedMillis()).put("status", STATUS_PAUSED).remove("segmentStartedAt").remove("lastFix")
+            state.put("elapsedMs", elapsedMillis()).put("status", STATUS_PAUSED)
+            state.remove("segmentStartedAt")
+            state.remove("lastFix")
             persistAndBroadcast()
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
         try {
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                state.put("gpsStatus", "location_disabled")
-                persistAndBroadcast()
+            if (!isLocationEnabled()) {
+                pauseForLocationDisabled()
                 return
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_INTERVAL_MS, 1f, this)
@@ -223,6 +244,25 @@ class RunTrackingService : Service(), LocationListener {
             state.put("gpsStatus", "waiting_for_fix")
             persistAndBroadcast()
         }
+    }
+
+    private fun isLocationEnabled(): Boolean = try {
+        val masterEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) locationManager.isLocationEnabled else true
+        masterEnabled && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    } catch (_: Exception) { false }
+
+    private fun pauseForLocationDisabled() {
+        if (state.optString("status") == STATUS_RUNNING) {
+            state.put("elapsedMs", elapsedMillis())
+                .put("status", STATUS_PAUSED)
+                .put("segment", state.optInt("segment") + 1)
+            state.remove("segmentStartedAt")
+            state.remove("lastFix")
+        }
+        state.put("gpsStatus", "location_disabled")
+        locationManager.removeUpdates(this)
+        persistAndBroadcast()
+        if (state.optString("status") == STATUS_PAUSED) updateNotification()
     }
 
     private fun persistAndBroadcast() {

@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // OAuth tokens, one-time state, webhook mappings, and integration events are
+    // server-owned. Mobile clients use authenticated callable functions only.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -15,7 +15,10 @@ import android.os.Build
 class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
-            ACTION_SNOOZE -> ReminderScheduler.snooze(context, intent)
+            ACTION_SNOOZE -> {
+                ReminderScheduler.snooze(context, intent)
+                intent.getStringExtra("id")?.let { (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(notificationId(it)) }
+            }
             else -> showReminder(context, intent)
         }
     }
@@ -38,6 +41,15 @@ class ReminderReceiver : BroadcastReceiver() {
         val channelId = channelId(silent, vibrate, soundSpec.takeIf { customChannelSound })
         createChannels(manager, channelId.takeIf { customChannelSound }, notificationSound, vibrate)
         val openIntent = activityIntent(context, id, "open")
+        val alarmIntent = PendingIntent.getActivity(
+            context,
+            id.hashCode() xor 0xA14,
+            Intent(context, AlarmActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                intent.extras?.let { extras -> putExtras(extras) }
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         val snoozeIntent = PendingIntent.getBroadcast(
             context,
             id.hashCode() xor 0x51A,
@@ -65,8 +77,9 @@ class ReminderReceiver : BroadcastReceiver() {
             .setStyle(Notification.BigTextStyle().bigText(body))
             .setContentIntent(openIntent)
             .setAutoCancel(true)
-            .setCategory(Notification.CATEGORY_REMINDER)
+            .setCategory(if (silent) Notification.CATEGORY_REMINDER else Notification.CATEGORY_ALARM)
             .setVisibility(Notification.VISIBILITY_PRIVATE)
+        if (!silent) notificationBuilder.setFullScreenIntent(alarmIntent, true)
         if (!occurrenceLocked) {
             notificationBuilder
                 .addAction(android.R.drawable.checkbox_on_background, "Done", doneIntent)
@@ -78,7 +91,7 @@ class ReminderReceiver : BroadcastReceiver() {
             notification.flags = notification.flags or Notification.FLAG_INSISTENT
             if (!vibrate) notification.vibrate = longArrayOf(0)
         }
-        manager.notify(id.hashCode(), notification)
+        manager.notify(notificationId(id), notification)
     }
 
     private fun activityIntent(context: Context, id: String, action: String): PendingIntent = PendingIntent.getActivity(
@@ -136,5 +149,6 @@ class ReminderReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_SNOOZE = "com.waytoconsistency.SNOOZE_REMINDER"
+        fun notificationId(id: String): Int = id.hashCode()
     }
 }
