@@ -105,7 +105,12 @@ class MainActivity : ComponentActivity() {
                 fileCallback = callback
                 val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
-                    type = params.acceptTypes.firstOrNull { it.isNotBlank() } ?: "*/*"
+                    val acceptedTypes = params.acceptTypes.flatMap { it.split(",") }
+                        .map { it.trim() }.filter { it.isNotBlank() }
+                    type = acceptedTypes.singleOrNull() ?: "*/*"
+                    if (acceptedTypes.size > 1) {
+                        putExtra(Intent.EXTRA_MIME_TYPES, acceptedTypes.toTypedArray())
+                    }
                     if (params.mode == FileChooserParams.MODE_OPEN_MULTIPLE) {
                         putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                     }

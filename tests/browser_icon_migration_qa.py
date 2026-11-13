@@ -119,7 +119,7 @@ def main():
               };
             })()""")
             expected = {
-                "version": 5, "taskIcon": "walk", "taskPolicy": "scheduled",
+                "version": 6, "taskIcon": "walk", "taskPolicy": "scheduled",
                 "categoryIcon": "book", "goalIcon": "book", "mood": "Good",
                 "legacyFields": 0, "iconGroups": 6, "pageOverflow": False,
                 "labelledIconButtons": True,

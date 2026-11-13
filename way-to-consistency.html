@@ -687,6 +687,7 @@ input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,input[typ
 }
 @media (max-width:370px){.topbar .brand-copy{display:none}.progress-spotlight{grid-template-columns:78px minmax(0,1fr)}.progress-ring{width:78px;height:78px}.runs-page>.stats .sk{font-size:.58rem}.plan-strip{gap:3px;padding:6px}.plan-strip button{min-height:68px}}
 </style>
+<link rel="stylesheet" href="assets/studio.css">
 </head>
 <body>
 <div id="bgLayer" aria-hidden="true"></div>
@@ -836,7 +837,7 @@ let db, memOnly = false, warnedSave = false, saveState = 'saved', syncChannel = 
 function defaultDB(){
   const mk = (id, kind, name, iconKey, color, order, extra) => Object.assign({id, kind, name, iconKey, color, order, archived: false}, extra || {});
   return {
-    v: 5,
+    v: 6,
     profile: {name: '', currency: 'INR', theme: 'system', skin: 'minimal', scale: 1, highContrast: false, confetti: true, volume: .7,
       defaultSound: 'tone:chime', lead: 10, snooze: 10, quietOn: false, quietStart: '22:00', quietEnd: '07:00',
       dailySummary: false, summaryTime: '08:00', lastSummary: '', partialCredit: 0, skippedCounts: false, streakFreezeWeeks: [],
@@ -853,6 +854,7 @@ function defaultDB(){
       mk('t-personal', 'task', 'Personal', 'star', PALETTE[0], 4)
     ],
     tasks: [], occs: [], goals: [], income: [], expenses: [], budgets: [], audio: [], log: [], alerts: {}, checkins: [], runs: [],
+    coach: {energy: [], wins: [], weeklyHabits: [], reflections: []},
     motivation: {partner: {name: '', streak: 0, rate: null, updatedAt: '', blocked: false}, nudges: [],
       music: {provider: 'none', value: '', label: '', autoOpen: true}},
     integrations: {
@@ -912,6 +914,10 @@ function migrate(){
   });
   db.cats.forEach(c => { c.iconKey = c.iconKey || inferIconKey(c, c.kind === 'expense' ? 'receipt' : 'check'); delete c.emoji; });
   db.goals.forEach(g => { g.iconKey = g.iconKey || inferIconKey(g, 'target'); delete g.emoji; });
+  if (version < 6){ db.coach = Object.assign({}, d.coach, db.coach || {}); version = 6; }
+  db.coach = Object.assign({}, d.coach, db.coach || {});
+  for (const key of ['energy', 'wins', 'weeklyHabits', 'reflections']) if (!Array.isArray(db.coach[key])) db.coach[key] = [];
+  db.coach.weeklyHabits = db.coach.weeklyHabits.filter(h => h && typeof h.id === 'string' && typeof h.name === 'string').map(h => ({...h, target: Math.max(1, Math.min(7, Math.round(Number(h.target) || 3))), dates: [...new Set((Array.isArray(h.dates) ? h.dates : []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)))]}));
   db.v = version;
   db.integrations = Object.assign({}, d.integrations, db.integrations || {});
   db.integrations.prefs = Object.assign({}, d.integrations.prefs, db.integrations.prefs || {});
@@ -1353,7 +1359,7 @@ function clearSamples(){
 /* ---------- ui state ---------- */
 const NAV = [
   {id: 'home', l: 'Home'}, {id: 'tasks', l: 'Tasks'}, {id: 'calendar', l: 'Calendar'}, {id: 'runs', l: 'Run'}, {id: 'habits', l: 'Habits'},
-  {id: 'money', l: 'Money'}, {id: 'reports', l: 'Reports'}, {id: 'journey', l: 'Journey'}, {id: 'motivation', l: 'Motivation'}, {id: 'integrations', l: 'Integrations'}, {id: 'tutorial', l: 'Tutorial'}, {id: 'settings', l: 'Settings'}
+  {id: 'money', l: 'Money'}, {id: 'reports', l: 'Reports'}, {id: 'journey', l: 'Journey'}, {id: 'studio', l: 'Focus Studio'}, {id: 'motivation', l: 'Motivation'}, {id: 'integrations', l: 'Integrations'}, {id: 'tutorial', l: 'Tutorial'}, {id: 'settings', l: 'Settings'}
 ];
 const ui = {view: 'home', calMode: 'month', calMonth: monthOf(todayStr()), calSel: todayStr(), fCat: '', fStatus: '', fPrio: '', taskQ: '',
   moneyTab: 'overview', moneyMonth: monthOf(todayStr()), repMonth: monthOf(todayStr()), txQ: '', txType: '', txCat: '', showArchived: false, tutorialStep: 0};
@@ -1480,7 +1486,7 @@ function viewHome(){
     ${p.sample ? `<div class="banner">${uiIcon('info')}<span class="grow">You are looking at <b>sample data</b> so you can explore. Clear it any time and start fresh.</span><button class="btn small" type="button" data-a="clearSamples">Clear sample data</button></div>` : ''}
     ${memOnly ? `<div class="banner">${uiIcon('alert')}<span class="grow">This view cannot keep data after you close it. Export a backup from Settings, or open the saved app file in your browser.</span></div>` : ''}
     ${todayFocusCard(td, g, p, todays, doneN, hT, hD, nr, now, wk)}
-    <div class="thead">${ibadge(TICON[th.id].i, TICON[th.id].c, 52)}<div><h2 class="tt">${esc(th.name)} Theme</h2><p class="ts">${esc(th.tag)}</p></div><span class="grow" style="flex:1"></span><button type="button" class="tuser" data-a="goView" data-v="journey" aria-label="Open my journey">${avatarHtml(36, r30 || 0)}<span>${esc(p.name || 'You')}<small>Level ${xpInfo().lvl} · ${xpInfo().title}</small></span></button></div>
+    <section class="studio-invite"><div><span class="studio-eyebrow">MAKE ROOM FOR YOURSELF</span><h2>A little focus. A little momentum.</h2><p class="sub">Your music, inspiring videos, and a quiet space to get started.</p></div><button class="btn primary" type="button" data-a="goView" data-v="studio">${icon('headphones')} Open Focus Studio</button></section>
     <section class="card hero${heroId() ? ' has-hero' : ''}" aria-label="Today">
       <div class="hero-l">${avatarHtml(104, r30 || 0)}<div class="stack" style="min-width:0;gap:6px">
         <h1 class="hello">${uiIcon(g.iconKey)} ${esc(g.g)}${p.name ? ', ' + esc(p.name) : ''}</h1>
@@ -1797,6 +1803,7 @@ function viewReports(){
 
 /* ---------- motivation, sharing, and run music ---------- */
 let localRunMusicUrl = '', localRunMusicName = '', localRunMusicAudio = null;
+document.addEventListener('wtc:studio-play', () => { if (localRunMusicAudio) localRunMusicAudio.pause(); });
 const MUSIC_HOSTS = {spotify: ['open.spotify.com'], youtube: ['music.youtube.com', 'youtu.be', 'www.youtube.com', 'youtube.com']};
 function safeMusicUrl(provider, value){
   try { const u = new URL(String(value || '')); return u.protocol === 'https:' && (MUSIC_HOSTS[provider] || []).includes(u.hostname.toLowerCase()) ? u.href : ''; }
@@ -1887,6 +1894,62 @@ function runMusicSummary(){
   if (music.provider === 'local') return music.label || localRunMusicName || 'Local audio';
   return 'No run music selected';
 }
+/* ---------- small wins, flexible habits, and reflection ---------- */
+function coachWeek(date = todayStr()){ return addDays(date, -((dowOf(date) + 6) % 7)); }
+function coachActivityDates(){
+  return [...new Set([...db.occs.filter(o => o.status === 'done').map(o => o.date), ...db.coach.wins.map(w => w.date), ...db.coach.weeklyHabits.flatMap(h => h.dates)])].filter(d => d <= todayStr()).sort();
+}
+function coachSuggestion(){
+  return db.occs.filter(o => o.date === todayStr() && ['pending', 'partial'].includes(o.status)).find(o => { const t = taskById(o.taskId); return t && t.state === 'active' && !occurrenceLocked(o, t); });
+}
+function smallWinCard(){
+  const td = todayStr(), energy = db.coach.energy.find(e => e.date === td)?.value || '', win = db.coach.wins.find(w => w.date === td);
+  const suggestion = coachSuggestion(), task = suggestion && taskById(suggestion.taskId);
+  const previous = coachActivityDates().filter(d => d < td).pop(), returning = previous && diffDays(td, previous) >= 2;
+  const copy = energy === 'low' ? 'Preparing is progress. Give yourself just two gentle minutes.' : energy === 'tired' ? 'Keep it light. Start with the easiest part for two minutes.' : 'Choose a first step and give it two minutes of attention.';
+  return `<section class="card coach-card" aria-label="Today's Small Win"><span class="studio-eyebrow">TODAY’S SMALL WIN</span><h2>${win ? 'You showed up for yourself.' : returning ? 'Welcome back. Start small.' : 'One small step is enough to start.'}</h2><p class="sub">${win ? esc(win.title) + ' · Saved as a small win. Your task progress stays yours to update.' : copy}</p>
+    <div class="coach-energy" role="group" aria-label="How does today feel?">${[['ready','Ready to go'],['tired','A little tired'],['low','Struggling today']].map(([v,l]) => `<button class="btn small" type="button" data-a="coachEnergy" data-v="${v}" aria-pressed="${energy === v}">${l}</button>`).join('')}</div>
+    ${win ? `<div class="rowf"><span class="chip">${icon('check')} Small win recorded</span><button class="btn small" data-a="coachSharePreview" type="button">Share encouragement</button><button class="btn small ghost" data-a="coachUndoWin" type="button">Undo win</button></div>` : `<div class="coach-next"><div><small>YOUR NEXT STEP</small><b>${task ? esc(task.title) : 'Prepare for one thing that matters to you'}</b><span class="sub">${task ? 'Work on a manageable first piece. Completing this step does not complete the whole task.' : 'Clear a little space, gather what you need, or write down your next action.'}</span></div><div class="rowf"><button class="btn primary" type="button" data-a="coachStart" data-id="${suggestion ? esc(suggestion.id) : ''}">${icon('play')} Start for 2 minutes</button><button class="btn" type="button" data-a="coachRecord" data-id="${suggestion ? esc(suggestion.id) : ''}">I did a small step</button></div></div>`}
+    <p class="coach-footnote">Private on this device. Choose music in Focus Studio whenever you want a soundtrack.</p></section>`;
+}
+function coachWeekly(){
+  const week = coachWeek(), td = todayStr();
+  return `<section class="card"><div class="rowf"><div class="grow"><span class="studio-eyebrow">FLEXIBLE BY DESIGN</span><h2>Your week, your rhythm</h2><p class="sub">Pick 1–7 days per week. Any day counts, once per day. Weeks start on Monday.</p></div><button type="button" class="btn primary" data-a="coachNewHabit">Add weekly habit</button></div><div class="stack" style="margin-top:18px">${db.coach.weeklyHabits.length ? db.coach.weeklyHabits.map(h => { const count = h.dates.filter(d => d >= week && d <= td).length, logged = h.dates.includes(td); return `<article class="coach-habit"><div class="rowf"><div class="grow"><b>${esc(h.name)}</b><p class="sub">${count} / ${h.target} days this week${count >= h.target ? ' · Weekly goal reached' : ' · Choose the days that suit you'}</p></div><button class="btn small" type="button" data-a="coachEditHabit" data-id="${esc(h.id)}">Edit</button></div><div class="coach-week" aria-label="This week">${Array.from({length:7},(_,i) => { const d = addDays(week,i); return `<span class="${h.dates.includes(d) ? 'logged' : ''}" title="${esc(dayLabel(d))}${h.dates.includes(d) ? ': completed' : ': not logged'}">${WD[dowOf(d)]}<b>${h.dates.includes(d) ? '✓' : '·'}</b></span>`; }).join('')}</div><button class="btn ${logged ? '' : 'primary'}" type="button" data-a="coachLogHabit" data-id="${esc(h.id)}" aria-pressed="${logged}">${logged ? 'Undo today’s check-in' : 'I did this today'}</button></article>`; }).join('') : '<p class="sub">Try “Walk outside” three days a week, or “Read a chapter” on any four days. Weekly habits are tracked here separately from scheduled tasks.</p>'}</div></section>`;
+}
+function coachHabitForm(id){
+  const h = db.coach.weeklyHabits.find(x => x.id === id);
+  openSheet(h ? 'Edit weekly habit' : 'A habit that fits your week', `<form class="form" data-form="coachHabit" data-id="${h ? esc(h.id) : ''}"><div class="field"><label for="coach-habit-name">What would you like to do?</label><input id="coach-habit-name" name="name" maxlength="80" required value="${esc(h?.name || '')}" placeholder="Walk outside"></div><div class="field"><label for="coach-habit-target">Days per week</label><input id="coach-habit-target" name="target" type="number" min="1" max="7" step="1" required value="${h?.target || 3}"></div><p class="sub">Check in once on any day you do it. Changing the target keeps your history and updates this week's goal.</p><button class="btn primary" type="submit">Save weekly habit</button>${h ? `<button class="btn ghost" type="button" data-a="coachDeleteHabit" data-id="${esc(h.id)}">Remove this weekly habit</button>` : ''}</form>`);
+}
+function coachMilestones(){
+  const dates = coachActivityDates(), wins = db.coach.wins.length;
+  const comeback = dates.some((d,i) => i && diffDays(d, dates[i-1]) >= 2);
+  const badges = [['First step', dates.length >= 1, 'Your first day with a completed task, weekly habit, or small win.'],['Seven days of effort',dates.length >= 7,'Seven active days in total. They do not need to be consecutive.'],['Ten small wins',wins >= 10,'Ten days of taking a manageable first step.'],['A fresh start',comeback,'Returning after at least one day without recorded activity.']];
+  return `<section class="card"><span class="studio-eyebrow">EFFORT WORTH NOTICING</span><h2>Your milestones</h2><div class="coach-badges">${badges.map(([title, earned, desc]) => `<article class="coach-badge ${earned ? 'earned' : ''}">${uiIcon(earned ? 'trophy' : 'target')}<b>${title}</b><span>${earned ? 'Reached' : 'Ahead of you'}</span><p class="sub">${desc}</p></article>`).join('')}</div><p class="coach-footnote">Based on your saved history. Correcting or removing a check-in updates these milestones too.</p></section>`;
+}
+function coachReflection(){
+  const week = coachWeek(), end = addDays(week,6), saved = db.coach.reflections.find(r => r.week === week);
+  const done = db.occs.filter(o => o.date >= week && o.date <= todayStr() && o.status === 'done').length;
+  const wins = db.coach.wins.filter(w => w.date >= week && w.date <= todayStr()).length;
+  const days = coachActivityDates().filter(d => d >= week && d <= todayStr()).length;
+  const adjustment = days < 3 ? 'Try one two-minute start on a day that feels manageable.' : 'Keep the routine that felt easiest, and make room for recovery.';
+  return `<section class="card"><span class="studio-eyebrow">PAUSE & REFLECT</span><h2>A kinder look at your week</h2><p class="sub">${esc(dayLabel(week))} – ${esc(dayLabel(end))} · Week so far</p><div class="coach-summary"><span><b>${done}</b>completed tasks</span><span><b>${wins}</b>small wins</span><span><b>${days}</b>active days</span></div><p class="sub">A suggestion for next week: ${adjustment}</p><form class="form" data-form="coachReflection" data-week="${week}" style="margin-top:16px"><div class="field"><label for="coach-worked">What helped you show up?</label><textarea id="coach-worked" name="worked" maxlength="400" placeholder="A quiet morning, a favorite song, a smaller goal…">${esc(saved?.worked || '')}</textarea></div><div class="field"><label for="coach-hard">What felt difficult?</label><textarea id="coach-hard" name="hard" maxlength="400">${esc(saved?.hard || '')}</textarea></div><div class="field"><label for="coach-next">One adjustment for next week</label><input id="coach-next" name="next" maxlength="200" value="${esc(saved?.next || '')}" placeholder="Make my first step smaller"></div><button class="btn primary" type="submit">${saved ? 'Update reflection' : 'Save reflection'}</button></form>${db.coach.reflections.filter(r => r.week !== week).length ? `<details style="margin-top:16px"><summary>Previous reflections</summary>${db.coach.reflections.filter(r => r.week !== week).slice().sort((a,b)=>b.week.localeCompare(a.week)).map(r=>`<article class="coach-habit"><b>Week of ${esc(dayLabel(r.week))}</b><p>Helped: ${esc(r.worked || '—')}</p><p>Difficult: ${esc(r.hard || '—')}</p><p>Next step: ${esc(r.next || '—')}</p></article>`).join('')}</details>` : ''}</section>`;
+}
+function coachRecordWin(id){
+  const td = todayStr(); if (db.coach.wins.some(w => w.date === td)) return toast('Today’s small win is already saved.', 'check');
+  const o = id ? occById(id) : null, t = o && taskById(o.taskId);
+  if (id && (!o || !t || o.date !== td || t.state !== 'active')) return toast('Choose a current task from Today.', 'info');
+  if (o && !guardOccurrenceUpdate(o,t)) return;
+  db.coach.wins.push({id:uid(),date:td,occurrenceId:o?.id || '',title:t ? 'A small step toward: '+t.title : 'Made space for a meaningful next step',createdAt:new Date().toISOString()});
+  closeSheet();commit();toast('Your effort counts. Small win saved.', 'heart');
+}
+let coachFocus = null;
+document.addEventListener('wtc:focus-complete', e => {
+  if (!coachFocus || e.detail?.token !== coachFocus.token) return;
+  const pending = coachFocus;coachFocus=null;
+  if(pending.date !== todayStr()) return toast('Your focus session finished. Choose a fresh small win for today.', 'heart');
+  if (db.coach.wins.some(w => w.date === todayStr())) return;
+  openSheet('Two minutes for yourself', `<p>You made time to begin. If you took a small step, you can record it now.</p><div class="rowf" style="margin-top:16px"><button type="button" class="btn primary" data-a="coachRecord" data-id="${esc(pending.id)}">Record my small win</button><button type="button" class="btn" data-a="closeSheet">Maybe later</button></div>`);
+});
 function viewMotivation(){
   const partner = db.motivation.partner, music = db.motivation.music, hasPartner = !!partner.name;
   const lastNudge = db.motivation.nudges[0];
@@ -1912,6 +1975,7 @@ function importPartnerUpdateSheet(){
   openSheet(`${uiIcon('download')} Import partner update`, `<form class="form" data-form="partnerUpdate"><p class="sub">Paste the update code they shared. It contains only their chosen name, streak, 30-day consistency, and update time.</p><div class="field"><label for="partner-code">Update code</label><textarea id="partner-code" name="code" required placeholder="WTC1:…"></textarea></div><button class="btn primary" type="submit">${icon('download')} Import update</button></form>`);
 }
 function launchRunMusic(){
+  document.dispatchEvent(new CustomEvent('wtc:run-music'));
   const music = db.motivation.music; if (!music || music.provider === 'none') return toast('Choose run music first.', 'headphones');
   if (window.AndroidReminders && window.AndroidReminders.openRunMusic){ window.AndroidReminders.openRunMusic(music.provider, music.value); return; }
   if (music.provider === 'local'){
@@ -2705,6 +2769,7 @@ const ICON = {
   pause: '<circle cx="12" cy="12" r="9"/><path d="M9 9v6M15 9v6"/>',
   stop: '<circle cx="12" cy="12" r="9"/><rect x="9" y="9" width="6" height="6"/>',
   mic: '<rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>',
+  studio: '<path d="M4 14v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="12" width="4" height="8" rx="2"/><rect x="17" y="12" width="4" height="8" rx="2"/>',
   music: '<path d="M9 18V6l10-2v12M9 10l10-2"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/>',
   headphones: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><path d="M4 13h3v7H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 1-2zM20 13h-3v7h2a2 2 0 0 0 2-2v-3a2 2 0 0 0-1-2z"/>',
   share: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.3 10.9 7.4-4.3M8.3 13.1l7.4 4.3"/>',
@@ -2927,7 +2992,7 @@ function applyTheme(){
   r.style.setProperty('--scale', p.scale);
   applyBackground(); setAmbient();
 }
-const VIEWS = {home: viewHome, tasks: viewTasks, calendar: viewCalendar, runs: viewRuns, habits: viewHabits, money: viewMoney, reports: viewReports, journey: viewJourney, motivation: viewMotivation, integrations: viewIntegrations, tutorial: viewTutorial, settings: viewSettings};
+const VIEWS = {studio: () => '<div class="page" id="studioView"></div>', home: viewHome, tasks: viewTasks, calendar: viewCalendar, runs: viewRuns, habits: viewHabits, money: viewMoney, reports: viewReports, journey: viewJourney, motivation: viewMotivation, integrations: viewIntegrations, tutorial: viewTutorial, settings: viewSettings};
 function render(){
   applyTheme(); ensureOccs(); if (!window.__bgProbed){ window.__bgProbed = 1; probeBgPhotos(); }
   updateSaveState(memOnly ? 'unavailable' : saveState);
@@ -2940,6 +3005,11 @@ function render(){
   $('#tabbar').innerHTML = tab('home', 'Today') + tab('calendar', 'Plan') + tab('runs', 'Run') + tab('habits', 'Habits') + tab('reports', 'Progress');
   $('#topbar').innerHTML = `<div class="brand">${LOGO}<span class="brand-copy"><b>Way to Consistency</b><small>Plan · Track · Improve · Grow</small></span></div><span class="save-state" id="topSaveState" role="status" aria-live="polite" data-state="${saveState}">${saveState === 'unavailable' ? 'Local storage unavailable' : 'Saved on this device'}</span><button type="button" class="iconbtn top-more" data-a="openMore" aria-label="Open tasks, money and settings">${icon('more')}</button><button type="button" class="iconbtn" data-a="goView" data-v="journey" aria-label="My journey" style="border-radius:50%;padding:0;overflow:hidden">${avatarHtml(40, r30 || 0)}</button>`;
   $('#main').innerHTML = (VIEWS[ui.view] || viewHome)();
+  if (ui.view === 'home') $('.home-page').insertAdjacentHTML('afterbegin', smallWinCard());
+  if (ui.view === 'motivation') $('.motivation-page .page-head').insertAdjacentHTML('afterend', smallWinCard() + coachMilestones() + coachReflection());
+  if (ui.view === 'habits') $('#main .page').insertAdjacentHTML('beforeend', coachWeekly());
+  if (ui.view === 'reports') $('#main .page').insertAdjacentHTML('beforeend', coachReflection());
+  document.dispatchEvent(new CustomEvent('wtc:view', {detail: ui.view}));
   document.title = 'Way to Consistency';
 }
 function go(v){
@@ -3034,6 +3104,22 @@ function availabilityChoiceSheet(id, data){
 }
 
 const A = {
+  coachEnergy: el => { const value=el.dataset.v;if(!['ready','tired','low'].includes(value))return;db.coach.energy=db.coach.energy.filter(e=>e.date!==todayStr());db.coach.energy.push({date:todayStr(),value});commit(); },
+  coachStart: el => {
+    if(window.WtcStudio?.isRunning())return toast('Pause or reset your current focus session before starting a small win.', 'clock');
+    const o=el.dataset.id&&occById(el.dataset.id);if(o&&!guardOccurrenceUpdate(o,taskById(o.taskId)))return;
+    coachFocus={token:uid(),id:el.dataset.id||'',date:todayStr()};go('studio');
+    document.dispatchEvent(new CustomEvent('wtc:focus-start',{detail:{minutes:2,token:coachFocus.token}}));
+  },
+  coachRecord: el => coachRecordWin(el.dataset.id),
+  coachUndoWin: () => { db.coach.wins=db.coach.wins.filter(w=>w.date!==todayStr());commit();toast('Small win removed. You can record it again anytime.', 'undo'); },
+  coachNewHabit: () => coachHabitForm(),
+  coachEditHabit: el => coachHabitForm(el.dataset.id),
+  coachLogHabit: el => { const h=db.coach.weeklyHabits.find(x=>x.id===el.dataset.id);if(!h)return;const td=todayStr();h.dates=h.dates.includes(td)?h.dates.filter(d=>d!==td):[...h.dates,td];commit(); },
+  coachDeleteHabit: el => { const h=db.coach.weeklyHabits.find(x=>x.id===el.dataset.id);if(!h)return;openSheet('Remove weekly habit?',`<p>Remove “${esc(h.name)}” and its check-in history? Scheduled tasks are kept.</p><div class="rowf" style="margin-top:16px"><button type="button" class="btn" data-a="coachConfirmDelete" data-id="${esc(h.id)}">Remove habit</button><button type="button" class="btn" data-a="closeSheet">Keep it</button></div>`); },
+  coachConfirmDelete: el => {db.coach.weeklyHabits=db.coach.weeklyHabits.filter(h=>h.id!==el.dataset.id);closeSheet();commit();},
+  coachSharePreview: () => { openSheet('Share a little encouragement',`<p>Only this message will be shared. Task titles, energy check-ins, and reflections stay private.</p><blockquote class="coach-note">I took a small step today. Want to make time for one small thing together? — Way to Consistency</blockquote><button class="btn primary" type="button" data-a="coachShare">Choose where to share</button>`); },
+  coachShare: () => {shareText('A small win','I took a small step today. Want to make time for one small thing together? — Way to Consistency').then(ok=>{if(ok){closeSheet();toast('Encouragement ready to share.', 'heart');}});},
   goView: el => { closeSheet(); go(el.dataset.v); },
   tutorialNext: () => { ui.tutorialStep = Math.min(TUTORIAL_STEPS.length - 1, (Number(ui.tutorialStep) || 0) + 1); render(); },
   tutorialPrev: () => { ui.tutorialStep = Math.max(0, (Number(ui.tutorialStep) || 0) - 1); render(); },
@@ -3269,6 +3355,8 @@ function moveCat(id, dir){
 
 /* ---------- form submits ---------- */
 const F = {
+  coachHabit: f => { const fd=new FormData(f),name=String(fd.get('name')||'').trim(),target=Number(fd.get('target'));if(!name||!Number.isInteger(target)||target<1||target>7)return toast('Add a name and choose 1–7 days.', 'info');const h=db.coach.weeklyHabits.find(x=>x.id===f.dataset.id);if(h){h.name=name.slice(0,80);h.target=target;}else db.coach.weeklyHabits.push({id:uid(),name:name.slice(0,80),target,dates:[]});closeSheet();commit();toast('Your weekly habit is ready.', 'leaf'); },
+  coachReflection: f => { const fd=new FormData(f),week=f.dataset.week;if(week!==coachWeek())return toast('The week changed. Reopen this page before saving.', 'clock');const record={week,worked:String(fd.get('worked')||'').trim().slice(0,400),hard:String(fd.get('hard')||'').trim().slice(0,400),next:String(fd.get('next')||'').trim().slice(0,200)};if(!record.worked&&!record.hard&&!record.next)return toast('Add a thought before saving.', 'info');db.coach.reflections=db.coach.reflections.filter(r=>r.week!==week);db.coach.reflections.push(record);commit();toast('Reflection saved privately.', 'book'); },
   task: f => {
     const fd = new FormData(f), id = f.dataset.id, title = String(fd.get('title') || '').trim();
     if (!title) return toast('Give the task a name first.', 'edit');
@@ -3640,5 +3728,6 @@ function init(){
 init();
 })();
 </script>
+<script src="assets/studio.js"></script>
 </body>
 </html>

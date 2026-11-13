@@ -4,7 +4,17 @@ An offline-first tasks, habits, reminders, personal finance, reports, and progre
 
 ## Icons and data compatibility
 
-The interface uses a bundled semantic SVG icon registry, so controls remain sharp, consistent, and fully available offline across all six themes. Tasks, goals, and categories store an editable `iconKey` instead of a supplied emoji. Schema version 4 migrates known legacy emoji to matching icons, infers a useful icon from the record name when needed, and uses a neutral fallback for unknown custom values. Schema version 5 adds offline-first motivation, accountability-partner, and run-music preferences. Imports from schema versions 1–4 remain supported; new exports retain schema version 5.
+The interface uses a bundled semantic SVG icon registry, so controls remain sharp, consistent, and fully available offline across all six themes. Tasks, goals, and categories store an editable `iconKey` instead of a supplied emoji. Schema version 4 migrates legacy emoji; version 5 adds motivation and partner preferences. Schema version 6 adds private energy check-ins, small wins, weekly habits, and reflections. Imports from versions 1–5 migrate without removing existing history; new exports include coach records.
+
+## Small Win coach
+
+Today and Motivation offer a daily energy check-in, an eligible task suggestion, and a two-minute Focus Studio session. Timer completion asks for confirmation before recording one small win per local calendar day. Users can also record effort directly or undo a win. Small wins never complete tasks or increase their quantitative progress. Scheduled task locks are enforced when suggesting and recording effort.
+
+Habits includes independent flexible weekly habits with a target of 1–7 days, any day of the week. Weeks begin Monday in local time; check-ins count once per day and can be undone. Targets can be edited while preserving history. Reports and Motivation include a private reflection for each week with previous entries available to read. Milestones derive from saved activity: a first active day, seven active days, ten small wins, and a return after a gap. These are local rules, with no external AI calls.
+
+The existing optional partner controls still support manual update exchange and rate-limited encouragement. A new small-win share preview sends a fixed encouraging message and excludes task titles, energy, and reflections. No message is sent until the user chooses sharing.
+
+The generated mint/navy icon is used by the web favicon, app header, Android launcher, and alarm screen. Generation details are in `assets/ICON.md`. A new APK build is required to see the icon on an installed Android app.
 
 ## Motivation, sharing, and music
 
@@ -25,6 +35,16 @@ Icons are decorative where their adjacent label already names the action. Icon-o
 Saving a task requires choosing whether its occurrences are available immediately or unlock at their scheduled date and start time. A scheduled occurrence without a start time unlocks at local midnight. Until it unlocks, occurrence-level completion, progress, skip/cancel, and rescheduling actions are read-only; editing the whole task remains available. Backups created before schema version 2 are migrated automatically and keep their previous early-completion behavior.
 
 ## Browser app
+
+### Focus Studio and refreshed interface
+
+Open **Focus Studio** from the navigation, the mobile More menu, or the Today shortcut. Import your own music, spoken motivation, and videos (up to 100 MB each). Files are saved in a separate IndexedDB media library on this device. Search, filter by music/video/favorites, play a queue, repeat a track, or watch a video using native playback controls. Playback continues across app views. Browser codec support varies; MP3 and MP4 are good starting formats. No media is uploaded and no streaming subscription is required.
+
+The studio includes 5, 15, 25, and 50 minute focus sessions with pause/reset. It uses an elapsed-time deadline while the page remains open and pauses studio playback when the session finishes. It is not a background alarm and resets when the page closes or reloads. Native run playback and browser audio may have different background behavior.
+
+Media is **not included in JSON task backups**. Keep original files; browser storage may be cleared or evicted. The player’s Save action downloads an original in supported browsers. Remove deletes only the library copy. All six existing themes retain their colors with clearer card surfaces, consistent buttons, focus indicators, and responsive studio layouts.
+
+Browser verification: run `tests/browser_icon_migration_qa.py` and `tests/browser_studio_qa.py` against an isolated headless Chrome with remote debugging on port 9237. The studio suite exercises real generated WAV/WebM media, IndexedDB persistence, favorites/search, navigation, timers, and mobile widths.
 
 Open [way-to-consistency.html](way-to-consistency.html) in a modern browser. The interface and its supplied images are local. User records are stored in that browser on that device; use the app's backup export before moving or clearing browser data.
 
